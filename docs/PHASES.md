@@ -1,10 +1,10 @@
 # Implementation Phases Roadmap (PHASES.md)
 
 ## Project: BugBuddy
-**Document Version:** 1.0.0  
+**Document Version:** 1.1.0  
 **Status:** Approved  
 **Author:** Senior Software Architect & Product Manager  
-**Reference Link:** [README.md](file:///d:/GHW_Challange01/README.md) | [PRD.md](file:///d:/GHW_Challange01/docs/PRD.md) | [TRD.md](file:///d:/GHW_Challange01/docs/TRD.md)
+**Reference Link:** [README.md](../README.md) | [PRD.md](PRD.md) | [TRD.md](TRD.md) | [AI_INSTRUCTIONS.md](../AI_INSTRUCTIONS.md)
 
 ---
 
@@ -35,7 +35,7 @@ BugBuddy is delivered through five sequential, test-gated phases. Each phase is 
   - `docs/PHASES.md`: Sequential delivery roadmap with explicit acceptance gates.
 - **Dependencies**: None.
 - **Acceptance Criteria**:
-  - All five required documents exist in the workspace and link correctly to one another.
+  - All five required documents exist in the workspace and link correctly to one another using GitHub-compatible relative paths.
   - Explicit first-class support defined for C, C++, Java, Python, JavaScript, and TypeScript.
   - Error classification defined for all 8 required categories.
   - Sarcastic tone guidelines and forbidden pleasantries clearly defined.

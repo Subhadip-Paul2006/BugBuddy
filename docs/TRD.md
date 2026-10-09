@@ -1,10 +1,10 @@
 # Technical Requirements Document (TRD)
 
 ## Project: BugBuddy
-**Document Version:** 1.0.0  
+**Document Version:** 1.1.0  
 **Status:** Approved  
 **Author:** Senior Software Architect & Documentation Engineer  
-**Reference Link:** [README.md](file:///d:/GHW_Challange01/README.md) | [PRD.md](file:///d:/GHW_Challange01/docs/PRD.md) | [PHASES.md](file:///d:/GHW_Challange01/docs/PHASES.md)
+**Reference Link:** [README.md](../README.md) | [PRD.md](PRD.md) | [PHASES.md](PHASES.md) | [AI_INSTRUCTIONS.md](../AI_INSTRUCTIONS.md)
 
 ---
 
@@ -751,6 +751,8 @@ Static hosting compatible with modern CDNs: Vercel, Netlify, Cloudflare Pages, a
 | **FR-014** | Offline Mock Fallback | TRD 12.2 (`OfflineMockProvider`) | Phase 2 |
 | **FR-015** | Client-Side Secret Redaction | TRD 16.1 (`SECRET_PATTERNS`, `SecretRedactor`) | Phase 2 |
 | **FR-016** | Local Data Persistence & Export | TRD 14 (`StorageService`, IndexedDB/localStorage) | Phase 1 |
+| **FR-017** | UI Error Boundary & Recovery | TRD 18 (React Error Boundary, Reboot Fallback) | Phase 1 |
+| **FR-018** | Incomplete & Ambiguous Handling | TRD 7 (Error Classification Table, Edge cases) | Phase 2 |
 | **NFR-001** | Performance & Latency | TRD 21 (FCP < 1.2s, TTI < 1.8s) | Phase 4 |
 | **NFR-002** | AI Stream Latency | TRD 12.3 (Streaming & Mock response latencies) | Phase 3 |
 | **NFR-003** | Usability & Aesthetics | TRD 3.1 (Vanilla CSS Design Tokens, Glassmorphism)| Phase 1 |
@@ -759,3 +761,5 @@ Static hosting compatible with modern CDNs: Vercel, Netlify, Cloudflare Pages, a
 | **NFR-006** | Pluggable Extensibility | TRD 6, 12 (`ILanguageAdapter`, `ILLMProvider`) | Phase 2 |
 | **NFR-007** | Graceful Degradation | TRD 12.3 (Fallback cascade to Mock provider) | Phase 2 |
 | **NFR-008** | Cross-Browser Compatibility | TRD 17.2, 20.2 (Evergreen browser testing) | Phase 4 |
+| **NFR-009** | Memory Footprint Limits | TRD 21 (Sustained browser memory < 80MB) | Phase 4 |
+| **NFR-010** | Epistemic Integrity | TRD 1, 11 (Distinction of hypotheses vs facts) | Phase 2 |
