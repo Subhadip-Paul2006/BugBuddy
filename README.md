@@ -1,5 +1,4 @@
-# BugBuddy 🐛⚡
-
+# BugBuddy
 > **"Your bugs are fixable. Your pet's disappointment is optional."**
 
 BugBuddy is a gamified, AI-powered debugging companion and productivity web application. It transforms the soul-crushing experience of chasing syntax errors, pointer misadventures, and runtime panics into a humorous, highly educational, and accountable workflow.
@@ -231,5 +230,6 @@ Contributions are welcome! Please ensure that:
 - **Current Milestone**: **Phase 0 — Documentation & Architecture Baseline**
 - **Status**: Completed. All specifications, contracts, language registries, and phase gates are fully documented and validated.
 - **Next Milestone**: **Phase 1 — UI Foundation & Virtual Pet** (Application shell, pet visualizer, task manager, and local persistence).
-#   B u g B u d d y  
+#   B u g B u d d y 
+ 
  
