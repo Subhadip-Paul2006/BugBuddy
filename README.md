@@ -1,4 +1,5 @@
 # BugBuddy
+
 > **"Your bugs are fixable. Your pet's disappointment is optional."**
 
 BugBuddy is a gamified, AI-powered debugging companion and productivity web application. It transforms the soul-crushing experience of chasing syntax errors, pointer misadventures, and runtime panics into a humorous, highly educational, and accountable workflow.
