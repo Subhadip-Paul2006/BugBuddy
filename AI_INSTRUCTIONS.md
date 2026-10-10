@@ -37,6 +37,10 @@ As an AI coding agent working on BugBuddy, you must strictly uphold the followin
 9. **Archify Tooling Boundary**: Archify is an offline developer/agent documentation skill (`node bin/archify.mjs finalize`) for generating interactive HTML diagrams in `docs/archify/`. Never install or import Archify into application runtime source code (`src/`).
 10. **Test-Driven Rigor**: Write unit tests for language adapters, error classification, pet state transitions, and redactor regexes. Never claim a test passed unless it was executed in the test runner.
 11. **Synchronized Documentation**: Whenever code interfaces, visual designs, or configuration keys change, immediately update the corresponding sections in [README.md](README.md), [docs/TRD.md](docs/TRD.md), and [docs/UI_UX.md](docs/UI_UX.md).
+12. **Token Minimization via Graphify Knowledge Graph**: To minimize context window bloat and reduce token consumption when answering codebase or architectural questions:
+   - Always query the pre-built local knowledge graph (`graphify-out/graph.json`) using `graphify query "<question>"`, `graphify path "<A>" "<B>"`, or `graphify explain "<concept>"` before scanning whole directories or reading multiple full files.
+   - Use targeted line ranges (`StartLine`/`EndLine`) when opening source files identified by graph query results.
+   - Run `graphify update .` after making code modifications to refresh the graph incrementally (zero LLM token cost, AST-only).
 
 ---
 

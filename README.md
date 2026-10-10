@@ -286,6 +286,32 @@ BugBuddy operates completely out of the box with zero third-party API keys using
 
 ---
 
+## 🧠 Developer Tooling & Context Graph (Graphify)
+
+BugBuddy is configured with **[Graphify](https://github.com/Graphify-Labs/graphify)** (free open-source version) to optimize AI coding assistant workflows and dramatically lower LLM token consumption.
+
+### Token Minimization Workflow
+Instead of dumping entire source files or running massive grep searches into the context window, coding agents query the local deterministic knowledge graph:
+```bash
+# Query architectural questions (BFS traversal returning targeted subgraphs)
+graphify query "How does the AST debugging engine work?"
+
+# Trace relationship paths between modules
+graphify path "Minecraft Survival Metaphor" "Ender Dragon Boss Fight Modal"
+
+# View interactive D3/WebGL knowledge graph in browser
+# Open graphify-out/graph.html
+
+# Incremental update after modifying code (free, AST-only, zero API cost)
+graphify update .
+```
+- **Knowledge Graph**: [`graphify-out/graph.json`](graphify-out/graph.json)
+- **Visual Graph**: [`graphify-out/graph.html`](graphify-out/graph.html)
+- **Audit Report**: [`graphify-out/GRAPH_REPORT.md`](graphify-out/GRAPH_REPORT.md)
+- **Token Efficiency**: Up to 99% token reduction when exploring repository structure.
+
+---
+
 ## 🧪 Testing & Quality Assurance
 
 *(Active starting in Phase 4)*
