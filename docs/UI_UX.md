@@ -1,621 +1,698 @@
-# BugBuddy UI/UX Specification: Minecraft-Inspired Developer Survival World
+# BugBuddy UI/UX Specification: Minecraft-Inspired Isometric Pixel World
+**The Living Developer Survival Base**
 
-**Document ID:** `BUGBUDDY-UI-UX-SPEC-V1`  
-**Document Version:** `1.0.0`  
-**Status:** Approved Specification  
-**Design Lead:** Senior UI/UX Designer, Game Interface Architect & Design Systems Engineer  
+**Document ID:** `BUGBUDDY-UI-UX-SPEC-V2`  
+**Document Version:** `2.0.0`  
+**Status:** Approved Master Specification  
+**Lead Roles:** Senior Game UI/UX Designer, Pixel-Art Art Director, Frontend Architect, Design Systems Engineer  
 **Reference Index:** [README.md](../README.md) | [docs/PRD.md](PRD.md) | [docs/TRD.md](TRD.md) | [docs/PHASES.md](PHASES.md) | [AI_INSTRUCTIONS.md](../AI_INSTRUCTIONS.md) | [docs/DOCUMENTATION_AUDIT.md](DOCUMENTATION_AUDIT.md)
 
 ---
 
-## 1. Design Vision and Visual Identity
+## 1. Executive Summary & Creative Direction
 
-### 1.1 The Metaphor: The Developer's Survival Base
-Software engineering is a survival game. Developers venture into treacherous codebases filled with lurking null pointers, volatile race conditions, and memory leaks (hostile mobs). When cornered by a cryptic stack trace, the developer retreats to their **Survival Base**—BugBuddy.
+### 1.1 The Metaphor: The Developer's Isometric Survival Base
+Software engineering is a survival adventure. Developers journey into dark, chaotic codebases filled with lurking syntax creeps, volatile memory leaks, and ferocious stack traces. When overwhelmed by a cryptic runtime failure, the developer retreats to their **Survival Base**—BugBuddy.
 
-BugBuddy is not another sterile, corporate SaaS dashboard with generic glassmorphism and pastel gradients. It is a **tactile, gamified command post** combining the cozy charm, modular block geometry, and satisfying progression mechanics of a voxel sandbox (inspired by Minecraft's visual grammar) with a high-performance, developer-grade debugging workspace.
+BugBuddy is **not** a generic corporate SaaS dashboard decorated with square corners and muted greens. It is an **authentic, living isometric pixel-art game environment** combined with an ergonomic, high-performance developer workspace. It captures the tactile charm, voxel block geometry, and satisfying progression of classic block-building survival games (inspired by Minecraft's visual grammar) while maintaining 100% utility, speed, and code readability.
 
 ```text
-┌───────────────────────────────────────────────────────────────────────────────┐
-│                       BUGBUDDY CORE VISUAL METAPHOR                           │
-├──────────────────────────┬────────────────────────────────────────────────────┤
-│ Game Concept             │ Developer Reality Equivalent                       │
-├──────────────────────────┼────────────────────────────────────────────────────┤
-│ Survival Base / Campfire │ BugBuddy App Shell & Productivity Hub              │
-│ Hostile Mobs (Creepers)  │ Bugs, Syntax Errors, Stack Traces, Compiler Panics │
-│ Sword & Crafting Table   │ The Bug Confession Booth & Interactive Chat        │
-│ XP Orbs & Leveling       │ Resolved Bugs, Completed Tasks, Daily Streaks      │
-│ Tamed Pet Companion      │ The Procrastination Pet (Mood reflecting output)   │
-│ Redstone Circuitry       │ Error Redaction, Input Processing & Analysis Engine│
-│ Enchantment Table        │ The Knowledge Codex (Grounded RAG Documentation)   │
-│ Hotbar / Inventory       │ Persistent Tool & Section Navigation Sidebar       │
-└──────────────────────────┴────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                        BUGBUDDY CORE ISOMETRIC METAPHOR                               │
+├──────────────────────────┬─────────────────────────────────────────────────────────────┤
+│ Game Element             │ Developer Reality Equivalent                                │
+├──────────────────────────┼─────────────────────────────────────────────────────────────┤
+│ Isometric Base Camp      │ Central Habitual Dashboard & Productivity Campfire          │
+│ The Hearth Companion     │ "ByteBuddy" — Virtual Pixel Companion & Sarcastic Mentor    │
+│ The Altar of Penance     │ Bug Confession Booth (Multi-Language Code Input & Redaction)│
+│ Crafting Terminal        │ Interactive Multi-Turn Debugging Chat Workspace             │
+│ Notice & Quest Board     │ Daily Coding Quests, Sprint Tasks & Timer Milestones        │
+│ The Bug Graveyard        │ Historical Bug Archive, Post-Mortems & Resolution Shelf     │
+│ The Explorer's Codex     │ Grounded Knowledge Base (RAG Documentation & Language Specs)│
+│ Control Chest            │ Settings Panel (Themes, Pixel Fonts, Audio, Local API Keys) │
+│ Hostile Mobs             │ Bugs: Creepers (Syntax), Skeletons (Types), Endermen (Leaks)│
+└──────────────────────────┴─────────────────────────────────────────────────────────────┘
 ```
 
-### 1.2 Core Design Principles
-1. **Blocky Depth & Tactile Physicality**: Surfaces utilize clean, layered voxel-style borders (inset and outset pixel-beveled shadows) giving cards the feel of sculpted stone, obsidian, and wood slabs.
-2. **Atmospheric Contrast**: Deepslate backgrounds (`#121417`, `#181A1F`) provide high-contrast backdrops that make Emerald greens, Redstone crimsons, Gold XP accents, and Diamond blues pop with purpose.
-3. **Typography Dual-Classing**: Headings and game HUD stats use crisp pixel-style fonts (`Press Start 2P` or `Silkscreen`), while code editors and long diagnostic explanations use hyper-legible developer typefaces (`JetBrains Mono` and `Inter`) to prevent eye fatigue.
-4. **Sarcastic Emotional Stake**: The virtual companion is a living entity inside this base. It does not speak in corporate pleasantries. It delivers biting, sharp humor from its pixelated hearth.
-5. **Epistemic & Functional Honesty**: Visual styling never sacrifices utility. Code blocks are copy-pasteable in one click, diffs are mathematically clear, and remote execution is never falsely implied.
+### 1.2 Strict Art Direction Invariants
+To maintain distinct game-world immersion without degrading developer ergonomics:
+1. **Deliberately Visible Square Pixels**: All icons, character sprites, block textures, and UI borders adhere to integer-scaled pixel art (`image-rendering: pixelated`).
+2. **Chunky Block Geometry**: UI panels feature 3-level voxel bevels (light highlight on top/left, deep shadow on bottom/right) simulating sculpted stone, dirt, and wood slabs.
+3. **No Corporate SaaS Compromises**: Strictly **NO** generic glassmorphism, pastel gradients, floating pill cards, glossy 3D blobs, or generic vector illustrations.
+4. **Code Readability Supremacy**: Source code, error stack traces, and detailed technical diagnoses are **never** rendered in pixel fonts. The display pixel fonts (`Press Start 2P`, `Silkscreen`, `VT323`) are reserved for headers, HUD statistics, and labels; code blocks use crisp monospace (`JetBrains Mono`), and body text uses legible system typography (`Inter`).
+5. **Legally Clean Assets**: All art, textures, and sprites are original or open-source under permissive licenses (CC0/SIL OFL). No proprietary Minecraft skins, logos, or copyrighted Mojang assets are used.
 
 ---
 
-## 2. Target Users and UX Goals
+## 2. Isometric World & Camera Direction
+
+### 2.1 Geometric Perspective & Grid Mathematics
+The main visual centerpiece is a **2.5D Isometric World** rendered with a classic 2:1 dimetric projection ratio (often referred to as game isometric).
 
 ```text
-┌────────────────────────────────────────────────────────────────────────┐
-│                        User Personas & UX Targets                      │
-├────────────────────┬────────────────────┬──────────────────────────────┤
-│ Novice Nora        │ Procrastinating    │ Senior Sam                   │
-│ (CS Student)       │ Pete (Junior Eng)  │ (Lead Architect)             │
-│ "Why did my C code │ "Just one YouTube  │ "Spare me the pleasantries;  │
-│ segfault again?"   │ video before fix." │ give me the diff and tests." │
-└────────────────────┴────────────────────┴──────────────────────────────┘
+       Isometric Tile Projection (2:1 Ratio)
+                 (0, 0)
+                   /\
+                  /  \
+     (-1, 0)     /    \     (0, 1)
+          \     / Tile \     /
+           \   /  Top   \   /
+            \ /          \ /
+             V------------V
+             |            |
+  Tile Left  | Block Body |  Tile Right
+    Face     |   Depth    |    Face
+             |            |
+             \            /
+              \          /
+               \        /
+                \      /
+                 V----V
 ```
 
-### 2.1 UX Goals
-- **Instant Orientation (< 2 seconds)**: The top HUD and base-camp dashboard immediately communicate: (1) active pet mood, (2) current XP/level, and (3) a one-click CTA to confess a bug.
-- **Dopamine-Fueled Feedback**: Completing tasks and fixing bugs awards floating gold XP particles and audible or visual level-up celebrations.
-- **Zero-Friction Confession**: Pasting code, detecting language, stripping secrets, and rendering a structured diagnosis completes smoothly with zero required modal popups.
-- **Accessible Legibility (WCAG 2.1 AA)**: All text passes 4.5:1 contrast ratios. Screen readers receive live status announcements for pet mood changes and chat responses.
+- **Base Tile Dimensions**:
+  - Tile Width ($W$): `64px`
+  - Tile Height ($H$): `32px` ($W / 2$)
+  - Vertical Block Height ($D$): `16px` (extruded block thickness)
+- **Coordinate Transformation Matrix**:
+  To convert 3D grid coordinates $(x, y, z)$ into 2D screen coordinates $(S_x, S_y)$:
+  $$S_x = (x - y) \times \frac{W}{2} + \text{Origin}_x$$
+  $$S_y = (x + y) \times \frac{H}{2} - (z \times D) + \text{Origin}_y$$
+- **Depth Sorting Order (Z-Indexing)**:
+  Sprites and terrain blocks are rendered back-to-front using depth metric:
+  $$\text{Depth} = x + y + (z \times 2)$$
+
+### 2.2 Voxel Palette & Surface Treatments
+The world terrain is constructed from 7 distinct voxel types:
+
+| Block Type | Top Face Hex | Light Face Hex (Left) | Dark Face Hex (Right) | Texture Motif |
+| :--- | :--- | :--- | :--- | :--- |
+| **Grass Block** | `#5B8C32` (Lush Green) | `#4A7328` | `#395A1E` | Pixelated grass fringe hanging over dirt edge |
+| **Dirt Layer** | `#866043` (Rich Loam) | `#6E4E36` | `#563C2A` | Rough 2×2 square loam pebble speckles |
+| **Chiseled Stone**| `#7F8287` (Granite Grey)| `#6B6D71` | `#57585C` | Inset mortar grooves with chipped stone bevels |
+| **Oak Wood Planks**| `#A27848` (Warm Timber)| `#87643B` | `#6C4F2E` | Horizontal wood grain stripes with nail studs |
+| **Obsidian** | `#261B3D` (Deep Purple) | `#1D142E` | `#140E20` | Subtle blue-magenta reflective crystalline shards |
+| **Water / River** | `#2E72B8` (Azure Stream)| `#255D96` | `#1C4774` | Animated 2-frame 50% opacity undulating wave ripples |
+| **Redstone Ore** | `#3A3A3C` (Stone Base) | `#2E2E30` | `#222224` | Glowing ruby crimson speckles (`#E53935`) |
+
+### 2.3 Lighting, Shading & Depth Rules
+1. **Directional Sun/Key Light**: Originates from the top-left (North-West) of the isometric space.
+   - Top Face: 100% illumination (unshaded diffuse).
+   - Left Face: 80% illumination (gentle half-tone shadow).
+   - Right Face: 60% illumination (deep ambient occlusion shadow).
+2. **Point Light (Campfire & Lanterns)**: The campfire in Base Camp casts dynamic warm amber illumination (`#F1C40F`, `#E67E22`) over adjacent tiles within a 3-block radius with subtle 2-frame flicker.
+3. **Drop Shadows**: Characters and floating items cast a semi-transparent, pixelated 2D elliptical shadow (`rgba(0, 0, 0, 0.45)`) directly onto the block surface below.
+
+### 2.4 World Framing & Viewport Hierarchy
+The isometric world serves as an atmospheric diorama framed within the web app:
+- **Desktop (>1024px)**:
+  - Top: Fixed Game HUD (`56px` height).
+  - Left: Developer Inventory Hotbar (`240px` width, collapsible to `64px`).
+  - Center: Living Isometric Base Camp Stage (`420px` height) with interactive pet, campfire, and animated terrain, transitioning seamlessly into docked workspace panels below.
+  - Right: Companion Status & Quest Drawer (`360px` width).
+- **Tablet (768px–1024px)**:
+  - Inventory collapses to icon-only hotbar (`64px`).
+  - The isometric stage scales proportionally (integer pixel scaling).
+  - Right panel collapses to an overlay drawer.
+- **Mobile (<768px)**:
+  - Stage renders as a focused 320×180px diorama centered on the pet.
+  - UI collapses to single-column tabbed navigation with bottom game hotbar (`56px`).
 
 ---
 
-## 3. Information Architecture
+## 3. The BugBuddy Virtual Companion: "ByteBuddy"
 
-```mermaid
-graph TD
-    Root[BugBuddy Application Shell] --> HUD[Top Navigation: Game HUD]
-    Root --> Sidebar[Left Navigation: Developer Inventory]
-    Root --> Workspace[Main Game Canvas / Base Camp]
-    Root --> StatusPanel[Right Companion & Quest Drawer]
+### 3.1 Creature Concept & Voxel Anatomy
+The virtual pet, **ByteBuddy**, is an original cyber-golem creature inhabiting the developer's base camp. It is part mischievous bug, part sturdy blocky automaton.
 
-    HUD --> PlayerCard[Player Handle & Level]
-    HUD --> XPBar[XP Progress & Streak]
-    HUD --> QuickSettings[Audio, Theme, Settings]
-
-    Sidebar --> NavBase[Base Camp Dashboard]
-    Sidebar --> NavBooth[Bug Confession Booth]
-    Sidebar --> NavChat[Interactive Debugging Chat]
-    Sidebar --> NavQuests[Daily Quest Board]
-    Sidebar --> NavPet[Companion Sanctuary]
-    Sidebar --> NavHistory[Bug Graveyard / History]
-    Sidebar --> NavCodex[Knowledge Codex]
-
-    Workspace --> ActiveView{Active View Router}
-    ActiveView --> ViewBase[Base Camp: Pet Hearth + Quick Actions]
-    ActiveView --> ViewBooth[Confession Booth: Input + Roast Card + Diff]
-    ActiveView --> ViewChat[Chat Workspace: Multi-turn + Follow-up Chips]
-    ActiveView --> ViewQuests[Quest Board: Tasks + Timers + Daily Quests]
+```text
+                 ByteBuddy Front/Isometric Blueprint
+                          [ Antenna Orb ]  <- Pulses with XP / state
+                                 ||
+                          ┌──────────────┐
+                          │  ■        ■  │ <- 2x2 Square Pixel Eyes
+                          │   ┌──────┐   │ <- Expressive Mouth Block
+                          │   └──────┘   │
+                          └──────┬───────┘
+                                 │
+                          ┌──────┴───────┐
+             [Left Arm]   │  [Heart Orb] │   [Right Arm / Tool]
+             ┌────────┐   │  Core Chest  │   ┌────────┐
+             │  4x6   │   └──────┬───────┘   │  4x6   │ (Holds Iron Wrench
+             └────────┘          │           └────────┘  or Wooden Sword)
+                          ┌──────┴───────┐
+                          │  6x4   6x4   │ <- Sturdy Stubby Voxel Legs
+                          └──────────────┘
 ```
+
+- **Proportions**:
+  - Head: `16×16×16px` cubic voxel head.
+  - Eyes: `2×2px` square pixel pupils that blink, widen, or squint.
+  - Body: `12×12×14px` torso with glowing emerald chest core.
+  - Limbs: `4×4×6px` blocky arms and stubby `6×4×4px` legs.
+  - Antenna: Single top antenna with a floating voxel crystal that changes color with pet mood.
+- **Palette**: Slate iron body (`#4B5263`), emerald core (`#2ECC71`), warm gold eye accents (`#F1C40F`), and weathered stone joints (`#2E3440`).
+
+### 3.2 Five Core Mood States & Sprite Specifications
+
+```text
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                        BYTEBUDDY EMOTIONAL STATE TAXONOMY                              │
+├───────────────────┬───────────────┬───────────────┬────────────────────────────────────┤
+│ Mood State        │ Visual Sprite │ Animation     │ Dialogue & Trigger                 │
+├───────────────────┼───────────────┼───────────────┼────────────────────────────────────┤
+│ 1. ECSTATIC       │ 🌟 Glowing    │ 4-frame jump, │ "Three bugs squashed in a row!     │
+│                   │ Emerald Crown │ gold sparkles │ Did you secretly become senior?"   │
+│                   │ Wide eyes (o_o│ (120ms/frame) │ [Trigger: 3 bugs fixed in sprint]  │
+├───────────────────┼───────────────┼───────────────┼────────────────────────────────────┤
+│ 2. HAPPY          │ 😊 Warm Amber │ 2-frame bounce│ "Another syntax error slayed.      │
+│                   │ Campfire sit  │ tail wag      │ The base campfire burns bright."   │
+│                   │ Curved eyes   │ (250ms/frame) │ [Trigger: Bug resolved (+50 XP)]   │
+├───────────────────┼───────────────┼───────────────┼────────────────────────────────────┤
+│ 3. NEUTRAL        │ 😐 Attentive  │ Slow 2px chest│ "Code compiles. Tests are quiet.   │
+│                   │ Iron Wrench   │ breathing,    │ What disaster are we causing next?"│
+│                   │ Blink (3s)    │ (500ms/frame) │ [Trigger: Fresh session start]     │
+├───────────────────┼───────────────┼───────────────┼────────────────────────────────────┤
+│ 4. DISAPPOINTED   │ 😒 Slumped    │ Drooping ears,│ "I have watched paint dry faster   │
+│                   │ Grey antenna  │ puff of smoke │ than this pull request."           │
+│                   │ Half-slit eyes│ (400ms/frame) │ [Trigger: Timer expired / snoozed] │
+├───────────────────┼───────────────┼───────────────┼────────────────────────────────────┤
+│ 5. DRAMATIC_      │ 🌧️ Collapsed  │ Face-down slab│ "I am entering the void.           │
+│    DESPAIR        │ Void raincloud│ twitching leg │ Even TypeScript couldn't save us." │
+│                   │ X_X eyes      │ (300ms/frame) │ [Trigger: 3+ snoozes / crash]      │
+└───────────────────┴───────────────┴───────────────┴────────────────────────────────────┘
+```
+
+### 3.3 Animation Engine & Reduced Motion Rules
+- **Frame Rate**: Retro 4 FPS (250ms per frame) to 8 FPS (125ms per frame) using CSS `steps()` timing functions for an authentic retro feel:
+  ```css
+  animation: bytebuddy-bounce 1s steps(4) infinite;
+  ```
+- **Reduced Motion Fallback (`prefers-reduced-motion: reduce`)**:
+  - Suppresses all jumping, hopping, floating particles, and camera shakes.
+  - Replaces animated sprite sequences with single static expressive pose matching the active mood.
+  - Retains speech bubbles and text-based dialogue updates without motion.
 
 ---
 
-## 4. Navigation Model
+## 4. Main Screens Specification
 
-### 4.1 Top Navigation: The Game HUD
-A compact, fixed-height (56px) game heads-up display anchored to the top of the viewport. It avoids the look of a traditional enterprise navbar and resembles an RPG status bar:
-
-```text
-┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ [🐛 BUG-BUDDY] │ ⚔️ DEV-PLAYER [LVL 3] │ [████████░░░░░ 519/800 XP] │ 🔥 4-DAY STREAK │ [⚙️ SETTINGS] │
-└──────────────────────────────────────────────────────────────────────────────────────────────────┘
-```
-
-- **Brand Block (Left)**: Pixelated bug icon paired with bold Minecraft-style block lettering (`BUGBUDDY`).
-- **Player Stats (Center-Left)**: Local player handle with pixel badge indicating current title (*"Console.log Archaeologist"*).
-- **XP Bar (Center)**: Segmented retro health/XP bar displaying current level progress with animated gold fill.
-- **Streak Tracker (Center-Right)**: Flickering pixelated campfire/flame icon showing consecutive days of active debugging.
-- **Utility HUD (Right)**: Retro toggle buttons for Audio effects (Chiptune click SFX), High-Contrast Mode, and Settings Modal.
-
-### 4.2 Left Sidebar: The Developer Inventory
-A persistent 240px sidebar styled as an open game inventory hotbar with carved stone borders and pixel-art category icons:
-
-```text
-┌─────────────────────────┐
-│ 🧰 DEVELOPER INVENTORY  │
-├─────────────────────────┤
-│ [🏕️] Base Camp          │ <- Active (Green Emerald Border)
-│ [⚔️] Confession Booth   │
-│ [💬] Debugging Chat     │
-│ [📜] Quest Board        │
-│ [🐾] Companion Stage    │
-│ [🪦] Bug Graveyard      │
-│ [📖] Knowledge Codex    │
-│ [⚙️] Base Settings      │
-├─────────────────────────┤
-│ [🔻 COLLAPSE SIDEBAR]   │
-└─────────────────────────┘
-```
-
-- **Collapsible State**: On desktop screens, clicking collapse minimizes the sidebar to a 64px compact icon hotbar. On tablet/mobile, it transforms into an off-canvas drawer triggered by an inventory chest icon button in the HUD.
-- **Active State Feedback**: Selected item features an emerald green border (`#2ECC71`), an indented slab background, and an emerald arrow indicator (`►`).
-
----
-
-## 5. Main Dashboard Layout: Base Camp
-
-The **Base Camp** is the default view. It represents the developer's cozy survival haven between coding battles.
+### Screen A: Base Camp / Main Dashboard
+The initial landing experience that grounds the developer in their survival base.
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ [TOP HUD: PLAYER STATUS & XP]                                                                          │
+│ [TOP GAME HUD: DEV-PLAYER (LVL 3) | 519/800 XP [████████░░░░] | 🔥 4-DAY STREAK | [⚙️ SETTINGS]]        │
 ├───────────────┬────────────────────────────────────────────────────────┬───────────────────────────────┤
-│ [INVENTORY]   │ [THE HEARTH: SURVIVAL BASE]                            │ [COMPANION & QUEST STATUS]    │
+│ [INVENTORY]   │ [ISOMETRIC BASE CAMP DIORAMA]                          │ [PET & SPRINT COMPACT PANEL]  │
 │               │ ┌────────────────────────────────────────────────────┐ │                               │
-│ Base Camp     │ │  🔥 CAMPFIRE & PIXEL PET STAGE                     │ │ 🐾 PET SUMMARY                │
-│ Confession    │ │     [  ^ _ ^  ]   Mood: HAPPY                      │ │ Mood: HAPPY (Level 3)         │
-│ Debug Chat    │ │     /|  💻  |\   "You survived the morning        │ │ Next: Senior Breakpoint Guru│
-│ Quests        │ │      /     \       without dropping the database." │ │                               │
-│ Companion     │ └────────────────────────────────────────────────────┘ │ 📜 ACTIVE QUEST               │
-│ Graveyard     │ ┌────────────────────────────────────────────────────┐ │ Confess 1 C++ Pointer Bug     │
-│ Codex         │ │ ⚡ PRIMARY QUICK ACTIONS                           │ │ Progress: [██████░░] 1/2      │
-│ Settings      │ │ [🗡️ CONFESS A BUG (C, C++, Py, Java, JS, TS)]      │ │ Reward: +75 XP              │
-│               │ │ [💬 CONTINUE LAST CHAT]  [📜 VIEW ACTIVE QUESTS]   │ │                               │
-│               │ └────────────────────────────────────────────────────┘ │ ⏱️ PRODUCTIVITY TIMER          │
-│               │ ┌─────────────────────────┬──────────────────────────┐ │ Current Task: Refactor auth   │
-│               │ │ 🪦 RECENT CONFESSIONS   │ 📋 DAILY SPRINT TASKS    │ │ Time Remaining: 24:18         │
-│               │ │ • NullPointer (Java)    │ [x] Fix CORS in server   │ │ [⏸️ PAUSE] [💤 SNOOZE]        │
+│ [🏕️] Base Camp│ │  /\                                                │ │ 🐾 BYTEBUDDY STATUS           │
+│ [⚔️] Confess   │ │ /  \       [ByteBuddy (HAPPY)]                    │ │ Mood: HAPPY (Level 3)         │
+│ [💬] Chat     │ │/    \      🔥 Campfire   🪵 Oak Log Bench          │ │ "Base secure. No crashes."   │
+│ [📜] Quests   │ │\    /     🌱 Grass Voxel Terrain                   │ │                               │
+│ [🐾] Habitat  │ │ \  /                                               │ │ 📜 DAILY QUEST OBJECTIVE      │
+│ [🪦] History  │ │  \/                                                │ │ Fix 1 C++ Pointer Bug [1/2]   │
+│ [📖] Codex    │ └────────────────────────────────────────────────────┘ │ Reward: +75 XP                │
+│ [⚙️] Settings  │ ┌────────────────────────────────────────────────────┐ │                               │
+│               │ │ ⚔️ PRIMARY ACTIONS HOTBAR                          │ │ ⏱️ ACTIVE SPRINT TIMER       │
+│               │ │ [🗡️ CONFESS A BUG (C, C++, Java, Py, JS, TS)]      │ │ Task: Refactor Token Auth     │
+│               │ │ [💬 RESUME CHAT]      [📜 VIEW QUEST BOARD]        │ │ Remaining: 24:18 [⏸️] [💤]   │
+│               │ └────────────────────────────────────────────────────┘ │                               │
+│               │ ┌─────────────────────────┬──────────────────────────┐ │ 🏆 RECENT ACHIEVEMENTS        │
+│               │ │ 🪦 RECENT BUG POSTS     │ 📋 ACTIVE SPRINT TASKS   │ │ • NullPointer Conqueror (+50) │
+│               │ │ • NullPointer (Java)    │ [x] Fix CORS in server   │ │ • 4-Day Streak Ember (+100)   │
 │               │ │ • Segfault (C)          │ [ ] Check TS generics    │ │                               │
 │               │ └─────────────────────────┴──────────────────────────┘ │                               │
 └───────────────┴────────────────────────────────────────────────────────┴───────────────────────────────┘
 ```
 
-### 5.1 The Hearth (Pet Visualizer Arena)
-- Occupies the top section of the central workspace.
-- Rendered with an animated pixel-art campfire (`#E53935` / `#F1C40F`) casting dynamic pixel lighting across a cobblestone hearth.
-- The virtual pet rests or works by the fire, responding immediately with speech bubbles reflecting current mood and recent events.
-
-### 5.2 Quick Actions Bar
-- **Primary CTA Button**: Large blocky Emerald button (`🗡️ CONFESS A BUG`), styled with a 3D pixel bevel, inviting immediate code submission.
-- **Secondary Buttons**: Stone slab buttons (`💬 Resume Chat`, `📜 View Quests`).
-
-### 5.3 Modular Sub-Panels
-- **Recent Confessions Slab**: Displays the last 3 submitted bugs with language badges, error classification chips, and quick-reopen shortcuts.
-- **Sprint Task Overview**: Quick checkboxes allowing developers to mark tasks as completed directly from the home screen, immediately triggering gold XP floaters.
+- **Focal Point**: Central 2.5D diorama showing ByteBuddy resting by the campfire, with smoke particles rising in pixel steps.
+- **Direct Actions**:
+  - Large beveled emerald button `🗡️ CONFESS A BUG` triggers immediate transition to Screen B.
+  - Stone hotbar buttons to resume last debugging conversation or open the quest board.
+- **Live Widgets**: Recent bug resolutions and daily tasks with inline checkboxes triggering floating XP particles upon completion.
 
 ---
 
-## 6. The Bug Confession Booth
-
-The **Confession Booth** is designed as an ancient Altar of Code Penance—a place where developers lay bare their embarrassing errors before the stone gods of syntax.
+### Screen B: Bug Confession Booth
+The sacred workstation where developers confess their code sins and receive instant diagnostics and humorous roasts.
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
 │ ⚔️ THE BUG CONFESSION BOOTH — ALTAR OF SYNTACTIC PENANCE                                               │
 ├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ [1. SELECT TARGET LANGUAGE]                                                                            │
-│ [ C ] [ C++ ] [ Java ] [ Python ] [ JavaScript ] [ TypeScript ]  [⚡ AUTO-DETECT]                      │
+│ [SELECT TARGET LANGUAGE]                                                                               │
+│ [ C ] [ C++ ] [ Java ] [ Python ] [ JavaScript ] [ TypeScript ]  [⚡ AUTO-DETECT: C++]                 │
+├────────────────────────────────────────────────────────┬───────────────────────────────────────────────┤
+│ [CODE PENANCE INPUT]                                   │ [COMPILER TANTRUM / ERROR TRACE (OPTIONAL)]   │
+│ ┌────────────────────────────────────────────────────┐ │ ┌───────────────────────────────────────────┐ │
+│ │ 1 #include <iostream>                              │ │ │ g++ -Wall -O2 test.cpp                    │ │
+│ │ 2 int main() {                                     │ │ │ Segmentation fault: 11 (core dumped)        │ │
+│ │ 3     int* ptr = nullptr;                          │ │ │                                           │ │
+│ │ 4     std::cout << *ptr << std::endl;              │ │ │                                           │ │
+│ │ 5     return 0;                                    │ │ │                                           │ │
+│ │ 6 }                                                │ │ │                                           │ │
+│ └────────────────────────────────────────────────────┘ │ └───────────────────────────────────────────┘ │
+│ Characters: 128 / 20,000 [🧹 CLEAR] [📋 PASTE DEMO]    │ Context: Nullptr dereference in main()        │
+├────────────────────────────────────────────────────────┴───────────────────────────────────────────────┤
+│ 🛡️ CLIENT SECRET SCANNER: [ACTIVE — API keys, JWTs, and passwords scrubbed locally before transmission]│
 ├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ [2. CODE PENANCE INPUT]                                  │ [3. COMPILER TANTRUM / ERROR TRACE]         │
-│ ┌──────────────────────────────────────────────────────┐ │ ┌─────────────────────────────────────────┐ │
-│ │ 1 #include <stdio.h>                                 │ │ │ gcc -Wall main.c                          │ │
-│ │ 2 int main() {                                       │ │ │ Segmentation fault: 11 (core dumped)      │ │
-│ │ 3   char *ptr = NULL;                                │ │ │                                           │ │
-│ │ 4   printf("%c\n", *ptr);                            │ │ │                                           │ │
-│ │ 5   return 0;                                        │ │ │                                           │ │
-│ │ 6 }                                                  │ │ │                                           │ │
-│ └──────────────────────────────────────────────────────┘ │ └─────────────────────────────────────────┘ │
-│ Characters: 104 / 20,000 [🧹 CLEAR] [📋 PASTE EXAMPLE]   │ Context: Null dereference at runtime        │
-├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ 🛡️ CLIENT SECRET SCANNER: [ACTIVE - ALL TOKENS SCRUBBED LOCALLY]                                       │
-│ ℹ️ NOTE: BugBuddy operates text analysis only. No remote compilation or execution occurs in the MVP.  │
-├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│                            [🔥 CONFESS BUG & RECEIVE SACRED ROAST (CTRL+ENTER)]                        │
+│                       [🔥 CONFESS BUG & RECEIVE SACRED ROAST (CTRL + ENTER)]                           │
 └────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 6.1 Input Form Design
-1. **Language Hotbar**: Six prominent pixel buttons representing C, C++, Java, Python, JavaScript, and TypeScript, plus an Auto-Detect toggle. The active language is highlighted with a gold border and glowing gem icon.
-2. **Dual-Pane Code & Error Editor**:
-   - Left pane: Dark monospace editor with syntax-colored line numbers, auto-indentation, and bracket matching.
-   - Right pane: Dedicated compiler terminal input with retro green or red terminal text for error output and stack traces.
-3. **Secret Redactor Shield Banner**: A reassuring retro shield badge indicating that API keys, passwords, and JWTs are stripped locally before processing.
-4. **Primary Confess CTA**: A beveled redstone/obsidian button that triggers an animated redstone particle burst when clicked.
-
-### 6.2 Structured Response Card (The Judgment)
-Upon submission, the Altar yields structured judgment in clear, digestible tiers:
-
-```text
-┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ 📜 THE VERDICT & ROOT CAUSE DIAGNOSIS                                                                  │
-├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ 🔥 THE ROAST:                                                                                          │
-│ "You dereferenced a null pointer with such supreme confidence that the operating system filed a        │
-│  restraining order. Outstanding emergency response from a line written to prevent the emergency."      │
-├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ 🏷️ CATEGORY: [Runtime Error]  |  💻 LANGUAGE: [C]  |  🎯 CONFIDENCE: [High]                           │
-├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ 🔍 LIKELY DIAGNOSIS:                                                                                   │
-│ Dereferencing pointer 'ptr' at line 4 while it holds the NULL address (0x0).                           │
-├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ 🛠️ STEP-BY-STEP FIX:                                                                                   │
-│ 1. Verify allocation returned valid non-NULL memory before access.                                     │
-│ 2. Guard dereference with defensive check: if (ptr != NULL) printf("%c\n", *ptr);                     │
-├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ 📝 CODE DIFF:                                                                                          │
-│ ┌────────────────────────────────────────────────────────────────────────────────────────────────────┐ │
-│ │ - printf("%c\n", *ptr);                                                                            │ │
-│ │ + if (ptr != NULL) {                                                                               │ │
-│ │ +     printf("%c\n", *ptr);                                                                        │ │
-│ │ + }                                                                                                │ │
-│ └────────────────────────────────────────────────────────────────────────────────────────────────────┘ │
-│ [📋 COPY DIFF] [📋 COPY FULL FIX]                                                                      │
-├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ 🧪 REPRODUCIBLE TEST SUGGESTION:                                                                       │
-│ Compile with AddressSanitizer: gcc -fsanitize=address -g main.c && ./a.out                             │
-│ [📋 COPY TEST COMMAND]                                                                                 │
-├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ 📖 KNOWLEDGE CODEX CITATIONS:                                                                          │
-│ • [C Standard ISO/IEC 9899] Clause 6.5.3.2: Address and Indirection Operators                         │
-│ • [CERT C Coding Standard] Rule EXP34-C: Do not dereference null pointers                             │
-├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ ⚡ INTERACTIVE FOLLOW-UP ACTIONS:                                                                      │
-│ [🐣 Simpler Explanation] [🔬 Deeper Mechanics] [✂️ Minimal Diff] [🧪 More Tests] [🔥 Roast Again]       │
-└────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-```
+- **Monaco/CodeMirror Integration**: Monospace high-contrast editor with syntax highlighting, line numbers, and indentation guides. Pixel fonts are strictly avoided in code text.
+- **Language Selector Hotbar**: 6 stone slab buttons with language badges. Active selection has an illuminated gold bevel.
+- **Client-Side Secret Shield**: Live scanning banner verifying that API tokens, credentials, and passwords never leave the browser unmasked.
+- **Diagnostic Result Card (The Judgment)**:
+  - **The Roast**: Bold satirical roast from ByteBuddy.
+  - **Root Cause & Classification**: Categorized tag (e.g., `[Null Dereference]`, `[Memory Management]`).
+  - **Minimal Code Diff**: Unified or split diff with green addition / red deletion blocks and 1-click copy.
+  - **Reproducible Test Command**: Shell command to verify fix (e.g., `g++ -fsanitize=address ...`).
+  - **Codex Citations**: Grounded links to official documentation (ISO C++, MDN, Oracle Java).
 
 ---
 
-## 7. The Interactive Debugging Chatbot
-
-The debugging chat workspace treats BugBuddy as an active co-op companion standing beside the developer's workbench.
+### Screen C: Interactive Debugging Chat
+A multi-turn collaborative terminal workstation where the developer and ByteBuddy work through complex problems together.
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
 │ 💬 DEBUGGING WORKBENCH: MULTI-TURN SPRINT CHAT                                                         │
 ├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ [Session: C Pointer Bug #104]  [Language: C]  [Status: Diagnosing]  [🗑️ Clear Chat] [➕ New Session]   │
+│ [Session #104: C++ Nullptr Dereference]  [Language: C++]  [Status: Diagnosed]  [🗑️ Clear] [➕ New]       │
 ├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
 │ ┌────────────────────────────────────────────────────────────────────────────────────────────────────┐ │
 │ │ 🧑‍💻 USER:                                                                          10:42 AM        │ │
-│ │ My code segfaulted at line 4 with char *ptr = NULL.                                                │ │
+│ │ My code crashed with Segfault 11 when accessing *ptr.                                              │ │
 │ ├────────────────────────────────────────────────────────────────────────────────────────────────────┤ │
-│ │ 🐛 BUGBUDDY (Sarcastic Senior Companion):                                          10:42 AM        │ │
-│ │ 🔥 "You dereferenced null. Truly an architectural triumph."                                        │ │
+│ │ 🐛 BYTEBUDDY:                                                                      10:42 AM        │ │
+│ │ 🔥 "You dereferenced nullptr with astonishing optimism. Did you expect the RAM to invent memory?"   │ │
 │ │                                                                                                    │ │
-│ │ 🔍 Diagnosis: Memory address 0x0 was read. Line 4 dereferenced an unallocated pointer.             │ │
-│ │ 🛠️ Minimal Fix: Guard pointer with if (ptr != NULL).                                              │ │
+│ │ 🔍 Diagnosis: Line 4 evaluated *ptr where ptr == nullptr (address 0x0). Unmapped page fault.       │ │
+│ │ 🛠️ Minimal Fix: Guard access with `if (ptr != nullptr)`.                                          │ │
 │ │                                                                                                    │ │
-│ │ ⚡ Context Actions:                                                                                │ │
-│ │ [🐣 Simpler] [🔬 Deeper] [✂️ Minimal Diff] [🧪 More Tests] [📍 Explain Line 4] [🔥 Roast Again]   │ │
-│ ├────────────────────────────────────────────────────────────────────────────────────────────────────┤ │
-│ │ 🧑‍💻 USER:                                                                          10:43 AM        │ │
-│ │ [Clicked: 🔬 Deeper] Explain the underlying operating system and memory architecture.              │ │
-│ ├────────────────────────────────────────────────────────────────────────────────────────────────────┤ │
-│ │ 🐛 BUGBUDDY:                                                                       10:43 AM        │ │
-│ │ In modern virtual memory architectures, page 0 (addresses 0x0 to 0xFFF) is intentionally marked    │ │
-│ │ unmapped by the kernel MMU to trap null pointers. When your CPU evaluates *ptr, the page table     │ │
-│ │ lookup triggers a hardware Page Fault exception. The OS kernel handles this by dispatching         │ │
-│ │ SIGSEGV (signal 11) to terminate your process.                                                     │ │
-│ │                                                                                                    │ │
-│ │ 📖 Codex Attribution: POSIX.1-2017 Memory Protection Specifications                                │ │
+│ │ ⚡ Contextual Follow-Up Actions:                                                                   │ │
+│ │ [🐣 Simpler] [🔬 Deeper Mechanics] [✂️ Minimal Diff] [🧪 More Tests] [📍 Explain Line 4] [🔥 Roast]│ │
 │ └────────────────────────────────────────────────────────────────────────────────────────────────────┘ │
 ├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
 │ ┌──────────────────────────────────────────────────────────────────────────────────────┬─────────────┐ │
-│ │ Type your follow-up question or paste another code snippet...                        │ [⚔️ SEND]   │ │
+│ │ Type your follow-up inquiry or paste modified code...                                │ [⚔️ SEND]   │ │
 │ └──────────────────────────────────────────────────────────────────────────────────────┴─────────────┘ │
-│ [📎 Attach Code] [🧪 Request Edge Cases] [✅ Mark Bug Resolved (+50 XP)]                              │
+│ [📎 Attach Code] [🧪 Generate Edge Cases] [✅ Mark Bug Resolved (+50 XP)]                              │
 └────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 7.1 Follow-Up Action Contract Matrix
-Each action button has a defined interaction specification:
-
-| Action Chip | Prompt Injected into Thread | Interaction Contract & Behavior |
-| :--- | :--- | :--- |
-| **🐣 Simpler Explanation** | *"Explain this bug to me like I am on my first day of programming."* | Strips jargon; uses an everyday real-world analogy while keeping root cause intact. |
-| **🔬 Deeper Technical Breakdown** | *"Break down the underlying compiler/runtime mechanisms and memory models causing this."* | Details bytecodes, hardware memory pages, assembly, or language specification clauses. |
-| **✂️ Minimal Code Fix** | *"Give me the absolute smallest diff that fixes this bug without refactoring my life."* | Returns a concise 1–3 line code snippet resolving only the immediate crash. |
-| **📦 Worked Example** | *"Show a complete, working minimal reproducible example."* | Outputs a self-contained, copy-pasteable runnable file with input and expected output. |
-| **🧪 More Debugging Tests** | *"Generate 3 edge-case unit tests to catch this bug in CI."* | Generates language-specific unit assertions covering empty, max, and invalid boundaries. |
-| **📍 Explain Specific Line** | *"Explain why line [X] triggered this failure."* | Prompts for a line number and analyzes variable state and evaluations on that line. |
-| **🔥 Roast Me Again** | *"Give me another harsher roast. I didn't learn my lesson yet."* | Generates a fresh, witty roast targeting the developer's stubbornness or bad habit. |
+- **Clear Separation of Messages**: User entries are styled in dark stone slabs with right alignment; ByteBuddy entries feature the companion's pixel avatar, sarcastic quote styling, and structured diff blocks.
+- **7 Contextual Action Chips**:
+  1. `🐣 Simpler Explanation` — Re-explains without technical jargon.
+  2. `🔬 Deeper Technical Breakdown` — Explains kernel virtual memory, page tables, or bytecode.
+  3. `✂️ Minimal Diff` — Tightest 1-3 line fix.
+  4. `📦 Worked Example` — Complete self-contained runnable file.
+  5. `🧪 More Debugging Tests` — 3 edge-case unit assertions.
+  6. `📍 Explain Line X` — Deep-dive into specific line evaluations.
+  7. `🔥 Roast Me Again` — Fresh satirical roast targeting developer bad habits.
 
 ---
 
-## 8. Knowledge Codex & Grounded Source Attribution (RAG)
-
-When BugBuddy retrieves documentation from its curated knowledge base, it displays citations with integrity:
-
-```text
-┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ 📖 KNOWLEDGE CODEX — RETRIEVED SOURCES                                                                 │
-├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ [1] Cppreference: C Standard Library Memory Management                                                 │
-│     Type: Official Language Documentation  |  Language: C / C++                                        │
-│     Excerpt: "If allocation succeeds, returns a pointer to the lowest byte in the allocated block.     │
-│               If allocation fails, returns a null pointer."                                            │
-│     Source URL: https://en.cppreference.com/w/c/memory/malloc                                         │
-├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ [2] SEI CERT C Coding Standard: EXP34-C                                                                │
-│     Type: Security & Quality Benchmark  |  Language: C                                                 │
-│     Excerpt: "Do not attempt to access memory through a pointer that is null."                         │
-│     Source URL: https://wiki.sei.cmu.edu/confluence/display/c/EXP34-C                                  │
-├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ ℹ️ Epistemic Status: Citations are retrieved from static curated indices. Reasoning is synthesized.  │
-└────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-```
-
-### 8.1 Fallback & Honest Empty States
-When no curated document meets the relevance threshold (score < 0.65), the UI displays:
-- **Badge**: `[No Grounded Sources Found]`
-- **Disclosure**: *"No direct official specification match found in local Codex. The diagnosis above is synthesized from general language semantics. Verify independently."*
-
----
-
-## 9. The Virtual Pet & Mood System
-
-The Procrastination Pet is the living soul of the survival base. Rendered in crisp SVG pixel-art, it transitions deterministically across five moods based purely on explicit user actions.
+### Screen D: Virtual Pet Habitat / Sanctuary
+A full-screen interactive diorama dedicated to observing ByteBuddy's environment, mood history, and achievements.
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ 🐾 PROCRASTINATION PET: EMOTIONAL STATE TAXONOMY                                                       │
-├───────────────────┬───────────────┬─────────────────────────────────┬──────────────────────────────────┤
-│ Mood State        │ Visual Sprite │ Sample Dialogue                 │ Triggering Conditions            │
-├───────────────────┼───────────────┼─────────────────────────────────┼──────────────────────────────────┤
-│ `ECSTATIC`        │ 🌟 Crowned    │ "Are you even human? Three bugs │ • 3 tasks completed in a row     │
-│                   │ Dancing Pixel │ fixed and zero coffee spills!"  │ • 5-day active debugging streak  │
-├───────────────────┼───────────────┼─────────────────────────────────┼──────────────────────────────────┤
-│ `HAPPY`           │ 😊 Cheerful   │ "Another bug confessed and      │ • Bug resolved (+50 XP)          │
-│                   │ Campfire Rest │ slain. The base is safe today." │ • Task finished before deadline  │
-├───────────────────┼───────────────┼─────────────────────────────────┼──────────────────────────────────┤
-│ `NEUTRAL`         │ 😐 Attentive  │ "The code compiles. For now.    │ • Initial session state          │
-│                   │ Tool in Hand  │ What are we building next?"     │ • Inactivity recovery (no timer) │
-├───────────────────┼───────────────┼─────────────────────────────────┼──────────────────────────────────┤
-│ `DISAPPOINTED`    │ 😒 Sighing    │ "I have watched glaciers melt   │ • Task deadline expired (00:00)  │
-│                   │ Drooped Ears  │ faster than your pull request." │ • User snoozes timer (2nd time)  │
-├───────────────────┼───────────────┼─────────────────────────────────┼──────────────────────────────────┤
-│ `DRAMATIC_DESPAIR`│ 🌧️ Weeping    │ "I am fading into the void.     │ • Task snoozed 3+ times          │
-│                   │ Raincloud Vex │ Even your linter gave up."      │ • Overdue task left abandoned    │
-└───────────────────┴───────────────┴─────────────────────────────────┴──────────────────────────────────┘
-```
-
-### 9.1 Anti-Surveillance Guarantee
-- **No Background Surveillance**: BugBuddy never monitors browser tab switches, webcam gaze, or keyboard idle seconds.
-- **Fair Rest Periods**: Legitimate developer pauses (stepping away, eating, sleeping) never trigger penalties unless the user explicitly configured an active countdown timer that expired.
-
----
-
-## 10. Quest Board & Progression Interface
-
-Tasks and debugging milestones are framed as survival quests that grant XP and advance the player's level.
-
-```text
-┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ 📜 SURVIVAL QUEST BOARD & SPRINT TASKS                                                                 │
+│ 🐾 BYTEBUDDY SANCTUARY & HABITAT                                                [🔍 ZOOM: 1x | 2x]     │
 ├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ 🏆 DAILY CODING QUESTS (RESETS IN: 14H 22M)                                                           │
 │ ┌────────────────────────────────────────────────────────────────────────────────────────────────────┐ │
-│ │ 🎯 Quest 1: Confess any C or C++ Pointer Bug                                 Reward: +50 XP        │ │
-│ │    Progress: [████████████████████] 1/1 [CLAIMED ✅]                                               │ │
+│ │                                 [ISOMETRIC VOXEL HABITAT]                                          │ │
+│ │                                                                                                    │ │
+│ │                 🌱 Grass Terraces        🪵 Crafting Table       💧 Animated River Stream          │ │
+│ │                       \                     /                         /                            │ │
+│ │                        \     [ByteBuddy]   /                         /                             │ │
+│ │                         \         🔥      /                         /                              │ │
+│ │                          \    Campfire   /                         /                               │ │
+│ │                           \             /                         /                                │ │
+│ │                            \___________/                         /                                 │ │
+│ └────────────────────────────────────────────────────────────────────────────────────────────────────┘ │
+├───────────────────────────────────────┬────────────────────────────────────────────────────────────────┤
+│ 📊 PET WELLNESS & STATS               │ 🏆 UNLOCKED SURVIVAL TROPHIES                                  │
+│ • Current Mood: HAPPY                 │ 🌟 [First Penance] Confessed initial bug (+50 XP)              │
+│ • Happiness Level: 84 / 100           │ ⚔️ [Memory Slayer] Fixed 5 C/C++ memory errors (+150 XP)       │
+│ • Survival Streak: 4 Days             │ 🛡️ [Secret Shield] Masked 10 secrets locally (+100 XP)         │
+│ • Favorite Food: Coffee Voxel (+10)   │ 👑 [Senior Breakpoint] Reached Level 5 (+500 XP)               │
+│ [☕ Feed Coffee Block] [🎾 Play Fetch]│ [🔒 Ender Dragon Slayer] Defeat final complex bug (Locked)     │
+└───────────────────────────────────────┴────────────────────────────────────────────────────────────────┘
+```
+
+- **Interactive Habitat**: Users can click the habitat to cause ByteBuddy to walk over, perform cheerful hops, or interact with items (like the crafting bench).
+- **Pet Care Actions**: Safe, fun gamification elements (e.g. feeding virtual coffee beans to boost pet cheerfulness without invasive real-world tracking).
+
+---
+
+### Screen E: Quest Board
+A Minecraft-style wooden bulletin board displaying daily coding quests, active sprint tasks, and countdown timers.
+
+```text
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ 📜 SURVIVAL QUEST BOARD & SPRINT TASKS                                           [RESETS IN: 14H 22M]  │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 🎯 DAILY CODING QUESTS                                                                                 │
+│ ┌────────────────────────────────────────────────────────────────────────────────────────────────────┐ │
+│ │ 📌 Quest 1: Confess any C or C++ Pointer Bug                                    Reward: +50 XP     │ │
+│ │    Status: [████████████████████] 1/1 Completed                                [CLAIMED ✅]        │ │
 │ ├────────────────────────────────────────────────────────────────────────────────────────────────────┤ │
-│ │ 🎯 Quest 2: Request a 'More Debugging Tests' follow-up                       Reward: +30 XP        │ │
-│ │    Progress: [░░░░░░░░░░░░░░░░░░░░] 0/1 [IN PROGRESS]                                              │ │
+│ │ 📌 Quest 2: Request a 'More Debugging Tests' follow-up in Chat                   Reward: +30 XP     │ │
+│ │    Status: [░░░░░░░░░░░░░░░░░░░░] 0/1 In Progress                              [INCOMPLETE]        │ │
 │ ├────────────────────────────────────────────────────────────────────────────────────────────────────┤ │
-│ │ 🎯 Quest 3: Finish a Sprint Task before timer expires                        Reward: +75 XP        │ │
-│ │    Progress: [██████████░░░░░░░░░░] 1/2 [IN PROGRESS]                                              │ │
+│ │ 📌 Quest 3: Complete a Sprint Task before timer expires                         Reward: +75 XP     │ │
+│ │    Status: [██████████░░░░░░░░░░] 1/2 In Progress                              [INCOMPLETE]        │ │
 │ └────────────────────────────────────────────────────────────────────────────────────────────────────┘ │
 ├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ 📋 ACTIVE SPRINT TASKS                                                        [➕ ADD NEW TASK]        │
+│ 📋 ACTIVE SPRINT TASKS                                                           [➕ ADD SPRINT TASK] │
 │ ┌────────────────────────────────────────────────────────────────────────────────────────────────────┐ │
-│ │ [ ] 1. Refactor async token refresh in auth service                          [⏱️ 18:42] [💤 SNOOZE]│ │
-│ │ [ ] 2. Fix TS2322 type mismatch in user profile interface                   [⏱️ 45:00] [💤 SNOOZE]│ │
-│ │ [x] 3. Fix off-by-one loop index in Python data loader (Done)               [+100 XP CLAIMED]      │ │
+│ │ [ ] 1. Refactor async token refresh in auth service                      [⏱️ 18:42] [💤 SNOOZE]    │ │
+│ │ [ ] 2. Fix TS2322 type mismatch in user profile interface               [⏱️ 45:00] [💤 SNOOZE]    │ │
+│ │ [x] 3. Fix off-by-one loop index in Python data loader (Done)           [+100 XP CLAIMED ✅]       │ │
 │ └────────────────────────────────────────────────────────────────────────────────────────────────────┘ │
 └────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
+- **Parchment Styling**: Pinned paper cards with pixelated push-pins on an oak plank background.
+- **Task Countdown Timers**: Monospace digital timer with redstone flashing animation when less than 5 minutes remain.
+
 ---
 
-## 11. Design Tokens and Typography
+### Screen F: Bug Graveyard / Session History
+An archive presented as labeled dungeon chests and gravestones commemorating resolved code defects.
 
-### 11.1 Semantic Color Tokens (CSS Custom Properties)
+```text
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ 🪦 THE BUG GRAVEYARD — ARCHIVE OF RESOLVED POST-MORTEMS                           [FILTER: ALL LANGS ▼]│
+├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ ┌────────────────────────────────────────────────────────────────────────────────────────────────────┐ │
+│ │ 🪦 Gravestone #104: Nullptr Dereference in Vector Search                     Language: [ C++ ]     │ │
+│ │    Slayed: Oct 10, 2026 | XP Awarded: +50 XP | Status: RESOLVED              [📖 VIEW POST-MORTEM] │ │
+│ ├────────────────────────────────────────────────────────────────────────────────────────────────────┤ │
+│ │ 🪦 Gravestone #103: ConcurrentModificationException in Event Bus            Language: [ Java ]    │ │
+│ │    Slayed: Oct 09, 2026 | XP Awarded: +75 XP | Status: RESOLVED              [📖 VIEW POST-MORTEM] │ │
+│ ├────────────────────────────────────────────────────────────────────────────────────────────────────┤ │
+│ │ 🪦 Gravestone #102: Unhandled Promise Rejection in Auth Flow                 Language: [ TS ]      │ │
+│ │    Slayed: Oct 08, 2026 | XP Awarded: +50 XP | Status: RESOLVED              [📖 VIEW POST-MORTEM] │ │
+│ └────────────────────────────────────────────────────────────────────────────────────────────────────┘ │
+└────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+- **Tombstone Cards**: Chiseled granite slabs showing bug title, language chip, resolution date, and instant re-open button.
+
+---
+
+### Screen G: Knowledge Codex (Explorer's Library)
+An explorer's enchanted tome presenting curated language specifications, memory model references, and standard library guides.
+
+```text
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ 📖 THE KNOWLEDGE CODEX — EXPLORER'S LIBRARY                                   [🔍 SEARCH CODEX: Ctrl+K]│
+├──────────────────────────────┬─────────────────────────────────────────────────────────────────────────┤
+│ 📚 TOPIC CATEGORIES          │ 📜 DOCUMENTATION ENTRY: C++20 MEMORY MODELS                             │
+│ • [ C & C++ Memory Models ]  │ ┌─────────────────────────────────────────────────────────────────────┐ │
+│ • [ Java Concurrency & GC ]  │ │ Source: ISO/IEC 14882:2020 Standard for Programming Language C++     │ │
+│ • [ Python GIL & AsyncIO ]   │ │ Section 6.7.2: Object and Memory Locations                           │ │
+│ • [ TS Type Narrowing ]      │ │                                                                     │ │
+│ • [ Linux Signals & SIGSEGV ]│ │ "Every byte in memory has a unique address. Two objects with        │ │
+│ • [ Common Exploit Patterns ]│ │  overlapping lifetimes either have distinct addresses or one is    │ │
+│                              │ │  a subobject of the other."                                         │ │
+│                              │ │                                                                     │ │
+│                              │ │ Canonical Citation: https://en.cppreference.com/w/cpp/language/memory│ │
+│                              │ └─────────────────────────────────────────────────────────────────────┘ │
+└──────────────────────────────┴─────────────────────────────────────────────────────────────────────────┘
+```
+
+- **Two-Column Explorer**: Left navigation listing language topic indexes; right page showing exact citations with canonical external links.
+- **Epistemic Honesty Badge**: Clarifies when citations come from static curated indexes versus synthesized LLM reasoning.
+
+---
+
+### Screen H: In-World Settings Panel
+An in-world stone control panel allowing developers to tailor their experience.
+
+```text
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ ⚙️ SURVIVAL BASE SETTINGS                                                               [✖️ CLOSE (Esc)]│
+├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 🎮 GAME & VISUAL PREFERENCES                                                                           │
+│ • Pixel Font Mode:        [🔘 ENABLED (Press Start 2P)]  [⚪ DISABLED (Use System Fonts)]               │
+│ • Isometric Stage Visual: [🔘 2.5D CANVAS WORLD]        [⚪ LOW-POWER STATIC BANNER]                   │
+│ • Reduced Motion:         [⚪ OFF]                      [🔘 ON (Respect prefers-reduced-motion)]       │
+│ • High-Contrast Mode:     [⚪ STANDARD]                 [🔘 WCAG AAA HIGH CONTRAST]                    │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 🎵 AUDIO & SFX PREFERENCES                                                                             │
+│ • Retro 8-Bit Chiptune SFX:[🔘 MUTED (Default)]          [⚪ ENABLED (-12dB Soft Click/Level Up)]       │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 🔑 AI PROVIDER RUNTIME CONFIGURATION (Stored in memory/sessionStorage only - Never compiled into app) │
+│ • Active Provider: [🔘 Local Mock (Free / Offline)]  [⚪ Google Gemini]  [⚪ Anthropic]  [⚪ OpenAI]    │
+│ • Personal API Key: [••••••••••••••••••••••••••••••••••••••••] [👁️ SHOW] [🧹 CLEAR KEY]                 │
+└────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+- **Functional Controls**: Immediate client-side toggles for fonts, canvas rendering, audio, and high-contrast modes.
+- **Safe Key Architecture**: Explicit disclosure that API keys are kept strictly in session memory and never transmitted to telemetry servers.
+
+---
+
+## 5. Design System Tokens & Typography
+
+### 5.1 CSS Custom Properties Token Map
 
 ```css
 :root {
-  /* Surface & World Palette (Deepslate & Bedrock) */
-  --bb-surface-ground: #101214;        /* Deep void background */
-  --bb-surface-base: #181A1F;          /* Deepslate stone canvas */
-  --bb-surface-panel: #22252C;         /* Chiseled stone panel */
-  --bb-surface-slab: #2A2E37;          /* Elevated stone slab */
-  --bb-surface-inset: #13151A;         /* Inset inventory slot background */
-
-  /* Blocky Borders & Shadows */
-  --bb-border-subtle: #343842;        /* Dark stone border */
-  --bb-border-highlight: #464C59;     /* Top/left beveled pixel light */
-  --bb-border-shadow: #0C0D0F;        /* Bottom/right beveled pixel shadow */
-  --bb-border-width: 2px;
-  --bb-border-bevel: 3px;
-
-  /* Accent & Material Tokens */
-  --bb-color-grass: #3E8E41;          /* Forest canopy / Base Camp accent */
-  --bb-color-emerald: #2ECC71;        /* Success, active nav, primary CTA */
+  /* Surface Ground & Canvas (Deepslate Voxel Palette) */
+  --bb-surface-void: #0D0E11;          /* Outer void background */
+  --bb-surface-base: #14161B;          /* Main application deepslate base */
+  --bb-surface-panel: #1E2128;         /* Chiseled stone panel background */
+  --bb-surface-slab: #272B34;          /* Elevated stone slab surface */
+  --bb-surface-inset: #111216;         /* Inset inventory slot cavity */
+  
+  /* Voxel Terrain Material Accents */
+  --bb-mat-grass-top: #5B8C32;         /* Lush voxel grass top */
+  --bb-mat-grass-side: #4A7328;        /* Grass fringe */
+  --bb-mat-dirt: #866043;              /* Loam soil */
+  --bb-mat-stone: #7F8287;             /* Granite slab */
+  --bb-mat-planks: #A27848;            /* Oak timber */
+  --bb-mat-obsidian: #261B3D;          /* Deep altar obsidian */
+  --bb-mat-water: #2E72B8;             /* River stream */
+  
+  /* Functional Game Accent Colors */
+  --bb-color-emerald: #2ECC71;         /* Success, primary CTA, active navigation */
+  --bb-color-emerald-shadow: #1E8449;  /* Emerald bottom bevel */
   --bb-color-emerald-glow: rgba(46, 204, 113, 0.25);
-  --bb-color-redstone: #E53935;       /* Error, alert, compiler panic, confess CTA */
+  
+  --bb-color-redstone: #E53935;        /* Compiler error, crash alert, confess CTA */
+  --bb-color-redstone-shadow: #922B21; /* Redstone bottom bevel */
   --bb-color-redstone-glow: rgba(229, 57, 53, 0.3);
-  --bb-color-gold: #F1C40F;           /* XP orbs, quest rewards, stars, streak fire */
+  
+  --bb-color-gold: #F1C40F;            /* XP orbs, star ratings, campfire embers */
+  --bb-color-gold-shadow: #B7950B;     /* Gold bottom bevel */
   --bb-color-gold-glow: rgba(241, 196, 15, 0.3);
-  --bb-color-diamond: #3498DB;        /* Info, C++ and TS badges, knowledge codex */
-  --bb-color-obsidian: #2A1B3D;       /* Elevated dark card, deep Altar modal */
-  --bb-color-wood: #795548;           /* Crafting table / task board accents */
+  
+  --bb-color-diamond: #3498DB;         /* Codex citations, info alerts, C++/TS chips */
+  --bb-color-diamond-shadow: #1F618D;  /* Diamond bottom bevel */
 
-  /* Typography Colors */
-  --bb-text-primary: #EDEDED;         /* High-contrast crisp white */
-  --bb-text-secondary: #A0A6B2;       /* Slate gray readable text */
-  --bb-text-muted: #6B7280;           /* Subtle labels, line numbers */
-  --bb-text-gold: #F5D76E;            /* XP stats, titles, achievements */
-  --bb-text-code: #58D68D;            /* Terminal output green */
+  /* Text & Legibility Colors */
+  --bb-text-primary: #F0F2F5;          /* Crisp high-contrast reading text (11.8:1) */
+  --bb-text-secondary: #9DA3AE;        /* Slate gray secondary text (6.2:1) */
+  --bb-text-muted: #656C78;            /* Code line numbers, subtle hints */
+  --bb-text-gold: #F7DC6F;             /* Game stats, player level, streak counter */
+  --bb-text-code-green: #58D68D;       /* Terminal output and diff additions */
+  --bb-text-code-red: #EC7063;         /* Diff deletions and compiler panics */
 
-  /* Typography Fonts */
-  --bb-font-display: 'Silkscreen', 'Press Start 2P', monospace;
+  /* Block Border & Bevel Tokens */
+  --bb-border-subtle: #2D323E;         /* Outer panel separator */
+  --bb-border-bevel-light: #3D4353;    /* Top/Left light reflection */
+  --bb-border-bevel-dark: #0A0B0E;     /* Bottom/Right shadow bevel */
+  --bb-border-width: 2px;
+  --bb-border-bevel-size: 3px;
+
+  /* Typography Stacks */
+  --bb-font-pixel-display: 'Press Start 2P', 'Silkscreen', monospace;
+  --bb-font-pixel-sub: 'VT323', monospace;
   --bb-font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --bb-font-code: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
 
-  /* Spacing Scale */
+  /* Sizing & Spacing Scale (8px Grid Alignment) */
+  --bb-space-2xs: 2px;
   --bb-space-xs: 4px;
   --bb-space-sm: 8px;
   --bb-space-md: 16px;
   --bb-space-lg: 24px;
   --bb-space-xl: 32px;
+  --bb-space-2xl: 48px;
 }
 ```
 
-### 11.2 Blocky Bevel Border Technique
-All interactive panels and buttons achieve an authentic tactile voxel aesthetic without heavy image assets using layered CSS box-shadows:
+### 5.2 Blocky Bevel Utility Classes
+Authentic voxel panels without images using pure CSS layered shadows:
 
 ```css
-/* Pixel-beveled stone slab */
+/* Tactile Chiseled Stone Slab Panel */
 .bb-panel-slab {
   background: var(--bb-surface-panel);
   border: var(--bb-border-width) solid var(--bb-border-subtle);
   box-shadow: 
-    inset 2px 2px 0px 0px var(--bb-border-highlight),
-    inset -2px -2px 0px 0px var(--bb-border-shadow),
-    0px 4px 0px 0px var(--bb-surface-ground);
+    inset 2px 2px 0px 0px var(--bb-border-bevel-light),
+    inset -2px -2px 0px 0px var(--bb-border-bevel-dark),
+    0px 4px 0px 0px var(--bb-surface-void);
+  border-radius: 0px; /* Strict 0px radius for voxel geometry */
 }
 
-/* Inset inventory slot */
+/* Inset Inventory Slot */
 .bb-inventory-slot {
   background: var(--bb-surface-inset);
   border: 2px solid var(--bb-border-subtle);
   box-shadow: 
-    inset 2px 2px 0px 0px var(--bb-border-shadow),
-    inset -2px -2px 0px 0px var(--bb-border-highlight);
+    inset 2px 2px 0px 0px var(--bb-border-bevel-dark),
+    inset -2px -2px 0px 0px var(--bb-border-bevel-light);
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 3D Beveled Emerald Game Button */
+.bb-btn-emerald {
+  background: var(--bb-color-emerald);
+  color: #0A2E16;
+  font-family: var(--bb-font-pixel-display);
+  font-size: 11px;
+  padding: 10px 18px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 
+    inset 2px 2px 0px 0px rgba(255, 255, 255, 0.4),
+    inset -2px -2px 0px 0px var(--bb-color-emerald-shadow),
+    0px 4px 0px 0px var(--bb-surface-void);
+  transition: transform 60ms linear, box-shadow 60ms linear;
+}
+
+.bb-btn-emerald:hover {
+  filter: brightness(1.08);
+  box-shadow: 
+    inset 2px 2px 0px 0px rgba(255, 255, 255, 0.6),
+    inset -2px -2px 0px 0px var(--bb-color-emerald-shadow),
+    0px 5px 0px 0px var(--bb-surface-void);
+}
+
+.bb-btn-emerald:active {
+  transform: translateY(3px);
+  box-shadow: 
+    inset 2px 2px 0px 0px rgba(0, 0, 0, 0.4),
+    inset -2px -2px 0px 0px rgba(255, 255, 255, 0.2),
+    0px 1px 0px 0px var(--bb-surface-void);
 }
 ```
 
 ---
 
-## 12. Reusable Component Specifications
+## 6. Technical Architecture & Engine Trade-Offs
 
-| Component | Selector / Name | Props & Inputs | States Handled | Visual / Behavior Contract |
+### 6.1 Architectural Trade-Off Analysis
+
+| Approach | Visual Quality & Game Feel | Text Legibility & Accessibility | Performance & Bundle Size | Recommendation |
 | :--- | :--- | :--- | :--- | :--- |
-| **Game HUD** | `<GameHUD />` | `player`, `level`, `xp`, `streak` | Normal, Audio Off, Muted | Top 56px sticky bar. Shows animated XP bar and quick toggles. |
-| **Inventory Slot** | `<InventorySlot />` | `icon`, `label`, `count`, `active`, `onClick` | Idle, Hover, Active, Disabled | 48×48px square inset slot with 2px bevel. Hover raises 1px. |
-| **Pet Stage** | `<PetStage />` | `mood`, `level`, `dialogue`, `onPetClick` | 5 Moods, Idle, Celebration | Animated SVG pixel avatar by campfire with contextual speech bubble. |
-| **Language Selector**| `<LanguageSelector />`| `selected`, `onSelect`, `autoDetect` | 6 Languages + Auto, Active | Hotbar of stone buttons with language logo badges. |
-| **Roast Card** | `<RoastCard />` | `roast`, `category`, `confidence` | Entering, Rendered, Copied | Crimson-bordered obsidian card with flame icon and bold italic roast. |
-| **Code Diff Box** | `<CodeDiff />` | `before`, `after`, `language` | Collapsed, Expanded, Copied | Side-by-side or unified green/red diff viewer with copy buttons. |
-| **Follow-Up Chip** | `<FollowUpChip />` | `actionId`, `label`, `onClick`, `disabled` | Idle, Hover, Active, Loading | Pill-shaped blocky button triggering structured chat prompts. |
-| **XP Floating Toast**| `<XPFloatToast />` | `deltaXP`, `reason` | Enter (float up), Fade out | Gold text `+50 XP` floating upward over 1.2s with slight sparkle. |
-| **Codex Citation** | `<CodexCitation />` | `title`, `url`, `excerpt`, `type` | Normal, Hover, External Link | Stone card with diamond border, showing excerpt and canonical link. |
-| **Task Countdown** | `<TaskTimer />` | `minutesRemaining`, `onSnooze`, `onDone`| Active, Overdue, Paused | Monospace digital clock with redstone blink when < 5 mins left. |
+| **A. Full 3D Engine (Three.js / Babylon)** | ⭐⭐⭐⭐⭐ High 3D fidelity, dynamic shadows | ⭐⭐ Poor HTML text integration, heavy canvas | ❌ Heavy (600KB+ bundle), mobile GPU drain | **Rejected**: Overkill for a developer tool |
+| **B. Pure CSS Isometric (DOM divs)** | ⭐⭐⭐ Decent block cards | ⭐⭐⭐⭐⭐ Native HTML accessibility | ⭐⭐⭐ Heavy DOM overhead for 100+ terrain blocks | **Rejected for terrain**: Sluggish on complex scenes |
+| **C. Hybrid Engine (HTML5 2D Canvas + DOM UI)**| ⭐⭐⭐⭐⭐ Authentic pixel art & 4 FPS sprites | ⭐⭐⭐⭐⭐ 100% native DOM for code, forms & chat | ⭐⭐⭐⭐⭐ Featherweight (<15KB code), 60 FPS | **SELECTED ARCHITECTURE** |
+
+### 6.2 The Hybrid Architecture (Selected)
+- **Layer 1: The Isometric 2D Canvas (`<IsometricWorldCanvas />`)**:
+  - Renders the 2.5D diorama (terrain blocks, campfire, ByteBuddy sprite, smoke/ember particles).
+  - Internal fixed coordinate space (e.g., `800×450px`), scaled via CSS with `image-rendering: pixelated`.
+  - Zero third-party gaming dependencies; implemented with vanilla HTML5 Canvas 2D API (`ctx.drawImage`, `ctx.fillRect`).
+- **Layer 2: Accessible DOM Application Shell**:
+  - All interactive UI panels, code editors, chat threads, buttons, forms, and dialogs are standard semantic HTML elements (`<button>`, `<textarea>`, `<dialog>`, `<nav>`).
+  - Screen readers have direct access to text content; developers can highlight and copy code with standard OS mouse/keyboard events.
 
 ---
 
-## 13. Animation and Interaction Inventory
+## 7. Knowledge-Base Agent Integration Assumptions
 
-| Interaction | Trigger | Behavior | Duration | Easing | Reduced Motion Alt | Blocking? |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Pet Idle Loop** | Continuous | Subtle 2px breathing/bounce loop | 2000ms | `steps(2, jump-none)` | Static image | **No** |
-| **Mood Change** | Mood update | Particle puff (smoke/hearts) + sprite swap | 400ms | `ease-out` | Instant swap | **No** |
-| **Bug Confession**| Click Confess | Redstone particle burst radiating from CTA | 350ms | `cubic-bezier(0, 0, 0.2, 1)` | Instant load | **No** |
-| **Roast Reveal** | Diagnosis ready| Smooth vertical slide-down entrance | 300ms | `ease-out` | Instant appearance| **No** |
-| **XP Earned** | Bug/Task done | Floating gold text `+50 XP` drifting up 24px | 1200ms | `ease-out` | Instant HUD update| **No** |
-| **Level-Up Blast**| Level threshold | Golden firework sparkles radiating from pet | 800ms | `steps(6)` | Flash border only | **No** |
-| **Button Click** | User click | 2px downward displacement (tactile depress) | 80ms | `linear` | Border color tint | **No** |
-| **Chat Stream** | AI response | Cursor blink + incremental token reveal | Active | `linear` | Full block render | **No** |
+To ensure that the UI agent and the independent knowledge-base agent integrate seamlessly without data collisions:
 
----
+### 7.1 Expected Knowledge-Base Contracts (TypeScript Interfaces)
 
-## 14. Responsive Layout & Breakpoints
+```typescript
+// 1. Grounded Source Citation
+export interface CodexCitation {
+  id: string;
+  title: string;
+  category: 'standard' | 'security' | 'compiler_spec' | 'manual';
+  language: 'c' | 'cpp' | 'java' | 'python' | 'javascript' | 'typescript' | 'general';
+  excerpt: string;
+  sourceUrl: string;
+  confidenceScore: number; // 0.0 to 1.0 (threshold >= 0.65 for display)
+}
 
-```text
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│ Desktop Viewport (> 1024px)                                                     │
-│ [HUD 56px]                                                                      │
-│ [Sidebar 240px]  [Main Workspace 60% Width]  [Companion & Quest Drawer 40%]    │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│ Tablet Viewport (768px - 1024px)                                                │
-│ [HUD 56px]                                                                      │
-│ [Sidebar 64px (Icons)]  [Main Workspace 100%]                                   │
-│ (Companion panel collapses into toggleable bottom drawer)                       │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│ Mobile Viewport (< 768px)                                                       │
-│ [HUD 52px]                                                                      │
-│ [Stacked View: Workspace 100%]                                                  │
-│ [Bottom Inventory Navigation Bar 60px]                                          │
-└─────────────────────────────────────────────────────────────────────────────────┘
+// 2. Structured Diagnostic Payload
+export interface DiagnosisVerdict {
+  sessionId: string;
+  timestamp: string;
+  roast: string;
+  category: string;
+  language: string;
+  confidence: 'High' | 'Medium' | 'Low';
+  rootCause: string;
+  stepsToFix: string[];
+  codeDiff: {
+    beforeSnippet: string;
+    afterSnippet: string;
+    language: string;
+  };
+  reproducibleTest: {
+    command: string;
+    description: string;
+  };
+  citations: CodexCitation[];
+}
+
+// 3. Knowledge Codex Topic Query
+export interface CodexTopicEntry {
+  topicId: string;
+  title: string;
+  language: string;
+  summary: string;
+  keyRules: string[];
+  citations: CodexCitation[];
+}
 ```
 
-- **Mobile First Touch Targets**: All interactive inventory slots and chips expand to a minimum touch bounding box of 44×44px.
-- **Horizontal Scroll Protection**: Code blocks and diffs enable smooth native horizontal touch scrolling (`overflow-x: auto`) without breaking outer viewport constraints.
+### 7.2 UI Boundary Guarantees
+- The UI layer will **never** attempt to execute code remotely.
+- If a query to the knowledge base returns zero citations, the UI gracefully falls back to the `[No Grounded Sources Found]` honest disclosure badge without crashing.
 
 ---
 
-## 15. Accessibility & Usability (WCAG 2.1 AA)
+## 8. Implementation Sequence & Next Steps
 
-1. **Color Contrast Verification**:
-   - Primary text (`#EDEDED`) on dark panel (`#22252C`) yields **11.4:1** contrast ratio (exceeds 4.5:1 requirement).
-   - Gold accent (`#F1C40F`) on dark surface (`#181A1F`) yields **10.8:1**.
-   - Redstone text (`#E53935`) is paired with icons and labels so error state is never conveyed by color alone.
-2. **Keyboard Navigation & Focus Rings**:
-   - All interactive components support standard `Tab` / `Shift+Tab` traversal.
-   - Visible focus indicator: High-contrast 2px double emerald focus ring (`outline: 2px solid #2ECC71; outline-offset: 2px`).
-   - Global shortcuts: `Ctrl+Enter` to submit bug confession; `Esc` to dismiss modals; `Ctrl+K` to search Codex.
-3. **Screen Reader Live Announcements**:
-   - Pet mood transitions update an `<div aria-live="polite" class="sr-only">` announcing: *"Pet mood changed to [HAPPY]. Dialogue: [Sample]"*.
-   - XP additions announce: *"Earned 50 XP. Total XP is now 519."*
-4. **Reduced Motion Adaptation**:
-   - Under `@media (prefers-reduced-motion: reduce)`, all bouncy particle animations and floaters are suppressed. State transitions occur instantly without animation delays.
-
----
-
-## 16. UI States and Error Handling
-
-- **Loading / Synthesis State**: The confession CTA displays an animated redstone repeater ticking effect with text *"Consulting Ancient Compilers..."*.
-- **Empty States**:
-  - Empty Chat: Display an illustrated stone lectern with text *"No active penance. Confess a bug to awaken BugBuddy."*
-  - Empty Taskboard: Display a wooden chest with text *"Inventory clear. Add a coding sprint task to earn XP."*
-- **Error Boundary Fallback**: If an unhandled React error occurs, the UI renders the **Creeper Explosion Screen**: *"CRASH! A rogue NullPointerException blew up your companion's base."* with a prominent Emerald button: `[🔨 Rebuild Base (Reset State)]`.
+### Phase 1 Frontend Deliverables (Prompt 02 Roadmap):
+1. **Design Tokens & Global Styles (`src/styles/tokens.css`, `theme.css`)**:
+   - Install CSS custom properties for surfaces, voxel materials, and block bevels.
+   - Configure `@font-face` for pixel display fonts and JetBrains Mono.
+2. **Accessible Core Components (`src/components/ui/`)**:
+   - `<GameHUD />`: XP progress, player title, and audio/theme switches.
+   - `<DeveloperInventory />`: Sidebar hotbar with desktop collapse and mobile drawer.
+   - `<ButtonPixel />`, `<PanelSlab />`, `<InventorySlot />`.
+3. **The Isometric Canvas Stage (`src/components/world/IsometricWorld.tsx`)**:
+   - 2D canvas terrain renderer (grass, dirt, stone, campfire).
+   - ByteBuddy sprite animator supporting 5 mood states and idle loops.
+4. **The Bug Confession Booth (`src/components/booth/ConfessionBooth.tsx`)**:
+   - Dual-pane code editor + terminal error input.
+   - Client-side secret scanner filter.
+   - Structured Roast & Diff card renderer.
+5. **Interactive Debug Chat (`src/components/chat/DebugChat.tsx`)**:
+   - Thread list with user/companion speech bubbles.
+   - 7 follow-up action buttons triggering structured prompts.
+6. **Quest Board & History (`src/components/quests/`, `src/components/history/`)**:
+   - Task timer countdown with snooze.
+   - Gravestone post-mortem archive.
 
 ---
-
-## 17. UI Acceptance Criteria
-
-1. **AC-UI-01 (Minecraft Look & Feel)**: All panels, buttons, and HUD elements render with blocky, beveled voxel borders and pixel-art accents without using proprietary copyrighted Minecraft textures or logos.
-2. **AC-UI-02 (Language Coverage)**: The confession booth allows switching between C, C++, Java, Python, JavaScript, and TypeScript, updating editor hints and test suggestion commands dynamically.
-3. **AC-UI-03 (Pet Mood Visuals)**: The virtual pet visibly updates its sprite, dialogue, and lighting across all five moods (`ECSTATIC`, `HAPPY`, `NEUTRAL`, `DISAPPOINTED`, `DRAMATIC_DESPAIR`).
-4. **AC-UI-04 (Follow-Up Interactivity)**: Clicking any of the 7 follow-up action chips in the chat thread automatically submits the exact prompt contract and maintains context.
-5. **AC-UI-05 (Secret Redactor Warning)**: Pasting a mock API key or JWT immediately displays the active redactor shield banner and masks the text before transmission.
-6. **AC-UI-06 (Keyboard Accessibility)**: A user can navigate from the language selector to the code input and trigger confession purely using keyboard controls (`Tab` and `Ctrl+Enter`).
-
----
-
-## 18. Mapping to PRD & TRD Requirement IDs
-
-| UI Component / Surface | Maps to PRD Requirement | Maps to TRD Requirement |
-| :--- | :--- | :--- |
-| Game HUD & Player Stats | `FR-009`, `NFR-003` | TRD Section 3.2, 13.3 |
-| Developer Inventory Sidebar | `FR-011`, `NFR-004` | TRD Section 3.2, 17.1 |
-| Base Camp Hearth & Pet | `FR-007`, `FR-008`, `NFR-003` | TRD Section 13.1, 13.2 |
-| Confession Booth Altar | `FR-001`, `FR-002`, `FR-003` | TRD Section 5, 6.1 |
-| Roast & Verdict Cards | `FR-004`, `FR-005`, `NFR-010`| TRD Section 7, 8.1 |
-| Interactive Chat Workbench | `FR-006`, `FR-012` | TRD Section 9, 15 |
-| Knowledge Codex Citations | `FR-013`, `NFR-010` | TRD Section 11.2, 11.3 |
-| Redstone Secret Scanner Banner | `FR-015`, `NFR-005` | TRD Section 16.1 |
-| Quest Board & Task Timers | `FR-010`, `FR-011` | TRD Section 13.4, 14.2 |
-| Creeper Crash Error Boundary | `FR-017`, `NFR-007` | TRD Section 18 |
-
----
-
-## 19. Implementation Notes and Deferred Features
-
-### In Scope for Phase 1 Frontend Kickoff:
-- CSS custom properties (`tokens.css`, `theme.css`) implementing the deepslate, stone, emerald, redstone, and gold palettes.
-- Reusable blocky beveled panel and button classes (`.bb-panel-slab`, `.bb-inventory-slot`, `.bb-btn-emerald`).
-- `GameHUD` component with XP bar and player profile.
-- `DeveloperInventory` sidebar with responsive drawer collapse.
-- `PetStage` SVG visualizer with 5 moods and animated campfire.
-- `TaskBoard` with countdown timers and snoozes.
-
-### Explicitly Deferred to Later Phases:
-- Live AI streaming integration (Deferred to Phase 3).
-- Curated RAG vector/token search engine (Deferred to Phase 3).
-- E2E Playwright test automation (Deferred to Phase 4).
-- Custom pet skins and unlockable accessories (Deferred to Phase 5+).
-
----
-*End of Specification — BugBuddy Minecraft-Inspired UI/UX System*
+*End of UI/UX Specification V2 — BugBuddy Minecraft-Inspired Isometric Pixel World*
