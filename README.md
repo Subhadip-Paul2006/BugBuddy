@@ -2,20 +2,22 @@
 
 > **"Your bugs are fixable. Your pet's disappointment is optional."**
 
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg?style=flat-square)](https://github.com/Subhadip-Paul2006/BugBuddy)
-[![Architecture: Archify](https://img.shields.io/badge/architecture-Archify_3.0-blueviolet.svg?style=flat-square)](https://github.com/tt-a1i/archify)
+[![Phase: 0 - Baseline Spec](https://img.shields.io/badge/phase-0__baseline-blue.svg?style=flat-square)](docs/DOCUMENTATION_AUDIT.md)
+[![UI/UX: Minecraft-Inspired](https://img.shields.io/badge/UI%2FUX-Minecraft--Inspired-brightgreen.svg?style=flat-square)](docs/UI_UX.md)
+[![Architecture: Bounded SPA](https://img.shields.io/badge/architecture-Bounded__SPA-blueviolet.svg?style=flat-square)](docs/TRD.md)
 [![TypeScript 5.x](https://img.shields.io/badge/TypeScript-5.x-blue.svg?style=flat-square)](https://www.typescriptlang.org/)
 [![React 18+](https://img.shields.io/badge/React-18+-61DAFB.svg?style=flat-square)](https://react.dev/)
 [![Accessibility: WCAG 2.1 AA](https://img.shields.io/badge/accessibility-WCAG_2.1_AA-success.svg?style=flat-square)](https://www.w3.org/WAI/WCAG21/quickref/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat-square)](LICENSE)
 
-BugBuddy is a gamified, AI-powered debugging companion and developer productivity web application. It transforms the soul-crushing experience of chasing cryptic compiler panics, syntax blunders, and runtime exceptions into an entertaining, highly educational, and emotionally accountable workflow.
+BugBuddy is a gamified, AI-powered debugging companion and developer productivity web application styled as a **Minecraft-Inspired Developer Survival World**. It transforms the soul-crushing experience of chasing cryptic compiler panics, syntax blunders, and runtime exceptions into an entertaining, highly educational, and emotionally accountable quest.
 
 ---
 
 ## 📌 Table of Contents
 
 - [The Problem & The Solution](#-the-problem--the-solution)
+- [Visual Direction & World Metaphor](#-visual-direction--world-metaphor)
 - [Core Features](#-core-features)
 - [First-Class Supported Languages](#-first-class-supported-languages)
 - [System Architecture & Archify Integration](#-system-architecture--archify-integration)
@@ -42,8 +44,20 @@ Debugging modern code is frustrating, lonely, and cognitively exhausting:
 
 ### The Solution
 BugBuddy blends tough love with pragmatic software engineering through two tightly synchronized subsystems:
-1. **The Bug Confession Booth**: Developers submit code snippets, compiler tantrums, or bug descriptions across six major programming languages. They receive an ego-bruising, hilarious roast targeting code flaws, followed immediately by structured root-cause diagnosis, minimal diffs, and reproducible verification tests.
-2. **The Procrastination Pet**: Users adopt an animated virtual coding companion whose emotional well-being reflects their real-world productivity. Completing tasks and resolving bugs awards XP, levels up the pet, and triggers celebrations. Procrastinating, snoozing timers, or abandoning commitments plunges the pet into theatrical, expressive despair.
+1. **The Bug Confession Booth (Altar of Penance)**: Developers submit code snippets, compiler tantrums, or bug descriptions across six major programming languages. They receive an ego-bruising, hilarious roast targeting code flaws, followed immediately by structured root-cause diagnosis, minimal diffs, and reproducible verification tests.
+2. **The Procrastination Pet (Survival Base Companion)**: Users adopt an animated pixel-art coding companion whose emotional well-being reflects their real-world productivity. Completing tasks and resolving bugs awards XP, levels up the pet, and triggers celebrations. Procrastinating, snoozing timers, or abandoning commitments plunges the pet into theatrical, expressive despair.
+
+---
+
+## ⛏️ Visual Direction & World Metaphor
+
+BugBuddy rejects generic corporate dashboards in favor of an original **Minecraft-Inspired Developer Survival World**:
+- **The Base Camp**: Your developer sanctuary featuring a cozy pixel-art hearth where your virtual pet rests and reacts.
+- **Voxel Depth & Blocky Borders**: Deepslate (`#121417`), cobblestone (`#2B2D31`), and obsidian surfaces with tactile beveled pixel borders.
+- **Inventory Hotbars**: A persistent developer inventory sidebar and game HUD displaying player level, XP progress, and active streak campfire.
+- **Hostile Mobs as Bugs**: Bugs and syntax errors are treated as hostile encounters; resolving them awards golden XP orbs.
+- **Material Accents**: Emerald green (`#2ECC71`) for success/actions, Redstone crimson (`#E53935`) for errors and compiler tantrums, and Gold (`#F1C40F`) for XP and quests.
+- *Detailed specification*: See [docs/UI_UX.md](docs/UI_UX.md).
 
 ---
 
@@ -85,17 +99,17 @@ BugBuddy's system architecture, specification taxonomy, and diagram standards ar
 ```mermaid
 graph TD
     subgraph Client [BugBuddy Web Application - Browser Runtime]
-        UI[User Interface Shell\nVanilla CSS + React Components]
+        UI[User Interface Shell\nMinecraft-Inspired Vanilla CSS + React]
         
         subgraph InputPipeline [Input & Preprocessing]
-            CB[Confession Booth]
+            CB[Confession Booth Altar]
             SR[Client Secret Redactor]
             LR[Language Registry & Adapters]
         end
         
         subgraph CoreEngines [Core Logic Engines]
             EC[Error Classification Engine]
-            RAG[Curated RAG Retriever]
+            RAG[Curated RAG Retriever / Codex]
             PSM[Pet State Machine & Progression]
             TM[Task & Productivity Manager]
         end
@@ -149,7 +163,8 @@ graph TD
    - System Context Architecture ([TRD Section 2](docs/TRD.md#2-system-context-and-component-architecture))
    - Debugging & RAG Sequence Flow ([TRD Section 10](docs/TRD.md#10-retrieval-augmented-generation-rag-architecture))
    - Pet Emotional State Machine ([TRD Section 13](docs/TRD.md#13-pet-state-machine-moods-xp-levels-quests-and-progression-rules))
-4. **Verifiable Traceability**: Every architectural component maps directly to PRD requirement IDs (`FR-xxx`, `NFR-xxx`) via the [Requirements Traceability Matrix](docs/TRD.md#23-requirements-traceability-matrix).
+4. **Verifiable Traceability**: Every architectural component maps directly to PRD requirement IDs (`FR-001`–`FR-018`, `NFR-001`–`NFR-010`) via the [Requirements Traceability Matrix](docs/TRD.md#23-requirements-traceability-matrix).
+5. **Offline Tooling Workflow**: Archify is leveraged as an offline developer/agent documentation tool (`node bin/archify.mjs finalize`) to generate standalone interactive HTML diagrams stored in `docs/archify/`, without bloating production client runtime bundles.
 
 ---
 
@@ -158,11 +173,11 @@ graph TD
 | Layer | Proposed Architecture (MVP) | Implementation Status | Future Production Architecture |
 | :--- | :--- | :--- | :--- |
 | **Frontend Framework** | React 18+ with TypeScript & Vite | Proposed (Phase 1) | Next.js / Remix SSR |
-| **Styling & Design System** | Vanilla CSS (Custom Design Tokens, Glassmorphism, Dark Mode) | Proposed (Phase 1) | Vanilla CSS Modules / Tailwind (if requested) |
+| **Styling & Design System** | Minecraft-Inspired Vanilla CSS Tokens (Deepslate, Voxel Borders) | Specified ([docs/UI_UX.md](docs/UI_UX.md)) | Vanilla CSS Modules / Tailwind (if requested) |
 | **Client State Management** | Zustand / Lightweight React Context | Proposed (Phase 1) | Zustand with persistent middleware |
 | **Local Persistence** | `IndexedDB` with `localStorage` fallback | Proposed (Phase 1) | SQLite / PGlite / Cloud Sync |
 | **AI Provider Abstraction** | Unified Adapter: Google Gemini, OpenAI, Anthropic, Mock Fallback | Proposed (Phase 2 & 3) | Edge server proxy with token bucket rate limiting |
-| **Knowledge Base (RAG)** | In-memory curated vector/keyword index with Cosine Similarity | Proposed (Phase 3) | ChromaDB / Pgvector serverless store |
+| **Knowledge Base (RAG)** | In-memory curated TF-IDF Cosine Similarity index | Proposed (Phase 3) | ChromaDB / Pgvector serverless store |
 | **Testing Suite** | Vitest, React Testing Library, Playwright | Proposed (Phase 4) | Full CI/CD with Vitest & Playwright matrix |
 
 ---
@@ -170,7 +185,7 @@ graph TD
 ## 🎯 MVP Capabilities vs. Explicit Non-Goals
 
 ### In Scope for MVP
-- ✅ Interactive single-page web application with responsive dark-mode styling.
+- ✅ Interactive single-page web application with Minecraft-inspired voxel styling and dark palette.
 - ✅ Confession Booth accepting code snippets, bug descriptions, and compiler outputs.
 - ✅ First-class adapter support for C, C++, Java, Python, JavaScript, and TypeScript.
 - ✅ Sarcastic roast generator followed by actionable diagnosis, fix steps, and tests.
@@ -193,16 +208,22 @@ graph TD
 The complete documentation suite for BugBuddy is structured across the following authoritative documents:
 
 1. **[Product Requirements Document (docs/PRD.md)](docs/PRD.md)**  
-   *Defines product vision, user personas, functional requirements (`FR-001` to `FR-016`), non-functional requirements (`NFR-001` to `NFR-008`), MVP scope, user stories, and success metrics.*
+   *Defines product vision, user personas, functional requirements (`FR-001` to `FR-018`), non-functional requirements (`NFR-001` to `NFR-010`), MVP scope, user stories, and success metrics.*
 
 2. **[Technical Requirements Document (docs/TRD.md)](docs/TRD.md)**  
    *Comprehensive engineering specification: component architectures, language registry, error classifications, response schemas, RAG pipelines, pet state machine equations, security protocols, ADRs, and the Requirements Traceability Matrix.*
 
-3. **[AI Coding Agent Instructions (AI_INSTRUCTIONS.md)](AI_INSTRUCTIONS.md)**  
+3. **[UI/UX Design Specification (docs/UI_UX.md)](docs/UI_UX.md)**  
+   *Authoritative visual design specification: Minecraft-inspired voxel design system, HUD and inventory navigation, confession booth layout, interactive chatbot contracts, virtual pet mood matrix, design tokens, animations, and WCAG 2.1 AA accessibility standards.*
+
+4. **[AI Coding Agent Instructions (AI_INSTRUCTIONS.md)](AI_INSTRUCTIONS.md)**  
    *Strict operational guidelines for Cursor and autonomous coding agents: persona rules, forbidden pleasantries, sarcastic tone contracts, architecture boundaries, and quality gates.*
 
-4. **[Implementation Phases Roadmap (docs/PHASES.md)](docs/PHASES.md)**  
+5. **[Implementation Phases Roadmap (docs/PHASES.md)](docs/PHASES.md)**  
    *Sequential five-phase implementation guide (Phase 0 through Phase 4) complete with objectives, deliverables, dependencies, acceptance criteria, and definitions of done.*
+
+6. **[Documentation Audit & Archify Blueprint (docs/DOCUMENTATION_AUDIT.md)](docs/DOCUMENTATION_AUDIT.md)**  
+   *Baseline repository audit, Archify capability research, and document-by-document synchronization blueprint.*
 
 ---
 
@@ -211,26 +232,29 @@ The complete documentation suite for BugBuddy is structured across the following
 ```text
 BugBuddy/
 ├── README.md                  # Project landing page, overview, and quickstart
+├── LICENSE                    # MIT License
 ├── AI_INSTRUCTIONS.md         # Operational rules and personality constraints for AI agents
 ├── docs/
 │   ├── PRD.md                 # Product Requirements Document (Behavioral & Product Spec)
 │   ├── TRD.md                 # Technical Requirements Document (Engineering & Architecture Spec)
-│   └── PHASES.md              # Sequential implementation roadmap & milestones
-├── src/                       # Application source code (Phase 1+)
+│   ├── UI_UX.md               # Minecraft-Inspired UI/UX Design System Specification
+│   ├── PHASES.md              # Sequential implementation roadmap & milestones
+│   └── DOCUMENTATION_AUDIT.md # Phase 0 Repository Audit & Archify Blueprint
+├── src/                       # Application source code (Planned - Phase 1+)
 │   ├── adapters/              # Language adapters (C, C++, Java, Python, JS, TS)
-│   ├── components/            # UI components (Pet, ConfessionBooth, Chat, TaskBoard)
+│   ├── components/            # UI components (HUD, PetStage, ConfessionBooth, Chat, TaskBoard)
 │   ├── engine/                # Debugging pipeline, error classifier, RAG retrieval
 │   ├── providers/             # LLM provider abstraction (Gemini, OpenAI, Anthropic, Mock)
 │   ├── state/                 # Pet state machine, task store, conversation store
-│   └── styles/                # Vanilla CSS tokens, glassmorphic themes, animations
-└── tests/                     # Test suites (Unit, component, and E2E)
+│   └── styles/                # Vanilla CSS tokens, voxel beveled themes, pixel animations
+└── tests/                     # Test suites (Planned - Phase 4)
 ```
 
 ---
 
 ## 🚀 Quickstart & Development Setup
 
-*(Placeholder — Active starting in Phase 1)*
+*(Active starting in Phase 1)*
 
 ### Prerequisites
 - Node.js `v18.0.0` or higher (verified with Node `v22.x`)
@@ -251,32 +275,20 @@ npm run dev
 
 ---
 
-## 🔑 Environment Configuration
+## 🔑 Environment & Key Configuration
 
-BugBuddy functions completely without any third-party API credentials using its built-in offline mock engine. To enable live AI provider inference, configure a `.env.local` file:
+BugBuddy operates completely out of the box with zero third-party API keys using its built-in offline mock engine (`OfflineMockProvider`).
 
-```bash
-# --- AI Provider Configuration ---
-# Options: 'mock' (default), 'gemini', 'openai', 'anthropic'
-VITE_AI_PROVIDER=mock
-
-# --- API Keys (Leave blank to use offline mock) ---
-VITE_GEMINI_API_KEY=
-VITE_OPENAI_API_KEY=
-VITE_ANTHROPIC_API_KEY=
-
-# --- Application Configuration ---
-VITE_APP_TITLE=BugBuddy
-VITE_LOG_LEVEL=info
-```
-
-> **Security Notice**: Never commit `.env` or `.env.local` files containing live API credentials to version control. All keys are processed strictly client-side or through a user-configured proxy.
+### Safe Credential Architecture
+- **Zero Build-Time Secrets**: Private API keys must **never** be hardcoded or compiled into client JavaScript bundles using `VITE_*_API_KEY` environment variables.
+- **In-App Runtime Configuration**: To connect live cloud models (Google Gemini, OpenAI, Anthropic), users can optionally enter their personal key in the in-app **Settings Modal**. Keys are held strictly in memory or `sessionStorage` during the active tab session and are never sent to external telemetry servers.
+- **Default Provider**: When no key is entered, the app functions seamlessly in offline mock mode.
 
 ---
 
 ## 🧪 Testing & Quality Assurance
 
-*(Placeholder — Active starting in Phase 2)*
+*(Active starting in Phase 4)*
 
 ```bash
 # Run unit and contract tests
@@ -294,14 +306,15 @@ npm run test:e2e
 ## 🤝 Contributing Guidelines
 
 Contributions are welcome! Please ensure that:
-1. All changes align strictly with [PRD.md](docs/PRD.md) and [TRD.md](docs/TRD.md).
+1. All changes align strictly with [PRD.md](docs/PRD.md), [TRD.md](docs/TRD.md), and [UI_UX.md](docs/UI_UX.md).
 2. Autonomous coding agents adhere faithfully to [AI_INSTRUCTIONS.md](AI_INSTRUCTIONS.md).
-3. The sarcastic personality guidelines are maintained without violating harassment or protected trait safety boundaries.
+3. The sarcastic personality guidelines and voxel visual direction are maintained without introducing toxic violations or proprietary game assets.
 
 ---
 
 ## 🚦 Current Project Status & Roadmap
 
 - **Current Milestone**: **Phase 0 — Documentation & Architecture Baseline**
-- **Status**: Completed. All specifications, contracts, language registries, and phase gates are fully documented and validated.
-- **Next Milestone**: **Phase 1 — UI Foundation & Virtual Pet** (Application shell, pet visualizer, task manager, and local persistence).
+- **Status**: Completed. All specifications (PRD, TRD, UI/UX, AI Instructions, Phases, Audit) are fully synchronized and approved.
+- **Next Milestone**: **Phase 1 — UI Foundation & Virtual Pet** (Application shell, Minecraft-inspired HUD/Inventory, pet visualizer, task manager, and local persistence).
+

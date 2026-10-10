@@ -1,24 +1,24 @@
 # Product Requirements Document (PRD)
 
 ## Project: BugBuddy
-**Document Version:** 1.1.0  
-**Status:** Approved  
+**Document Version:** 1.2.0  
+**Status:** Approved Specification  
 **Author:** Senior Product Manager & Documentation Engineer  
-**Reference Link:** [README.md](../README.md) | [TRD.md](TRD.md) | [PHASES.md](PHASES.md) | [AI_INSTRUCTIONS.md](../AI_INSTRUCTIONS.md)
+**Reference Link:** [README.md](../README.md) | [TRD.md](TRD.md) | [UI_UX.md](UI_UX.md) | [PHASES.md](PHASES.md) | [AI_INSTRUCTIONS.md](../AI_INSTRUCTIONS.md) | [DOCUMENTATION_AUDIT.md](DOCUMENTATION_AUDIT.md)
 
 ---
 
 ## 1. Product Overview
 
-**BugBuddy** is an interactive, gamified, AI-powered debugging assistant and developer productivity companion.
+**BugBuddy** is an interactive, gamified, AI-powered debugging assistant and developer productivity companion styled as a **Minecraft-Inspired Developer Survival World**.
 
 **Tagline:** *"Your bugs are fixable. Your pet's disappointment is optional."*
 
-BugBuddy resolves the acute frustration and isolation of debugging by uniting two compelling core mechanics:
-1. **The Bug Confession Booth**: A developer confessional where users paste troublesome code, cryptic error outputs, or compiler tantrums across six first-class programming languages (C, C++, Java, Python, JavaScript, TypeScript). In return, they receive a brutally honest, humorous roast that cuts through developer denial, followed immediately by crystal-clear, structured technical guidance, minimal fix steps, reproducible test suggestions, and interactive follow-ups.
-2. **The Procrastination Pet**: A virtual coding companion whose emotional well-being and visual state are tied directly to the developer's productivity. When users tackle difficult bugs and complete their scheduled coding tasks, the pet earns experience points (XP), levels up, and celebrates. When users procrastinate, postpone tasks, or ignore self-imposed deadlines, the pet sinks into expressive, dramatic despair.
+BugBuddy resolves the acute frustration and isolation of debugging by uniting two compelling core mechanics within a tactile voxel survival base:
+1. **The Bug Confession Booth (Altar of Syntactic Penance)**: A developer confessional where users paste troublesome code, cryptic error outputs, or compiler tantrums across six first-class programming languages (C, C++, Java, Python, JavaScript, TypeScript). In return, they receive a brutally honest, humorous roast that cuts through developer denial, followed immediately by crystal-clear, structured technical guidance, minimal fix steps, reproducible test suggestions, and interactive follow-ups.
+2. **The Procrastination Pet (Survival Base Companion)**: A virtual coding companion whose emotional well-being and visual state are tied directly to the developer's productivity. When users tackle difficult bugs and complete their scheduled coding tasks, the pet earns experience points (XP), levels up, and celebrates. When users procrastinate, postpone tasks, or ignore self-imposed deadlines, the pet sinks into expressive, dramatic despair.
 
-BugBuddy is built to be approachable and instantly engaging as a polished single-page mini web application while establishing architectural foundations for enterprise-grade extensibility.
+BugBuddy is built to be approachable and instantly engaging as a polished single-page mini web application designed with blocky beveled surfaces, inventory hotbars, and rich pixel-art accents, fully detailed in [docs/UI_UX.md](UI_UX.md).
 
 ---
 
