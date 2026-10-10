@@ -10,10 +10,15 @@
 
 BugBuddy uses a curated, offline-capable debugging knowledge base to power its AI diagnostic engine and sarcastic Minecraft-themed debugging persona. The knowledge system is built with strict TypeScript contracts, deterministic schema validation, cross-file duplicate detection, and automated normalization.
 
-The knowledge system is organized into three progressive stages:
-- **Stage 1 (Complete):** Curated debugging knowledge corpus across six primary programming languages (`c`, `cpp`, `java`, `python`, `javascript`, `typescript`).
-- **Stage 2 (Complete):** Metadata schema, strict validation engine, normalizer, local file ingestion, diagnostics reporting, and automated test suite.
-- **Stage 3 (Complete):** In-memory weighted BM25 keyword retrieval, multi-criteria language/category filtering, deterministic tie-breaking, and LLM prompt context assembly.
+The knowledge system follows an eight-stage progressive roadmap:
+- **Stage 1 (Complete):** Curated Knowledge Corpus across six primary programming languages (`c`, `cpp`, `java`, `python`, `javascript`, `typescript`).
+- **Stage 2 (Complete):** Metadata Schema and Document Ingestion with strict contract validation and diagnostics reporting.
+- **Stage 3 (Complete):** Keyword Retrieval with Language and Category Filters using weighted in-memory BM25.
+- **Stage 4 (Complete):** Structured Roast, Diagnosis, Fix, and Test Responses grounded deterministically in retrieved entries.
+- **Stage 5 (Complete):** Source Attribution and Retrieval Evaluation with rich provenance and deterministic benchmarking.
+- **Stage 6 (Planned):** Optional Embedding-Based Semantic Retrieval.
+- **Stage 7 (Planned):** AI Provider Integration and Interactive Follow-Up Conversations.
+- **Stage 8 (Planned):** Automated Knowledge Updates and Advanced Ranking.
 
 ---
 
@@ -40,14 +45,20 @@ BugBuddy/
 │       ├── validator.ts           # Schema validation and diagnostic generation
 │       ├── ingest.ts              # Safe file reading, parsing, and directory ingestion
 │       ├── reporter.ts            # Terminal and markdown summary formatting
-│       └── search.ts              # Weighted BM25 retrieval, filtering, and prompt context assembly
+│       ├── search.ts              # Weighted BM25 retrieval, filtering, and prompt context assembly
+│       ├── response.ts            # Structured response engine with rich source attribution
+│       ├── evaluationData.ts      # Ground truth evaluation dataset (30 queries across 6 languages)
+│       └── evaluator.ts           # Deterministic retrieval evaluation runner & metric calculations
 │
 ├── scripts/
-│   └── validate_knowledge.ts      # Standalone CLI validation script
+│   ├── validate_knowledge.ts      # Standalone CLI validation script
+│   └── evaluate_retrieval.ts      # Standalone CLI retrieval evaluation runner
 │
 ├── tests/
 │   ├── knowledge.test.ts          # Stage 2 validation & ingestion test suite (16 tests)
-│   └── knowledgeSearch.test.ts    # Stage 3 search, ranking & retrieval test suite (15 tests)
+│   ├── knowledgeSearch.test.ts    # Stage 3 search, ranking & retrieval test suite (15 tests)
+│   ├── response.test.ts           # Stage 4 structured response engine test suite (17 tests)
+│   └── attribution.test.ts        # Stage 5 attribution & evaluation test suite (13 tests)
 │
 └── docs/
     ├── KNOWLEDGE_BASE_STATUS.md   # Baseline audit, current status, and test report
@@ -469,4 +480,158 @@ for (const src of diagnosis.sources) {
 const markdownReport = formatDiagnosisResponseMarkdown(diagnosis);
 console.log(markdownReport);
 ```
+
+---
+
+## 10. Stage 5: Source Attribution & Retrieval Evaluation
+
+Stage 5 introduces end-to-end citation provenance and an independent, deterministic retrieval evaluation benchmark suite.
+
+### 10.1 Source Attribution & Citation Provenance
+
+To guarantee that developers can independently verify BugBuddy recommendations against authoritative documentation, every citation displayed in a structured diagnosis is traceable to an indexed knowledge record.
+
+#### 10.1.1 AttributedSource Contract
+
+In addition to the legacy `sources: KnowledgeSource[]` list, BugBuddy responses expose `attributedSources: AttributedSource[]` and `hasSources: boolean`:
+
+```typescript
+export interface AttributedSource extends KnowledgeSource {
+  recordId: string;                 // Stable knowledge entry ID (e.g. 'py-mutable-default-argument')
+  recordTitle: string;              // Title of originating entry
+  language: CanonicalLanguage;      // Language of originating entry
+  category: CanonicalCategory;      // Category of originating entry
+  isPrimary: boolean;               // True if attached to the primary rank #1 diagnosis
+}
+```
+
+#### 10.1.2 Attribution & Anti-Fabrication Principles
+
+1. **Zero Citation Fabrication:** Sources are extracted *strictly* from retrieved and filtered records. No URLs, domain names, or documentation passages are invented or synthesized.
+2. **Provenance Association:** Citations explicitly indicate whether they originate from the primary diagnosis (`[Primary]`) or a complementary related entry (`[Related: <recordId>]`).
+3. **Honest Missing-Source Representation:** When a curated entry contains no external URLs, BugBuddy sets `hasSources: false`, `sources: []`, and records an honest disclosure in `limitations`:
+   > *"No external documentation citations are available for this curated knowledge entry. Guidance is derived strictly from local verified patterns."*
+   No placeholder URLs (e.g. `example.com` or empty strings) are generated.
+4. **No Unrelated Citations:** In `NO_MATCH` scenarios, `sources: []` and `attributedSources: []` are strictly empty. Unrelated entries never contribute citations to ungrounded responses.
+5. **Language Isolation:** Language filtering prevents cross-language citation leakage (e.g. JavaScript MDN links never attach to Python diagnoses).
+
+---
+
+### 10.2 Retrieval Evaluation Dataset
+
+The evaluation suite (`src/knowledge/evaluationData.ts`) consists of 30 deterministic test queries across all six supported languages (5 queries per language). Ground-truth expectations strictly reference real record IDs from the 60-entry corpus.
+
+#### 10.2.1 Dataset Schema
+
+```typescript
+export interface EvaluationCase {
+  id: string;                       // Stable test case ID (e.g. 'eval-py-01')
+  query: string;                    // Realistic developer input (compiler error, symptom, concept)
+  expectedLanguage: CanonicalLanguage;
+  expectedRecordIds: string[];      // Verified corpus IDs; index 0 is primary match
+  expectedCategory?: CanonicalCategory;
+  queryType: 'exact_error' | 'symptom' | 'concept' | 'loose_wording';
+  explanation: string;
+}
+```
+
+#### 10.2.2 Query Distribution
+
+| Language | Total Cases | Exact Error Cases | Symptom Cases | Concept Cases | Loose Wording Cases |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **C** | 5 | 1 | 1 | 2 | 1 |
+| **C++** | 5 | 1 | 1 | 2 | 1 |
+| **Java** | 5 | 2 | 1 | 2 | 0 |
+| **Python** | 5 | 2 | 1 | 2 | 0 |
+| **JavaScript** | 5 | 1 | 1 | 3 | 0 |
+| **TypeScript** | 5 | 1 | 1 | 2 | 1 |
+| **Total** | **30** | **8** | **6** | **13** | **3** |
+
+---
+
+### 10.3 Evaluation Metrics & Definitions
+
+The deterministic evaluator (`src/knowledge/evaluator.ts`) measures information retrieval quality using standard metrics:
+
+| Metric | Definition | Limitations & Edge Cases |
+| :--- | :--- | :--- |
+| **Top-1 Accuracy** | Fraction of queries where the primary expected record is ranked at position #1. | Sensitive to ties; requires exact lexical discrimination. |
+| **MRR (Mean Reciprocal Rank)** | Average reciprocal rank of the primary expected record: $\frac{1}{N} \sum \frac{1}{\text{rank}_i}$. | Rewards matches in top ranks ($1.0$ for #1, $0.5$ for #2, $0.33$ for #3). Penalizes missing entries ($0$). |
+| **Recall@K** ($K=1, 3, 5$) | Fraction of expected relevant records retrieved in the top $K$ results: $\frac{\|E \cap R_K\|}{\|E\|}$. | Measures coverage; achieves 100% if target record is present in top $K$. |
+| **Precision@K** ($K=1, 3$) | Fraction of retrieved top $K$ records that are relevant: $\frac{\|E \cap R_K\|}{\min(K, \|R_K\|)}$. | For single-target test cases, Precision@3 is mathematically capped at $33.3\%$ ($\frac{1}{3}$) even for perfect retrieval. |
+| **Filter Compliance** | Percentage of retrieved results that strictly satisfy the applied language/category filter. | Should always be 100% in a correctly implemented search engine. |
+
+---
+
+### 10.4 Actual Evaluation Benchmark Results
+
+Evaluated against the full 60-entry production corpus via `npm run evaluate:retrieval`:
+
+#### Run 1: Raw Keyword Retrieval (No Language Filter Applied)
+*Measures raw lexical discriminating power across all 60 corpus entries.*
+
+| Metric | Value | Interpretation |
+| :--- | :---: | :--- |
+| **Top-1 Accuracy** | **100.0%** (30/30) | All primary targets ranked at position #1 |
+| **MRR** | **1.0000** | Perfect reciprocal rank |
+| **Recall@1** | **100.0%** | Target record captured at rank #1 |
+| **Recall@3** | **100.0%** | Target record captured in top 3 |
+| **Recall@5** | **100.0%** | Target record captured in top 5 |
+| **Precision@1** | **100.0%** | Rank #1 precision |
+| **Precision@3** | **33.3%** | Expected theoretical maximum for single-label ground truth |
+| **Filter Compliance** | **100.0%** | Baseline compliance |
+
+#### Run 2: Language-Scoped Retrieval (Language Filter Applied)
+*Measures accuracy when the developer's active language context is applied.*
+
+| Metric | Value | Interpretation |
+| :--- | :---: | :--- |
+| **Top-1 Accuracy** | **100.0%** (30/30) | All primary targets ranked at position #1 |
+| **MRR** | **1.0000** | Perfect reciprocal rank |
+| **Recall@1** | **100.0%** | Target record captured at rank #1 |
+| **Recall@3** | **100.0%** | Target record captured in top 3 |
+| **Recall@5** | **100.0%** | Target record captured in top 5 |
+| **Precision@1** | **100.0%** | Rank #1 precision |
+| **Precision@3** | **33.3%** | Expected theoretical maximum for single-label ground truth |
+| **Filter Compliance** | **100.0%** | 100% of returned items match requested language |
+
+#### Per-Language Breakdown
+
+| Language | Evaluation Cases | Top-1 Accuracy | MRR | Recall@3 | Recall@5 |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| `c` | 5 | 100.0% | 1.000 | 100.0% | 100.0% |
+| `cpp` | 5 | 100.0% | 1.000 | 100.0% | 100.0% |
+| `java` | 5 | 100.0% | 1.000 | 100.0% | 100.0% |
+| `python` | 5 | 100.0% | 1.000 | 100.0% | 100.0% |
+| `javascript` | 5 | 100.0% | 1.000 | 100.0% | 100.0% |
+| `typescript` | 5 | 100.0% | 1.000 | 100.0% | 100.0% |
+
+---
+
+### 10.5 Known Ranking Weaknesses & BM25 Limitations
+
+While the current 30-case evaluation achieves 100% Top-1 accuracy due to tailored field weights (Title: 6.0, Tags: 5.0, Symptoms: 3.5), pure BM25 exhibits known theoretical and practical limitations:
+
+1. **Vocabulary Mismatch & Synonym Gaps:** Queries using informal developer jargon (e.g. *"wild pointer"* instead of *"dangling pointer"*, or *"loop variable leak"* instead of *"closure late binding"*) risk lower BM25 relevance if those synonyms are not explicitly included in record tags.
+2. **Short Ambiguous Queries:** Queries containing only common generic terms (e.g. *"null pointer"* or *"memory leak"*) match multiple same-language records with close scores, triggering `AMBIGUOUS_EVIDENCE` mode.
+3. **Exact Token Dependency:** Without morphological stemming or semantic embeddings, slight variations in phrasing (e.g., singular vs. plural, past tense) depend on subtoken tokenization rules.
+4. **Precision@K Attenuation for Single Targets:** Fixed-depth precision metrics naturally drop when only one relevant record exists for a query in the corpus.
+
+*Future Mitigation:* Stage 6 will address these gaps by introducing optional embedding-based semantic retrieval to complement BM25 keyword matching via reciprocal rank fusion (RRF).
+
+---
+
+### 10.6 How to Run the Evaluation Suite
+
+```bash
+# Run the automated retrieval evaluation CLI
+npm run evaluate:retrieval
+
+# Run all test suites including Stage 5 attribution tests
+npm test
+
+# Run only the Stage 5 attribution and evaluation test suite
+npx tsx --test tests/attribution.test.ts
+```
+
 

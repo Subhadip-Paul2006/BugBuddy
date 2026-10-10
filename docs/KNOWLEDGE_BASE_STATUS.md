@@ -1,10 +1,10 @@
 # BugBuddy Knowledge Base — Status & Audit Report
 
-**Document Version:** 3.0.0  
+**Document Version:** 4.0.0  
 **Updated At:** 2026-10-10  
 **Workspace:** `D:\GHW_Challange01`  
 **Repository Remote:** `https://github.com/Subhadip-Paul2006/BugBuddy.git` (`origin/main`)  
-**Role:** Knowledge Base Engineer  
+**Role:** Senior Search-Quality & Software Testing Engineer  
 
 ---
 
@@ -12,10 +12,15 @@
 
 This document serves as the official tracking, baseline audit, and verification report for the BugBuddy Curated Debugging Knowledge System. BugBuddy requires a robust, validated, offline-capable debugging knowledge base across six supported programming languages (`c`, `cpp`, `java`, `python`, `javascript`, `typescript`) to ground its sarcastic AI debugging pet and offline diagnostic engine.
 
-The knowledge base roadmap comprises:
-- **Stage 1**: Curated Debugging Knowledge Corpus (minimum 60 entries, ≥ 10 per language, meeting full metadata and quality criteria) — **COMPLETE**.
-- **Stage 2**: Metadata Schema, Ingestion Pipeline, Contract Validation, and Diagnostics — **COMPLETE**.
-- **Stage 3**: BM25 Keyword Retrieval, Multi-Criteria Filtering, Deterministic Tie-Breaking, and LLM Prompt Context Assembly — **COMPLETE**.
+The canonical eight-stage knowledge base roadmap is:
+- **Stage 1: Curated Knowledge Corpus** (60 entries across 6 languages) — **COMPLETE**.
+- **Stage 2: Metadata Schema and Document Ingestion** (validation, normalization, diagnostics) — **COMPLETE**.
+- **Stage 3: Keyword Retrieval with Language and Category Filters** (in-memory BM25 engine) — **COMPLETE**.
+- **Stage 4: Structured Roast, Diagnosis, Fix, and Test Responses** (deterministic response engine) — **COMPLETE**.
+- **Stage 5: Source Attribution and Retrieval Evaluation** (provenance, anti-fabrication, 30-case benchmark) — **COMPLETE**.
+- **Stage 6: Optional Embedding-Based Semantic Retrieval** — **PLANNED**.
+- **Stage 7: AI Provider Integration and Interactive Follow-Up Conversations** — **PLANNED**.
+- **Stage 8: Automated Knowledge Updates and Advanced Ranking** — **PLANNED**.
 
 ---
 
@@ -328,44 +333,107 @@ Exit code: `0`
 
 ---
 
-## 7. Remaining Work & Future Roadmap
+## 7. Stage 5: Source Attribution & Retrieval Evaluation Verification
 
-### 7.1 Stage 1: Curated Knowledge Corpus
-- **Status:** **COMPLETE** (60 entries across 6 languages).
+### 7.1 Scope & Architecture
+Stage 5 implemented citation provenance tracking and an independent, deterministic retrieval evaluation benchmark suite:
+1. **Source Attribution & Provenance**: Extended `DiagnosisResponse` with `attributedSources: AttributedSource[]` and `hasSources: boolean`. Each source retains `recordId`, `recordTitle`, `language`, `category`, and `isPrimary`.
+2. **Anti-Fabrication & Honest Missing-Source Handling**: Enforces zero fabricated citations. When a curated entry has no external URLs, `hasSources: false` is set with an explicit disclaimer in `limitations`.
+3. **Retrieval Evaluation Dataset**: 30 deterministic test cases in `src/knowledge/evaluationData.ts` across all 6 languages (5 cases per language: exact errors, symptoms, concepts, loose wording) referencing verified corpus IDs.
+4. **Deterministic Evaluation Runner**: `src/knowledge/evaluator.ts` calculating Recall@K, Precision@K, MRR, Top-1 Accuracy, filter compliance, and ranking weakness diagnostics.
+5. **CLI Runner**: `scripts/evaluate_retrieval.ts` via `npm run evaluate:retrieval`.
 
-### 7.2 Stage 2: Canonical Schema, Normalization & Ingestion
-- **Status:** **COMPLETE** (Validated, normalized, provenance tracked).
+### 7.2 Stage 5 Automated Test Results
 
-### 7.3 Stage 3: In-Memory BM25 Keyword Retrieval & Filtering
-- **Status:** **COMPLETE** (Field-weighted BM25, deterministic tie-breaking, prompt context formatter).
+Test suite: `tests/attribution.test.ts` (13 tests)
 
-### 7.4 Stage 4: Structured Debugging Response Engine
-- **Status:** **COMPLETE**
-- Implementation deliverables:
-  1. Typed response contract (`DiagnosisResponse`, `SuggestedFix`, `ResponseMode`, `UserCodeContext`).
-  2. Deterministic response builder (`buildDiagnosisResponse`, `diagnoseProblem`).
-  3. Grounding and anti-fabrication rules (100% anchored in curated records, zero fake citations).
-  4. Safe multi-match handling and language isolation.
-  5. Honest no-match and ambiguous evidence handling.
-  6. Human-readable Markdown formatter (`formatDiagnosisResponseMarkdown`).
-  7. Automated test suite (17 tests in `tests/response.test.ts`) passing cleanly with 100% assertion coverage.
+```
+TAP version 13
+# Subtest: BugBuddy Knowledge Base — Stage 5 Attribution & Retrieval Evaluation
+    ok 1 - 1. Direct match preserves its original source URLs faithfully
+    ok 2 - 2. Source titles and knowledge IDs remain associated correctly with provenance
+    ok 3 - 3. Multiple matching entries preserve distinct record provenance and primary flags
+    ok 4 - 4. Never invents or fabricates citations not present in the retrieved records
+    ok 5 - 5. Duplicate citation links are deduplicated cleanly across records
+    ok 6 - 6. Missing source metadata is represented honestly without placeholders
+    ok 7 - 7. Language-incompatible records do not bleed citations into strict response
+    ok 8 - 8. No-match responses do not display citations from unrelated records
+    ok 9 - 9. Structured response formatting preserves citation information and provenance badges
+    ok 10 - 10. The evaluation runner detects unknown expected record IDs as corpus integrity failures
+    ok 11 - 11. Retrieval metrics (Recall@K, Precision@K, MRR, Top-1) calculate correctly on synthetic fixtures
+    ok 12 - 12. Evaluation results are completely deterministic across multiple runs
+    ok 13 - 13. Integration: Evaluates all 30 evaluation cases against the actual 60-record corpus
+1..13
+ok 1 - BugBuddy Knowledge Base — Stage 5 Attribution & Retrieval Evaluation
+```
 
-### 7.5 Future Knowledge-Base Stages (Planned)
-- **Stage 5: Verification & Sandboxed Execution Bridge (Planned):** Local test execution runner and compiler validation adapter.
-- **Stage 6: Dynamic Pattern Learning (Planned):** Session pattern cache and post-mortem entry generator.
-- **Stage 7: AI Provider Orchestration (Planned):** Provider-agnostic LLM prompt runner grounding completions in retrieved records.
-- **Stage 8: Community Codex Sharing (Planned):** Export/import format for custom user debugging rules and team codices.
+Status: **PASS (13 / 13 passing, 0 failures)**
+
+### 7.3 End-to-End Suite Verification
+
+Running `npm test` across all 7 test suites:
+- `tests/secretRedaction.test.ts`: 7 tests passed
+- `tests/sampleSnippets.test.ts`: 6 tests passed
+- `tests/pixelEmblems.test.ts`: 5 tests passed
+- `tests/knowledge.test.ts`: 16 tests passed
+- `tests/knowledgeSearch.test.ts`: 15 tests passed
+- `tests/response.test.ts`: 17 tests passed
+- `tests/attribution.test.ts`: 13 tests passed
+- **Total:** **79 / 79 tests passing across 7 suites (0 failures)**.
+
+### 7.4 Benchmark Results (`npm run evaluate:retrieval`)
+
+Command run: `npm run evaluate:retrieval` (`tsx scripts/evaluate_retrieval.ts`)
+
+| Run Mode | Top-1 Accuracy | MRR | Recall@1 | Recall@3 | Recall@5 | Precision@1 | Precision@3 | Filter Compliance |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Run 1: Raw Retrieval** | 100.0% (30/30) | 1.0000 | 100.0% | 100.0% | 100.0% | 100.0% | 33.3%* | 100.0% |
+| **Run 2: Scoped Retrieval** | 100.0% (30/30) | 1.0000 | 100.0% | 100.0% | 100.0% | 100.0% | 33.3%* | 100.0% |
+
+*\* Note: Precision@3 is mathematically capped at 33.3% (1/3) for single-label ground truth cases.*
+
+#### Per-Language Results
+- `c` (5 cases): Top-1 Acc: 100.0%, MRR: 1.000, Recall@3: 100.0%, Recall@5: 100.0%
+- `cpp` (5 cases): Top-1 Acc: 100.0%, MRR: 1.000, Recall@3: 100.0%, Recall@5: 100.0%
+- `java` (5 cases): Top-1 Acc: 100.0%, MRR: 1.000, Recall@3: 100.0%, Recall@5: 100.0%
+- `python` (5 cases): Top-1 Acc: 100.0%, MRR: 1.000, Recall@3: 100.0%, Recall@5: 100.0%
+- `javascript` (5 cases): Top-1 Acc: 100.0%, MRR: 1.000, Recall@3: 100.0%, Recall@5: 100.0%
+- `typescript` (5 cases): Top-1 Acc: 100.0%, MRR: 1.000, Recall@3: 100.0%, Recall@5: 100.0%
+
+### 7.5 Type Checking & Production Build
+- `npx tsc --noEmit`: Exited with code `0` (Zero compiler errors).
+- `npm run build`: Exited with code `0` (55 modules transformed, production assets compiled in 2.59s).
 
 ---
 
-## 8. Parallel-Agent Safety Confirmation
+## 8. Knowledge Roadmap & Planned Stages
+
+The approved BugBuddy Knowledge Base roadmap is strictly defined as:
+
+1. **Stage 1: Curated Knowledge Corpus** — **COMPLETE** (60 entries across 6 languages).
+2. **Stage 2: Metadata Schema and Document Ingestion** — **COMPLETE** (Strict validation, normalization, diagnostics).
+3. **Stage 3: Keyword Retrieval with Language and Category Filters** — **COMPLETE** (In-memory BM25 engine).
+4. **Stage 4: Structured Roast, Diagnosis, Fix, and Test Responses** — **COMPLETE** (Deterministic response engine).
+5. **Stage 5: Source Attribution and Retrieval Evaluation** — **COMPLETE** (Provenance, anti-fabrication, 30-case benchmark).
+6. **Stage 6: Optional Embedding-Based Semantic Retrieval** — **PLANNED** (Local embeddings and Reciprocal Rank Fusion).
+7. **Stage 7: AI Provider Integration and Interactive Follow-Up Conversations** — **PLANNED** (LLM prompt runner grounded in retrieved entries).
+8. **Stage 8: Automated Knowledge Updates and Advanced Ranking** — **PLANNED** (Corpus updater, community contributions).
+
+*(Notice: No code execution sandbox, remote execution, or multiplayer networking features are part of the knowledge engine roadmap.)*
+
+---
+
+## 9. Parallel-Agent Safety Confirmation
 
 - Modifications to UI-owned files (`docs/UI_UX.md`, `src/components/*`, `src/styles/*`, `src/App.tsx`, `src/services/*`): **NONE (0 modifications)**.
 - Modifications to shared root documentation (`README.md`, `docs/PRD.md`, `docs/TRD.md`, `docs/PHASES.md`, `AI_INSTRUCTIONS.md`): **NONE (0 modifications)**.
-- All knowledge base implementation is strictly self-contained within:
+- Git / GitHub commands executed: **NONE (0 git commands)**.
+- Code execution sandbox or arbitrary code execution introduced: **NONE (0 sandboxes)**.
+- All knowledge base work is strictly confined to:
   - `knowledge/*.json` (curated knowledge corpora)
-  - `src/knowledge/*` (schema, validation, ingestion, normalizer, reporter, search, response, exports)
-  - `scripts/validate_knowledge.ts` (ingestion CLI)
-  - `tests/knowledge.test.ts`, `tests/knowledgeSearch.test.ts`, and `tests/response.test.ts` (automated test suites)
-  - `docs/KNOWLEDGE_BASE_STATUS.md` and `docs/KNOWLEDGE_BASE.md` (dedicated documentation)
+  - `src/knowledge/*` (schema, validation, ingestion, normalizer, reporter, search, response, evaluationData, evaluator, index)
+  - `scripts/validate_knowledge.ts`, `scripts/evaluate_retrieval.ts` (CLI scripts)
+  - `tests/*.test.ts` (automated test suites)
+  - `docs/KNOWLEDGE_BASE_STATUS.md` and `docs/KNOWLEDGE_BASE.md` (knowledge documentation)
+
 
