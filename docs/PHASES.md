@@ -1,10 +1,10 @@
 # Implementation Phases Roadmap (PHASES.md)
 
 ## Project: BugBuddy
-**Document Version:** 1.1.0  
-**Status:** Approved  
+**Document Version:** 1.2.0  
+**Status:** Approved Roadmap  
 **Author:** Senior Software Architect & Product Manager  
-**Reference Link:** [README.md](../README.md) | [PRD.md](PRD.md) | [TRD.md](TRD.md) | [AI_INSTRUCTIONS.md](../AI_INSTRUCTIONS.md)
+**Reference Link:** [README.md](../README.md) | [PRD.md](PRD.md) | [TRD.md](TRD.md) | [UI_UX.md](UI_UX.md) | [AI_INSTRUCTIONS.md](../AI_INSTRUCTIONS.md) | [DOCUMENTATION_AUDIT.md](DOCUMENTATION_AUDIT.md)
 
 ---
 
@@ -18,55 +18,63 @@ BugBuddy is delivered through five sequential, test-gated phases. Each phase is 
 ├─────────────┬─────────────┬─────────────┬─────────────┬────────────────┤
 │   Phase 0   │   Phase 1   │   Phase 2   │   Phase 3   │    Phase 4     │
 │ Baseline &  │   UI Shell  │  Confession │ Interactive │ Integration,   │
-│ Arch Specs  │    & Pet    │   Engine    │ AI/RAG Chat │ E2E & Release  │
+│ Voxel Specs │  & Base Camp│   Engine    │ AI/RAG Chat │ E2E & Release  │
 └─────────────┴─────────────┴─────────────┴─────────────┴────────────────┘
 ```
 
 ---
 
-## Phase 0 — Documentation and Architecture Baseline
+## Phase 0 — Documentation, Architecture & UI/UX Baseline
 
-- **Objective**: Establish complete, consistent, and validated product requirements, engineering architecture, Archify-modeled system diagrams, language registry designs, and agent operational guidelines.
+- **Objective**: Establish complete, consistent, and validated product requirements, engineering architecture, Minecraft-inspired UI/UX design specifications, Archify-modeled system diagrams, language registry designs, and agent operational guidelines.
 - **Deliverables**:
   - `README.md`: Project landing page, tech stack specification, and documentation directory.
+  - `LICENSE`: Official MIT License.
   - `docs/PRD.md`: Behavioral product requirements, user personas, functional and non-functional requirements.
   - `docs/TRD.md`: Engineering specifications, component architecture, schemas, and traceability matrix.
-  - `AI_INSTRUCTIONS.md`: Strict agent guidelines and sarcastic persona rules.
+  - `docs/UI_UX.md`: Comprehensive Minecraft-inspired voxel design system, HUD and inventory navigation, confession booth layout, chatbot contracts, and accessibility standards.
+  - `AI_INSTRUCTIONS.md`: Strict agent guidelines, sarcastic persona rules, and voxel design rules.
   - `docs/PHASES.md`: Sequential delivery roadmap with explicit acceptance gates.
+  - `docs/DOCUMENTATION_AUDIT.md`: Phase 0 repository audit, Archify research, and documentation synchronization blueprint.
 - **Dependencies**: None.
 - **Acceptance Criteria**:
-  - All five required documents exist in the workspace and link correctly to one another using GitHub-compatible relative paths.
+  - All documentation artifacts exist in the workspace and link correctly to one another using GitHub-compatible relative paths.
+  - `docs/UI_UX.md` establishes a complete, implementation-ready visual language with design tokens, voxel border styles, and interaction inventories.
   - Explicit first-class support defined for C, C++, Java, Python, JavaScript, and TypeScript.
   - Error classification defined for all 8 required categories.
-  - Sarcastic tone guidelines and forbidden pleasantries clearly defined.
+  - Sarcastic tone guidelines, forbidden pleasantries, and safe client runtime key storage clearly defined.
 - **Testing Requirements**:
   - Markdown syntax and internal link validation across all documents.
   - Mermaid diagram syntax validation.
 - **Definition of Done**:
-  - All documents approved and baseline committed to the repository without open architectural ambiguities.
+  - All documents approved, `docs/DOCUMENTATION_AUDIT.md` signed off, and baseline committed to the repository without open architectural ambiguities.
 
 ---
 
-## Phase 1 — UI Foundation and Virtual Pet
+## Phase 1 — UI Foundation, Base Camp & Virtual Pet
 
-- **Objective**: Construct the responsive application shell, dark-mode design system, interactive Procrastination Pet visualizer, task management board, deterministic mood state machine, XP progression, and browser persistence.
+- **Objective**: Construct the responsive application shell, Minecraft-inspired voxel design system, interactive Procrastination Pet visualizer, Base Camp dashboard, task management board, deterministic mood state machine, XP progression, and browser persistence.
 - **Deliverables**:
-  - Vite + React 18 + TypeScript project foundation.
-  - Vanilla CSS design tokens (`src/styles/tokens.css`, `src/styles/theme.css`) with glassmorphic cards and dark palette.
-  - `PetStage` component with animated SVG pet avatar supporting 5 moods (`ECSTATIC`, `HAPPY`, `NEUTRAL`, `DISAPPOINTED`, `DRAMATIC_DESPAIR`).
-  - Deterministic `PetStateMachine` implementing polynomial XP formula and mood transitions.
+  - Vite + React 18 + TypeScript project foundation (`package.json`, `tsconfig.json`, `vite.config.ts`).
+  - Minecraft-inspired Vanilla CSS design tokens (`src/styles/tokens.css`, `src/styles/theme.css`) with deepslate surfaces and beveled blocky borders.
+  - `GameHUD` top status bar with player profile, animated gold XP bar, and streak campfire.
+  - `DeveloperInventory` collapsible sidebar navigation with pixel-art icons.
+  - `PetStage` component with animated SVG pet avatar supporting 5 moods (`ECSTATIC`, `HAPPY`, `NEUTRAL`, `DISAPPOINTED`, `DRAMATIC_DESPAIR`) and hearth campfire lighting.
+  - Deterministic `PetStateMachine` implementing piecewise polynomial XP formula and mood transitions.
   - `TaskBoard` component supporting task creation, countdown timers, snooze actions, and completion checkboxes.
+  - Scaffolding for Confession Booth UI (`ConfessionInputBox`, language hotbar) and Chat UI (`ConversationThread`, `FollowUpChip`).
   - `StorageService` implementing local persistence via `IndexedDB` / `localStorage` with JSON export/import.
-- **Dependencies**: Phase 0 baseline.
+- **Dependencies**: Phase 0 baseline & `docs/UI_UX.md` specification approval.
 - **Acceptance Criteria**:
+  - Application renders with Minecraft-inspired visual identity adhering strictly to `docs/UI_UX.md`.
   - User can create tasks with countdown timers, trigger snoozes, and observe deterministic pet mood drops.
-  - Completing a task awards XP, updates the level bar, and triggers a happy celebration animation.
+  - Completing a task awards gold XP particles, updates the level bar, and triggers a happy celebration animation.
   - Reloading the browser preserves tasks, pet level, XP, and mood.
 - **Testing Requirements**:
   - Unit tests for `PetStateMachine` (XP calculations, level thresholds, mood transitions).
-  - Component tests for `PetStage` and `TaskBoard`.
+  - Component tests for `PetStage`, `GameHUD`, and `TaskBoard`.
 - **Definition of Done**:
-  - UI renders cleanly on desktop and mobile viewports with zero console errors and 100% passing state machine tests.
+  - UI renders cleanly on desktop, tablet, and mobile viewports with zero console errors and 100% passing state machine tests.
 
 ---
 

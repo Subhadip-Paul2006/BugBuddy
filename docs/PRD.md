@@ -168,7 +168,7 @@ To make software debugging entertaining, educational, and emotionally accountabl
 | :--- | :--- | :--- | :--- |
 | **NFR-001** | Performance | Load & Render Latency | Initial application load (FCP) shall complete in < 1.2s on standard broadband connections. Local UI interactions (mood changes, task status toggles) shall render in < 50ms. |
 | **NFR-002** | Performance | AI Stream Latency | Time-to-first-token for live AI responses shall not exceed 1,200ms under standard provider conditions; mock responses shall begin streaming within 250ms. |
-| **NFR-003** | Usability & Aesthetics | Visual Excellence | The UI shall feature a modern dark-mode aesthetic with custom design tokens, glassmorphic card overlays, expressive SVG pet animations, and smooth transitions. |
+| **NFR-003** | Usability & Aesthetics | Minecraft-Inspired Visual Excellence | The UI shall feature an original Minecraft-inspired developer survival world aesthetic (deepslate backgrounds, beveled blocky borders, inventory hotbars, emerald/redstone/gold accents, pixel-art pet avatar) adhering strictly to [docs/UI_UX.md](UI_UX.md). |
 | **NFR-004** | Accessibility | WCAG Compliance | The web application shall adhere to WCAG 2.1 Level AA standards, including full keyboard navigation, minimum 4.5:1 text contrast ratios, and `aria-live` screen reader announcements for pet mood changes and streaming chat. |
 | **NFR-005** | Security & Privacy | Zero Data Leakage | No user code, error logs, or telemetry shall be transmitted to external servers without explicit user configuration. All state shall remain in local browser storage by default. |
 | **NFR-006** | Extensibility | Pluggable Architecture | The language registry and LLM provider interfaces shall be strictly decoupled such that adding a new programming language or AI backend requires zero changes to core UI or state logic. |
@@ -274,6 +274,33 @@ To make software debugging entertaining, educational, and emotionally accountabl
   - *Given* the user has not configured any API keys,  
   - *When* they submit code or interact with the pet,  
   - *Then* the application automatically utilizes the offline Mock Engine, generating relevant roasts, diagnoses, and XP awards without throwing network errors.
+
+### US-05: Multi-Turn Interactive Follow-Up Actions
+- **As a** developer seeking deeper technical clarity or a minimal diff,  
+  **I want to** click context action chips (e.g., *Simpler*, *Deeper*, *Minimal Fix*, *More Tests*),  
+  **So that I can** explore solutions iteratively without retyping the bug context.
+- **Acceptance Criteria**:
+  - *Given* a diagnosis has been rendered in the chat or confession booth,  
+  - *When* the user clicks "Minimal Fix",  
+  - *Then* the system retains conversation context and streams a concise 1–3 line fix diff directly targeting the defect.
+
+### US-06: Daily Survival Quests and Progression
+- **As a** gamified developer looking for motivation,  
+  **I want to** complete daily coding quests (e.g., confessing bugs, requesting tests, beating timers),  
+  **So that I can** earn bonus XP, level up my companion, and maintain daily streaks.
+- **Acceptance Criteria**:
+  - *Given* a user has an active quest "Confess any C or C++ Pointer Bug",  
+  - *When* they submit a valid C pointer bug,  
+  - *Then* the quest updates to complete, awards +50 XP, and triggers a celebratory golden particle animation on the pet stage.
+
+### US-07: Client-Side Secret Redaction & Privacy Shield
+- **As a** security-conscious developer,  
+  **I want my** API keys, passwords, and JWT tokens automatically scrubbed from pasted code before transmission,  
+  **So that I** never accidentally leak credentials to AI models or local logs.
+- **Acceptance Criteria**:
+  - *Given* a user pastes code containing `sk-1234567890abcdef1234567890abcdef`,  
+  - *When* the code is ingested,  
+  - *Then* the token is replaced with `[REDACTED_SECRET]` locally and an emerald/redstone shield banner informs the user that credentials were masked.
 
 ---
 

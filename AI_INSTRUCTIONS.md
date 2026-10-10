@@ -8,27 +8,35 @@
 
 As an AI coding agent working on BugBuddy, you must strictly uphold the following non-negotiable principles:
 
-1. **Pre-Flight Orientation**: Always read [README.md](README.md), [docs/PRD.md](docs/PRD.md), [docs/TRD.md](docs/TRD.md), and [docs/PHASES.md](docs/PHASES.md) before implementing changes. Never guess architecture or reinvent state models.
-2. **Strict MVP Boundaries**: Never silently expand scope. If an enhancement is not in the active phase milestone or PRD, do not build it. Specifically:
+1. **Pre-Flight Orientation**: Always read [README.md](README.md), [docs/PRD.md](docs/PRD.md), [docs/TRD.md](docs/TRD.md), [docs/UI_UX.md](docs/UI_UX.md), and [docs/PHASES.md](docs/PHASES.md) before implementing changes. Never guess architecture, design tokens, or state models.
+2. **UI/UX & Voxel Design System Conformance**: Strictly preserve the **Minecraft-Inspired Developer Survival World** visual direction defined in [docs/UI_UX.md](docs/UI_UX.md).
+   - Use centralized design tokens (`--bb-surface-base`, `--bb-color-emerald`, `--bb-border-subtle`).
+   - Implement tactile blocky beveled borders (`.bb-panel-slab`, `.bb-inventory-slot`).
+   - Implement functional controls rather than nonfunctional decorative placeholders.
+   - Always include loading, error, empty, and success states for every component.
+   - Support WCAG 2.1 AA contrast and respect `prefers-reduced-motion`.
+   - **Do NOT** replace the interface with generic corporate SaaS dashboards, pastel glassmorphism, or Tailwind utility soup.
+3. **Strict MVP Boundaries**: Never silently expand scope. If an enhancement is not in the active phase milestone or PRD, do not build it. Specifically:
    - **Do NOT** build a remote server sandbox or live compiler execution service.
    - **Do NOT** add background browser tab surveillance, webcam monitoring, or creepy inactivity tracking.
    - **Do NOT** add paid cloud backend requirements or mandatory third-party accounts.
-3. **Preserve Subsystem Decoupling**: Maintain strict separation between:
+4. **Preserve Subsystem Decoupling**: Maintain strict separation between:
    - UI Presentation (`src/components/`, `src/styles/`)
    - Language Adapters & Registry (`src/adapters/`)
    - Debugging Pipeline & Error Classifier (`src/engine/`)
    - AI Provider Abstraction (`src/providers/`)
    - Pet State Machine & Progression Math (`src/state/`)
    - Storage & Persistence (`src/services/storage.ts`)
-4. **Contract & Type Integrity**: Use strict TypeScript types across all modules. Every LLM response, mock payload, and stored state object must adhere to the schemas declared in [docs/TRD.md](docs/TRD.md).
-5. **Robust Input Validation**: Never trust user input. Validate character lengths (max 20,000 chars), sanitize against XSS, and gracefully handle empty, malformed, or nonsensical submissions without crashing.
-6. **Epistemic Honesty**:
+5. **Contract & Type Integrity**: Use strict TypeScript types across all modules. Every LLM response, mock payload, and stored state object must adhere to the schemas declared in [docs/TRD.md](docs/TRD.md) and [docs/UI_UX.md](docs/UI_UX.md).
+6. **Robust Input Validation**: Never trust user input. Validate character lengths (max 20,000 chars), sanitize against XSS, and gracefully handle empty, malformed, or nonsensical submissions without crashing.
+7. **Epistemic Honesty**:
    - Never claim code was compiled or executed when it was only parsed statically.
    - Never fabricate fake URLs, hallucinated citations, or non-existent documentation sources.
    - Clearly label hypotheses as hypotheses and verified test steps as tests.
-7. **Zero Secret Leakage**: Never hardcode API keys, credentials, or tokens in source code, commits, or documentation. Always route secrets through environment variables or client-side redaction filters.
-8. **Test-Driven Rigor**: Write unit tests for language adapters, error classification, pet state transitions, and redactor regexes. Never claim a test passed unless it was executed in the test runner.
-9. **Synchronized Documentation**: Whenever code interfaces or configuration keys change, immediately update the corresponding section in [README.md](README.md) and [docs/TRD.md](docs/TRD.md).
+8. **Zero Secret Leakage & Safe Key Architecture**: Never hardcode API keys, credentials, or tokens in source code, commits, or documentation. Never compile private provider keys into client bundles using `VITE_*_API_KEY` variables. Route cloud keys strictly through runtime user entry in the Settings modal (held in memory/sessionStorage).
+9. **Archify Tooling Boundary**: Archify is an offline developer/agent documentation skill (`node bin/archify.mjs finalize`) for generating interactive HTML diagrams in `docs/archify/`. Never install or import Archify into application runtime source code (`src/`).
+10. **Test-Driven Rigor**: Write unit tests for language adapters, error classification, pet state transitions, and redactor regexes. Never claim a test passed unless it was executed in the test runner.
+11. **Synchronized Documentation**: Whenever code interfaces, visual designs, or configuration keys change, immediately update the corresponding sections in [README.md](README.md), [docs/TRD.md](docs/TRD.md), and [docs/UI_UX.md](docs/UI_UX.md).
 
 ---
 
@@ -119,8 +127,11 @@ When processing submissions across the eight standardized categories:
 Before declaring any implementation task complete:
 - [ ] Code compiles without TypeScript errors (`npm run build` or `npx tsc --noEmit`).
 - [ ] Unit tests pass for modified components (`npm run test`).
-- [ ] No API keys or personal credentials are hardcoded.
-- [ ] The app functions in offline mock mode (`VITE_AI_PROVIDER=mock`).
-- [ ] Responsive design verified (no horizontal scrollbars or broken layouts).
-- [ ] Sarcastic tone guidelines are met without toxic violations.
-- [ ] Documentation links and references remain intact.
+- [ ] UI components strictly adhere to [docs/UI_UX.md](docs/UI_UX.md) (Minecraft-inspired design tokens, blocky beveled borders, no generic SaaS templates).
+- [ ] No API keys or credentials hardcoded or configured via build-inlined `VITE_*_API_KEY` variables.
+- [ ] The app functions in offline mock mode (`OfflineMockProvider`) without requiring internet or API keys.
+- [ ] Loading, error, empty, and success states are explicitly implemented.
+- [ ] Reduced-motion preferences (`prefers-reduced-motion`) and WCAG 2.1 AA accessibility contrast are respected.
+- [ ] Responsive design verified across desktop (>1024px), tablet (768px-1024px), and mobile (<768px).
+- [ ] Sarcastic tone guidelines are met without personal malice or protected-characteristic harassment.
+- [ ] Documentation links and cross-references remain intact and synchronized.

@@ -1,10 +1,10 @@
 # Technical Requirements Document (TRD)
 
 ## Project: BugBuddy
-**Document Version:** 1.1.0  
-**Status:** Approved  
+**Document Version:** 1.2.0  
+**Status:** Approved Specification  
 **Author:** Senior Software Architect & Documentation Engineer  
-**Reference Link:** [README.md](../README.md) | [PRD.md](PRD.md) | [PHASES.md](PHASES.md) | [AI_INSTRUCTIONS.md](../AI_INSTRUCTIONS.md)
+**Reference Link:** [README.md](../README.md) | [PRD.md](PRD.md) | [UI_UX.md](UI_UX.md) | [PHASES.md](PHASES.md) | [AI_INSTRUCTIONS.md](../AI_INSTRUCTIONS.md) | [DOCUMENTATION_AUDIT.md](DOCUMENTATION_AUDIT.md)
 
 ---
 
@@ -17,6 +17,7 @@ BugBuddy is engineered as a client-centric, highly modular Single Page Applicati
 3. **Deterministic State Transitions**: State progression (such as pet emotional health, leveling, and quest completion) is strictly deterministic and verifiable, rather than driven by unpredictable LLM hallucinations.
 4. **Resilient Offline Fallback**: The core system is completely functional without internet access or third-party AI keys via an embedded heuristic engine and rich mock provider.
 5. **Epistemic Clarity & Safety**: Code analysis is explicitly bounded as static/heuristic assistance (no unverified claims of compiler execution). Sensitive credentials are sanitized client-side before transmission.
+6. **Voxel Design System Conformance**: The UI presentation strictly implements the Minecraft-inspired developer survival world specification formalized in [docs/UI_UX.md](UI_UX.md).
 
 ---
 
@@ -27,17 +28,17 @@ The high-level system architecture depicts the relationships between the user in
 ```mermaid
 graph TD
     subgraph Client [BugBuddy Web Application - Browser Runtime]
-        UI[User Interface Shell\nVanilla CSS + React Components]
+        UI[User Interface Shell\nMinecraft-Inspired Vanilla CSS + React]
         
         subgraph InputPipeline [Input & Preprocessing]
-            CB[Confession Booth]
+            CB[Confession Booth Altar]
             SR[Client Secret Redactor]
             LR[Language Registry & Adapters]
         end
         
         subgraph CoreEngines [Core Logic Engines]
             EC[Error Classification Engine]
-            RAG[Curated RAG Retriever]
+            RAG[Curated RAG Retriever / Codex]
             PSM[Pet State Machine & Progression]
             TM[Task & Productivity Manager]
         end
@@ -88,31 +89,31 @@ graph TD
 
 ## 3. Frontend Architecture
 
-### 3.1 Technology Foundation
+### 3.1 Technology Foundation & Voxel Styling
 - **Core Library**: React 18+ with TypeScript in strict mode.
 - **Build Tool**: Vite (esbuild-powered hot module replacement and tree-shaking).
-- **Styling Architecture**: Vanilla CSS with structured design tokens (`src/styles/tokens.css`, `src/styles/theme.css`).
-  - Dark-mode first design palette using refined HSL values.
-  - Glassmorphic card styling (`backdrop-filter: blur(12px)`).
-  - CSS custom properties for dynamic theming and pet mood lighting.
-  - Zero heavyweight UI utility dependencies (Tailwind is intentionally omitted unless requested).
+- **Styling Architecture**: Vanilla CSS with structured design tokens (`src/styles/tokens.css`, `src/styles/theme.css`), detailed in [docs/UI_UX.md](UI_UX.md):
+  - Deepslate dark-mode palette (`#101214`, `#181A1F`, `#22252C`).
+  - Tactile voxel beveled borders (`border-image` / layered inset-outset pixel shadows).
+  - High-visibility material accents: Emerald green (`#2ECC71`), Redstone crimson (`#E53935`), Gold (`#F1C40F`), and Diamond blue (`#3498DB`).
+  - Dual-typography hierarchy: Pixel-style display font (`Silkscreen` / `Press Start 2P`) for headings and HUD; hyper-legible `Inter` for prose and `JetBrains Mono` for code blocks.
+  - Zero heavy utility dependencies (Tailwind is intentionally omitted unless requested).
 
 ### 3.2 Component Hierarchy
 ```text
 AppShell
-├── Header (App branding, streak counter, sound toggle, settings)
-├── MainWorkspace (CSS Grid: 2-column on desktop, 1-column on mobile)
-│   ├── LeftPanel: Confession & Chat Workspace
-│   │   ├── ConfessionInputBox (Code textarea, language selector, submit trigger)
-│   │   ├── SecretWarningBanner (Triggers when tokens are redacted)
-│   │   ├── DiagnosticCard (Roast headline, category tag, diagnosis, diff viewer)
-│   │   ├── InteractiveActionBar (Simpler, Deeper, Minimal Fix, Tests, Another Roast)
-│   │   └── ConversationThread (Multi-turn follow-up chat)
-│   └── RightPanel: Procrastination Pet & Productivity
-│       ├── PetStage (Animated SVG pet avatar, mood indicator, speech bubbles)
-│       ├── PetStatsBar (Level, XP progress bar, current mood title)
-│       ├── DailyQuestsWidget (Active coding quests and claimable rewards)
-│       └── TaskBoard (Active tasks, deadline timers, snooze button, completion checkbox)
+├── GameHUD (Player status, level, animated XP bar, streak campfire, audio toggle)
+├── DeveloperInventory (Persistent 240px sidebar with pixel icons; collapses on tablet/mobile)
+├── MainWorkspace (CSS Grid: 2-column on desktop, responsive stack on mobile)
+│   ├── CentralCanvas: Active View Router
+│   │   ├── BaseCampDashboard (Pet campfire hearth, primary CTAs, recent confessions slab)
+│   │   ├── ConfessionAltar (Language hotbar, dual-pane code/error editor, secret shield)
+│   │   ├── DebuggingWorkbench (Multi-turn sprint chat, structured cards, 7 follow-up chips)
+│   │   └── QuestBoard (Daily coding quests, task manager, countdown timers, snooze buttons)
+│   └── RightStatusPanel: Companion & Quest Drawer (Desktop > 1024px)
+│       ├── PetStage (Animated SVG pixel avatar, campfire lighting, mood speech bubbles)
+│       ├── PetStatsBar (Level, XP progress bar, current title)
+│       └── ActiveQuestWidget (Current quest progress and suggested next action)
 └── Footer (Offline indicator, Archify architecture link, privacy guarantee)
 ```
 
@@ -447,8 +448,8 @@ export interface KnowledgeChunk {
 - Chunks are stored in a lightweight in-memory BM25 / token-similarity index in the client, enabling instant matching without cloud dependencies.
 
 ### 11.3 Retrieval, Ranking, and Source Attribution
-- **Relevance Scoring**: Cosine/BM25 similarity score normalized between 0.0 and 1.0. Chunks scoring below a relevance cutoff (0.65) are discarded.
-- **Attribution Contract**: Every retrieved chunk included in prompt synthesis is mapped directly to a `SourceAttribution` object containing title, canonical URL, and excerpt.
+- **Relevance Scoring**: Evaluated via in-memory TF-IDF Cosine Similarity over normalized token frequency vectors, bounded strictly within $[0.0, 1.0]$. Chunks scoring below a relevance cutoff ($0.65$) are discarded.
+- **Attribution Contract**: Every retrieved chunk included in prompt synthesis is mapped directly to a `SourceAttribution` object containing title, canonical URL, and excerpt, displayed in the Knowledge Codex.
 - **No Match Fallback**: When no curated documents meet the threshold, the system explicitly marks `sources: []` and notes in the response that diagnostic guidance is generated from base model training knowledge rather than a verified specification document.
 
 ### 11.4 Prompt Injection Defense in RAG
@@ -530,16 +531,16 @@ Pet emotional states are strictly determined by explicit user events:
 *Anti-Surveillance Guarantee*: The pet never infers procrastination from background tab time, OS window focus, or keyboard idle timers. State changes occur exclusively upon explicit user interaction or user-configured countdown expirations.
 
 ### 13.3 XP and Level Curve Formula
-The required XP to reach level $L$ is calculated using a deterministic polynomial curve:
-$$\text{XP}_{\text{required}}(L) = \lfloor 100 \times L^{1.5} \rfloor$$
+The cumulative XP threshold required to achieve level $L$ is calculated using a deterministic piecewise polynomial curve:
+$$\text{XP}_{\text{cumulative}}(L) = \begin{cases} 0 & \text{for } L = 1 \\ \lfloor 100 \times L^{1.5} \rfloor & \text{for } L > 1 \end{cases}$$
 
-| Level | Cumulative XP Required | Unlocked Title |
-| :--- | :--- | :--- |
-| **Level 1** | 0 XP | *Syntax Sinner* |
-| **Level 2** | 282 XP | *Stack Overflow Copy-Paster* |
-| **Level 3** | 519 XP | *Console.log Archaeologist* |
-| **Level 4** | 800 XP | *Bug Whisperer* |
-| **Level 5** | 1,118 XP | *Senior Breakpoint Enthusiast* |
+| Level | Cumulative XP Required | XP Delta to Advance | Unlocked Title |
+| :--- | :--- | :--- | :--- |
+| **Level 1** | 0 XP | 282 XP | *Syntax Sinner* |
+| **Level 2** | 282 XP | 237 XP | *Stack Overflow Copy-Paster* |
+| **Level 3** | 519 XP | 281 XP | *Console.log Archaeologist* |
+| **Level 4** | 800 XP | 318 XP | *Bug Whisperer* |
+| **Level 5** | 1,118 XP | 358 XP | *Senior Breakpoint Enthusiast* |
 
 ### 13.4 Coding Quests Engine
 Every 24 hours, the engine generates three daily quests:
@@ -684,14 +685,17 @@ graph TD
 
 ## 20. Deployment and Environment Configuration
 
-### 20.1 Environment Variables
-| Variable Name | Required | Default | Description |
+### 20.1 Environment & Safe Key Configuration
+To eliminate client-side credential exposure risks, BugBuddy strictly decouples secrets from build-time bundles:
+
+| Configuration Parameter | Location | Default | Description & Security Policy |
 | :--- | :--- | :--- | :--- |
-| `VITE_AI_PROVIDER` | No | `mock` | Active provider: `mock`, `gemini`, `openai`, `anthropic`. |
-| `VITE_GEMINI_API_KEY`| No | `""` | Google Gemini API key. |
-| `VITE_OPENAI_API_KEY`| No | `""` | OpenAI API key. |
-| `VITE_ANTHROPIC_API_KEY`| No | `""` | Anthropic Claude API key. |
-| `VITE_LOG_LEVEL` | No | `info` | Logging verbosity: `debug`, `info`, `warn`, `error`. |
+| `VITE_APP_TITLE` | Build env (`.env`) | `BugBuddy` | Client application display title. |
+| `VITE_LOG_LEVEL` | Build env (`.env`) | `info` | Client logging level (`debug`, `info`, `warn`, `error`). |
+| `Runtime AI Provider` | In-App Settings | `mock` | Selected provider (`mock`, `gemini`, `openai`, `anthropic`). |
+| `Runtime API Key` | Session / Memory | `""` | User-provided personal key. **Never compiled into build files.** Stored only in `sessionStorage` or active memory during tab lifetime. |
+
+> **Security Invariant**: Never define private cloud provider keys in `VITE_*` environment variables. In Vite, all `VITE_*` variables are statically inlined into public client JavaScript bundles. BugBuddy defaults to `OfflineMockProvider` (requiring zero keys).
 
 ### 20.2 Target Platforms
 Static hosting compatible with modern CDNs: Vercel, Netlify, Cloudflare Pages, and GitHub Pages. Build artifact is a static distribution (`dist/`).
@@ -724,10 +728,10 @@ Static hosting compatible with modern CDNs: Vercel, Netlify, Cloudflare Pages, a
 - **Decision**: Implement a 100% deterministic state machine in TypeScript code.
 - **Rationale**: Users need predictable, fair rules. An LLM might randomly penalize users due to prompt drift. Deterministic triggers guarantee transparent game mechanics.
 
-### ADR-004: Adoption of Archify Specification Conventions
-- **Context**: Deciding on architectural modeling and documentation standards.
-- **Decision**: Model all system documentation and component interactions on the Archify 3.0 specification guidelines ([tt-a1i/archify](https://github.com/tt-a1i/archify)).
-- **Rationale**: Archify emphasizes bounded diagrams (8-12 nodes), strict schema verification, and clear traceability between requirements and implementations.
+### ADR-004: Offline Archify Workflow & Minecraft-Inspired UI Specification
+- **Context**: Deciding how Archify specification tools and visual systems integrate into the project lifecycle.
+- **Decision**: Adopt the Archify 3.0 specification guidelines ([tt-a1i/archify](https://github.com/tt-a1i/archify)) as an offline documentation visualizer (`node bin/archify.mjs finalize`) generating standalone interactive HTML diagrams stored in `docs/archify/`, while mandating strict conformance to the Minecraft-inspired UI/UX system specified in [docs/UI_UX.md](UI_UX.md).
+- **Rationale**: Archify provides rich multi-view interactive diagrams without bloating production client runtime dependencies. Centralizing visual styling in `docs/UI_UX.md` guarantees consistent implementation across components.
 
 ---
 
