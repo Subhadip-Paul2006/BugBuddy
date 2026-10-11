@@ -1,0 +1,41 @@
+flowchart TB
+    subgraph Users ["Developer Workspace"]
+        Dev["Developer / Student<br/>(Browsing at :3000)"]
+    end
+
+    subgraph ClientBoundary ["Client Runtime (Browser)"]
+        SPA["BugBuddy Web App<br/>(React 18 + Vite 5 SPA)"]
+        LocalStore["Local Storage<br/>(Versioned Profile, Quests, XP)"]
+        ClientOffline["Client Deterministic Engine<br/>(Zero-Network Fallback)"]
+    end
+
+    subgraph ServerBoundary ["Backend Service (Node.js on :3001)"]
+        HTTPServer["HTTP Server (`src/server/index.ts`)<br/>Port 3001 / HOST 0.0.0.0"]
+        AIRouter["API Router (`src/server/aiRouter.ts`)<br/>POST /api/diagnose | 64KB Limit | CORS"]
+        Orchestrator["AIDebugOrchestrator<br/>(Evidence Grounding & Fallback)"]
+        HybridEngine["Hybrid Search Engine<br/>(BM25 + RRF Reciprocal Rank Fusion)"]
+        BM25Index["In-Memory BM25 Index<br/>(60 Curated Records, 6 Languages)"]
+        VectorIndex["VectorSearchIndex<br/>(ONNX Dense Vectors / 384-dim)"]
+        ProviderRegistry["AI Provider Registry<br/>(Gemini, OpenAI, Mock)"]
+    end
+
+    subgraph ExternalProviders ["Server-Side External Cloud AI"]
+        GeminiAPI["Google Gemini REST API<br/>(gemini-2.5-flash / gemini-1.5-flash)"]
+        OpenAIAPI["OpenAI Chat API<br/>(gpt-4o-mini / gpt-4o)"]
+    end
+
+    Dev -->|Visits UI / Submits Code| SPA
+    SPA <-->|Reads / Writes Stats| LocalStore
+    SPA -.->|Offline / Network Error| ClientOffline
+    SPA -->|POST /api/diagnose| HTTPServer
+
+    HTTPServer --> AIRouter
+    AIRouter --> Orchestrator
+    Orchestrator --> HybridEngine
+    HybridEngine --> BM25Index
+    HybridEngine --> VectorIndex
+    Orchestrator --> ProviderRegistry
+
+    ProviderRegistry -->|GEMINI_API_KEY| GeminiAPI
+    ProviderRegistry -->|OPENAI_API_KEY| OpenAIAPI
+    ProviderRegistry -.->|Fallback to Curated Evidence| BM25Index

@@ -1,0 +1,40 @@
+stateDiagram-v2
+    [*] --> Development: Feature Implementation & Bug Fixes
+    
+    Development --> LocalPreflight: Pre-Release Quality Gates
+    state LocalPreflight {
+        [*] --> CheckBuild: npm run build
+        CheckBuild --> CheckTests: npm test (192 unit tests)
+        CheckTests --> CheckKnowledge: npm run validate:knowledge
+        CheckKnowledge --> CheckRetrieval: npm run evaluate:retrieval
+        CheckRetrieval --> [*]
+    }
+    
+    LocalPreflight --> ReleaseCandidate: Gates Pass 100%
+    note right of ReleaseCandidate
+        Release package prepared at:
+        releases/v0.1.0/
+        Status: RELEASE CANDIDATE (Draft)
+    end note
+    
+    ReleaseCandidate --> StagedCommit: Single Clean Git Commit
+    StagedCommit --> GitHubBranch: Push to main branch
+    
+    GitHubBranch --> AutomatedCI: GitHub Actions CI Matrix
+    AutomatedCI --> ProductionDeploy: CI Passes & Owner Manual Approval
+    
+    state ProductionDeploy {
+        DeployBackend: Deploy Render Web Service
+        HealthCheck: curl -f /health probe
+        DeployFrontend: Deploy Render Static Site
+        BrowserQA: Manual E2E User Flow Verification
+        
+        DeployBackend --> HealthCheck
+        HealthCheck --> DeployFrontend
+        DeployFrontend --> BrowserQA
+    }
+    
+    ProductionDeploy --> OfficialRelease: Smoke Tests Pass
+    OfficialRelease --> TagRelease: Git Tag v0.1.0 & GitHub Release Published
+    TagRelease --> PostReleaseMonitoring: Sentry / Logs / User Feedback
+    PostReleaseMonitoring --> [*]

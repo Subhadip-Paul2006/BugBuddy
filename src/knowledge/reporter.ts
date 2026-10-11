@@ -3,8 +3,8 @@
  * Generates human-readable terminal and Markdown reports from ingestion and validation results.
  */
 
-import type { IngestionResult, ValidationError } from './types.ts';
-import { SUPPORTED_LANGUAGES } from './schema.ts';
+import type { IngestionResult, ValidationError } from './types';
+import { SUPPORTED_LANGUAGES } from './schema';
 
 export function formatDiagnostics(errors: ValidationError[]): string {
   if (errors.length === 0) {
@@ -51,3 +51,40 @@ ${tableRows}
 
   return output;
 }
+
+export function formatCorpusQualityAudit(audit: import('./maintenance').CorpusQualityAuditReport): string {
+  const statusStr = audit.recordsWithErrorsCount === 0 && audit.perLanguageMeetsTarget ? 'PASSED' : 'NEEDS_ATTENTION';
+  const tableRows = SUPPORTED_LANGUAGES.map((lang) => {
+    const count = audit.recordsByLanguage[lang] || 0;
+    const met = count >= 10 ? '✓' : '✗ (<10)';
+    return `  - ${lang.padEnd(12)}: ${String(count).padStart(3)} entries ${met}`;
+  }).join('\n');
+
+  let output = `
+==================================================
+ BugBuddy Stage 8 Corpus Quality Audit Report
+ Status: ${statusStr}
+ Total Records Audited: ${audit.totalRecords}
+ Perfect Clean Records: ${audit.perfectRecordsCount}
+ Records with Warnings: ${audit.recordsWithWarningsCount}
+ Records with Errors:   ${audit.recordsWithErrorsCount}
+ Corpus SHA-256:        ${audit.fingerprint.slice(0, 16)}...
+--------------------------------------------------
+ Per-Language Distribution:
+${tableRows}
+==================================================
+`;
+
+  if (audit.allIssues.length > 0) {
+    output += `\nDetailed Audit Findings (${audit.allIssues.length} finding${audit.allIssues.length === 1 ? '' : 's'}):\n`;
+    output += audit.allIssues
+      .map(
+        (issue, idx) =>
+          `  ${idx + 1}. [${issue.severity.toUpperCase()}] [${issue.recordId}] ${issue.rule}: ${issue.message}`
+      )
+      .join('\n');
+  }
+
+  return output;
+}
+

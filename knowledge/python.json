@@ -1,0 +1,262 @@
+[
+  {
+    "id": "py-mutable-default-argument",
+    "language": "python",
+    "title": "Mutable Default Argument Retains State Across Calls",
+    "category": "silly_mistake",
+    "difficulty": "beginner",
+    "symptoms": "Function default list/dict accumulates data from previous invocations unexpectedly.",
+    "roast": "Your ender chest keeps items from other players because you shared one default bag with the whole server.",
+    "diagnosis": "Default argument expressions are evaluated once when the function definition is executed, not at each call. A mutable default like [] is shared across all calls.",
+    "debuggingSteps": [
+      "Set parameter default to None: def func(items=None)",
+      "Initialize a new list inside the function body if items is None",
+      "Avoid mutable objects (lists, dicts, sets) as default parameter values"
+    ],
+    "badExample": "def append_item(val, items=[]):\n    items.append(val)\n    return items",
+    "fixedExample": "def append_item(val, items=None):\n    if items is None:\n        items = []\n    items.append(val)\n    return items",
+    "whyItWorks": "Assigning None as the default and instantiating a new list inside the call ensures each invocation gets its own fresh list instance.",
+    "tests": "assert append_item(1) == [1] and append_item(2) == [2]",
+    "tags": ["python", "default-arguments", "mutable", "gotcha", "functions"],
+    "sources": [
+      {
+        "title": "Python Docs - Default Parameter Values",
+        "url": "https://docs.python.org/3/tutorial/controlflow.html#default-argument-values"
+      }
+    ]
+  },
+  {
+    "id": "py-unbound-local-error-scope",
+    "language": "python",
+    "title": "UnboundLocalError When Reassigning Variable in Outer Scope",
+    "category": "runtime_error",
+    "difficulty": "intermediate",
+    "symptoms": "UnboundLocalError: local variable referenced before assignment when reading then writing a variable.",
+    "roast": "Trying to craft with diamond blocks before you even mined them: Python flagged your inventory fraud.",
+    "diagnosis": "If a variable is assigned anywhere inside a function body, Python marks it as local to that function for the entire scope, masking the outer variable.",
+    "debuggingSteps": [
+      "Check if variable is assigned inside the function after being read",
+      "Add 'global var_name' if modifying global module state",
+      "Add 'nonlocal var_name' if modifying enclosing closure scope"
+    ],
+    "badExample": "counter = 0\ndef increment():\n    counter += 1 # UnboundLocalError: local variable 'counter' referenced before assignment\n    return counter",
+    "fixedExample": "counter = 0\ndef increment():\n    global counter\n    counter += 1\n    return counter",
+    "whyItWorks": "Declaring 'global counter' explicitly tells the compiler that assignments target module scope rather than binding a new local variable.",
+    "tests": "counter = 0; increment(); assert counter == 1",
+    "tags": ["python", "scope", "unboundlocalerror", "global", "closure"],
+    "sources": [
+      {
+        "title": "Python FAQ - Why am I getting an UnboundLocalError?",
+        "url": "https://docs.python.org/3/faq/programming.html#why-am-i-getting-an-unboundlocalerror-when-the-variable-has-a-value"
+      }
+    ]
+  },
+  {
+    "id": "py-list-mutation-during-iteration",
+    "language": "python",
+    "title": "Skipped Elements from Modifying List While Iterating",
+    "category": "logic_error",
+    "difficulty": "intermediate",
+    "symptoms": "Loop skips elements or terminates prematurely when deleting or appending elements inside a for-loop.",
+    "roast": "Digging straight down while standing on the gravel block you're breaking: down into the lava you go.",
+    "diagnosis": "Python list iteration tracks elements by internal index offset. Removing an element shifts subsequent elements left, causing the iterator to skip the immediate next element.",
+    "debuggingSteps": [
+      "Iterate over a shallow copy of the list: for item in list(items):",
+      "Use a list comprehension to filter items into a new list",
+      "Collect items to delete and remove them in a separate pass"
+    ],
+    "badExample": "nums = [1, 2, 2, 3]\nfor x in nums:\n    if x == 2:\n        nums.remove(x) # nums becomes [1, 2, 3]; second 2 is skipped!",
+    "fixedExample": "nums = [1, 2, 2, 3]\nnums = [x for x in nums if x != 2]",
+    "whyItWorks": "List comprehensions create a brand new filtered list without interfering with iteration cursors.",
+    "tests": "nums = [1, 2, 2, 3]; nums = [x for x in nums if x != 2]; assert nums == [1, 3]",
+    "tags": ["python", "list", "iteration", "mutation", "comprehension"],
+    "sources": [
+      {
+        "title": "Python Tutorial - More on Lists",
+        "url": "https://docs.python.org/3/tutorial/datastructures.html#more-on-lists"
+      }
+    ]
+  },
+  {
+    "id": "py-shallow-copy-nested-mutation",
+    "language": "python",
+    "title": "Mutating Nested Collections via Shallow Copy",
+    "category": "logic_error",
+    "difficulty": "intermediate",
+    "symptoms": "Modifying a copied dictionary or list accidentally mutates the original object's nested data.",
+    "roast": "Cloning your pet wolf with copy() but leaving its leash tied to your neighbor's collar.",
+    "diagnosis": "Shallow copies (list.copy(), dict.copy(), copy.copy()) duplicate the top container, but nested elements remain references to the same underlying objects.",
+    "debuggingSteps": [
+      "Identify nested mutable structures (lists within lists, dicts within dicts)",
+      "Import copy and use copy.deepcopy() for true isolation",
+      "Verify object identity of nested structures with id(a[0]) vs id(b[0])"
+    ],
+    "badExample": "import copy\noriginal = [[1, 2], [3, 4]]\nshallow = original.copy()\nshallow[0].append(99) # original[0] also gets 99!",
+    "fixedExample": "import copy\noriginal = [[1, 2], [3, 4]]\ndeep = copy.deepcopy(original)\ndeep[0].append(99)",
+    "whyItWorks": "copy.deepcopy recursively clones all nested objects, guaranteeing full memory decoupling.",
+    "tests": "import copy; o = [[1]]; d = copy.deepcopy(o); d[0].append(2); assert len(o[0]) == 1 and len(d[0]) == 2",
+    "tags": ["python", "copy", "deepcopy", "nested-data", "references"],
+    "sources": [
+      {
+        "title": "Python Standard Library - copy module",
+        "url": "https://docs.python.org/3/library/copy.html"
+      }
+    ]
+  },
+  {
+    "id": "py-string-int-concat-type-error",
+    "language": "python",
+    "title": "TypeError: can only concatenate str to str (not 'int')",
+    "category": "type_compilation",
+    "difficulty": "beginner",
+    "symptoms": "TypeError thrown when attempting to use '+' between a string and an integer or float.",
+    "roast": "Trying to combine a book and a sword without an anvil: Python doesn't guess your recipes.",
+    "diagnosis": "Python is strongly typed and does not implicitly coerce integers to strings during concatenation. Combining them requires explicit conversion or formatting.",
+    "debuggingSteps": [
+      "Use modern f-strings (f'Score: {score}')",
+      "Explicitly convert with str(val)",
+      "Check data types coming from user input or APIs"
+    ],
+    "badExample": "score = 100\nmsg = \"Current score: \" + score # TypeError",
+    "fixedExample": "score = 100\nmsg = f\"Current score: {score}\"",
+    "whyItWorks": "Formatted string literals (f-strings) automatically evaluate expressions and invoke their __format__ or __str__ representations.",
+    "tests": "score = 100; assert f'Score: {score}' == 'Score: 100'",
+    "tags": ["python", "typeerror", "f-strings", "type-coercion", "formatting"],
+    "sources": [
+      {
+        "title": "Python Docs - Formatted String Literals",
+        "url": "https://docs.python.org/3/tutorial/inputoutput.html#formatted-string-literals"
+      }
+    ]
+  },
+  {
+    "id": "py-missing-self-method-definition",
+    "language": "python",
+    "title": "TypeError: method takes 0 positional arguments but 1 was given",
+    "category": "silly_mistake",
+    "difficulty": "beginner",
+    "symptoms": "Calling an instance method on a class object throws TypeError: takes 0 positional arguments but 1 was given.",
+    "roast": "You told your pet to fetch, but forgot to give it ears to hear who told it.",
+    "diagnosis": "Python instance method invocations implicitly pass the instance as the first argument ('self'). If the method definition omitted 'self', argument counts mismatch.",
+    "debuggingSteps": [
+      "Add 'self' as the first parameter of instance methods",
+      "Or add @staticmethod decorator if the method does not access instance state",
+      "Or add @classmethod if it operates on class state"
+    ],
+    "badExample": "class Player:\n    def get_health():\n        return 100\np = Player()\np.get_health() # TypeError: get_health() takes 0 positional arguments but 1 was given",
+    "fixedExample": "class Player:\n    def get_health(self):\n        return 100\np = Player()\np.get_health()",
+    "whyItWorks": "Including 'self' in the parameter list binds the method to the calling object instance.",
+    "tests": "class Player: def get_health(self): return 100\nassert Player().get_health() == 100",
+    "tags": ["python", "classes", "self", "oop", "typeerror"],
+    "sources": [
+      {
+        "title": "Python Tutorial - Class Objects and Method Objects",
+        "url": "https://docs.python.org/3/tutorial/classes.html#method-objects"
+      }
+    ]
+  },
+  {
+    "id": "py-generator-exhaustion-reuse",
+    "language": "python",
+    "title": "Generator Exhaustion When Iterating Multiple Times",
+    "category": "logic_error",
+    "difficulty": "intermediate",
+    "symptoms": "Second loop or list conversion over a generator yields empty results with no error raised.",
+    "roast": "Drinking a potion of water breathing twice and wondering why the empty glass bottle gave you no bubbles.",
+    "diagnosis": "Generators and iterator expressions produce values on-the-fly and maintain a one-way consumption state. Once exhausted, they yield StopIteration on all subsequent calls.",
+    "debuggingSteps": [
+      "Convert the generator to a list if multiple traversals are required: items = list(gen)",
+      "Re-instantiate the generator function if lazy streaming is necessary",
+      "Inspect itertools.tee for splitting an iterator into multiple independent iterators"
+    ],
+    "badExample": "gen = (x * 2 for x in range(3))\nfirst_sum = sum(gen) # 6\nsecond_sum = sum(gen) # 0! Generator is exhausted",
+    "fixedExample": "items = list(x * 2 for x in range(3))\nfirst_sum = sum(items) # 6\nsecond_sum = sum(items) # 6",
+    "whyItWorks": "Materializing the generator into a list stores elements in memory, permitting repeated traversals.",
+    "tests": "items = list(x * 2 for x in range(3)); assert sum(items) == 6 and sum(items) == 6",
+    "tags": ["python", "generators", "iterators", "exhaustion", "itertools"],
+    "sources": [
+      {
+        "title": "Python Docs - Generator Types",
+        "url": "https://docs.python.org/3/library/stdtypes.html#generator-types"
+      }
+    ]
+  },
+  {
+    "id": "py-is-identity-vs-equality",
+    "language": "python",
+    "title": "Using 'is' for Value Equality Instead of '=='",
+    "category": "logic_error",
+    "difficulty": "beginner",
+    "symptoms": "Comparison fails unexpectedly for integers, strings, or floats depending on CPython interning optimizations.",
+    "roast": "Checking if two swords are the same by verifying they occupy the same quantum coordinates.",
+    "diagnosis": "'is' checks identity (memory address id(a) == id(b)), while '==' checks value equality (__eq__). Using 'is' for numbers or strings produces erratic bugs when small-integer interning limits are crossed.",
+    "debuggingSteps": [
+      "Use '==' for comparing values (numbers, strings, lists)",
+      "Reserve 'is' exclusively for singleton comparisons (var is None, var is True, var is False)",
+      "Run flake8 or ruff to catch SyntaxWarning / E721 lint warnings"
+    ],
+    "badExample": "a = 1000\nb = 1000\nif a is b: # Evaluates to False in many Python environments\n    pass",
+    "fixedExample": "a = 1000\nb = 1000\nif a == b: # Evaluates to True reliably\n    pass",
+    "whyItWorks": "'==' invokes the __eq__ method, comparing numeric values rather than underlying memory pointers.",
+    "tests": "a = 1000; b = 1000; assert a == b",
+    "tags": ["python", "identity", "equality", "is-operator", "gotcha"],
+    "sources": [
+      {
+        "title": "Python Language Reference - Comparisons",
+        "url": "https://docs.python.org/3/reference/expressions.html#comparisons"
+      }
+    ]
+  },
+  {
+    "id": "py-late-binding-closures-in-loop",
+    "language": "python",
+    "title": "Late Binding Closures in Loops Producing Uniform Values",
+    "category": "logic_error",
+    "difficulty": "advanced",
+    "symptoms": "All lambdas created inside a loop evaluate with the final loop iteration variable value.",
+    "roast": "Printing 5 name tags inside a loop, but all of them say 'Creeper #5' because you only filled the ink at the end.",
+    "diagnosis": "Python closures bind variables by reference, not by value. The closure looks up 'i' at call time, when the loop has already completed and 'i' holds its final value.",
+    "debuggingSteps": [
+      "Bind the loop variable eagerly using default arguments: lambda x, i=i: x + i",
+      "Use functools.partial to freeze arguments",
+      "Define an enclosing helper function to create a distinct scope"
+    ],
+    "badExample": "funcs = [lambda: i for i in range(3)]\nresults = [f() for f in funcs] # Produces [2, 2, 2] instead of [0, 1, 2]!",
+    "fixedExample": "funcs = [lambda i=i: i for i in range(3)]\nresults = [f() for f in funcs] # Produces [0, 1, 2]",
+    "whyItWorks": "Default arguments are evaluated when the lambda is created, snapshotting the current value of i into the function closure's default tuple.",
+    "tests": "funcs = [lambda i=i: i for i in range(3)]; assert [f() for f in funcs] == [0, 1, 2]",
+    "tags": ["python", "closures", "late-binding", "lambdas", "functional"],
+    "sources": [
+      {
+        "title": "Python FAQ - Why do lambdas defined in a loop with different values all return the same result?",
+        "url": "https://docs.python.org/3/faq/programming.html#why-do-lambdas-defined-in-a-loop-with-different-values-all-return-the-same-result"
+      }
+    ]
+  },
+  {
+    "id": "py-except-clause-bare-exception",
+    "language": "python",
+    "title": "Catching Bare 'except:' Swallowing KeyboardInterrupt and SystemExit",
+    "category": "logic_error",
+    "difficulty": "intermediate",
+    "symptoms": "Script cannot be stopped with Ctrl+C, or exit commands are trapped and ignored.",
+    "roast": "Building an indestructible bedrock bunker that traps yourself inside forever: you can't even quit the world.",
+    "diagnosis": "A bare 'except:' catches BaseException, which includes KeyboardInterrupt and SystemExit. This prevents graceful cancellation or termination.",
+    "debuggingSteps": [
+      "Catch 'except Exception:' instead of bare 'except:' to allow system signals to propagate",
+      "Catch specific error classes (ValueError, KeyError, IOError) whenever possible",
+      "Rethrow unexpected exceptions with 'raise'"
+    ],
+    "badExample": "try:\n    while True: do_work()\nexcept: # Traps KeyboardInterrupt (Ctrl+C)!\n    pass",
+    "fixedExample": "try:\n    do_work()\nexcept Exception as e:\n    logger.error(f\"Work error: {e}\")",
+    "whyItWorks": "Inheriting from Exception allows system exit events like KeyboardInterrupt (which inherit directly from BaseException) to pass through unimpeded.",
+    "tests": "try: raise ValueError('err')\nexcept Exception as e: assert isinstance(e, ValueError)",
+    "tags": ["python", "exceptions", "bare-except", "signals", "clean-code"],
+    "sources": [
+      {
+        "title": "Python Docs - Built-in Exceptions Hierarchy",
+        "url": "https://docs.python.org/3/library/exceptions.html#exception-hierarchy"
+      }
+    ]
+  }
+]

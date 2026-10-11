@@ -1,0 +1,37 @@
+flowchart LR
+    subgraph IngestionStage ["1. Knowledge Ingestion & Validation"]
+        CorpusFiles["knowledge/*.json<br/>(60 Curated Records / 6 Languages)"]
+        Validator["validator.ts<br/>(Schema & ID Collision Checks)"]
+        Normalizer["normalizer.ts<br/>(BM25 Search Term Tokenizer)"]
+    end
+
+    subgraph IndexingStage ["2. Dual-Index Assembly"]
+        BM25Store["KnowledgeSearchIndex<br/>(In-Memory BM25 Index)"]
+        EmbeddingPipeline["LocalTransformersEmbeddingAdapter<br/>(Xenova/all-MiniLM-L6-v2)"]
+        VectorStore["VectorSearchIndex<br/>(384-dim Dense Vector Index)"]
+    end
+
+    subgraph QueryExecution ["3. Query & Hybrid Fusion"]
+        QueryInput["Incoming Bug Query<br/>(Code + Error Message + Language)"]
+        BM25Search["BM25 Keyword Scoring"]
+        VectorSearch["Cosine Similarity Search"]
+        RRF["Reciprocal Rank Fusion (RRF)<br/>Score = SUM 1 / (60 + Rank)"]
+    end
+
+    subgraph AttributionStage ["4. Provenance & Filtering"]
+        Dedupe["Candidate Deduplication"]
+        CitationFilter["Source Attribution & URL Guard<br/>(Rejects fabricated IDs)"]
+        GroundingContext["Grounding Evidence Prompt<br/>(Sent to LLM or Fallback Engine)"]
+    end
+
+    CorpusFiles --> Validator --> Normalizer
+    Normalizer --> BM25Store
+    Normalizer --> EmbeddingPipeline --> VectorStore
+
+    QueryInput --> BM25Search & VectorSearch
+    BM25Store --> BM25Search
+    VectorStore --> VectorSearch
+
+    BM25Search --> RRF
+    VectorSearch --> RRF
+    RRF --> Dedupe --> CitationFilter --> GroundingContext

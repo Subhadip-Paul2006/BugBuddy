@@ -1,0 +1,262 @@
+[
+  {
+    "id": "java-null-pointer-unboxed-primitive",
+    "language": "java",
+    "title": "NullPointerException During Primitive Auto-Unboxing",
+    "category": "runtime_error",
+    "difficulty": "beginner",
+    "symptoms": "NullPointerException thrown on an arithmetic operation or boolean conditional expression.",
+    "roast": "Opening a gift box that contains literally nothing: Java just collapsed your inventory.",
+    "diagnosis": "Auto-unboxing implicitly calls .intValue() or .booleanValue() on wrapper classes (Integer, Boolean, etc.). If the wrapper reference is null, a NullPointerException occurs.",
+    "debuggingSteps": [
+      "Check wrapper object nullability before unboxing into primitive",
+      "Use primitive types if nullability is not required",
+      "Use Optional or Objects.requireNonNullElse / ternary default values"
+    ],
+    "badExample": "Integer count = null;\nint total = count + 1; // Throws NullPointerException via count.intValue()",
+    "fixedExample": "Integer count = null;\nint total = (count != null ? count : 0) + 1;",
+    "whyItWorks": "Guarding against null before evaluation supplies a fallback primitive value, avoiding the implicit method dispatch on null.",
+    "tests": "Integer count = null; int total = (count != null ? count : 0) + 1; assert total == 1;",
+    "tags": ["java", "autoboxing", "null-pointer", "wrapper-classes", "runtime-error"],
+    "sources": [
+      {
+        "title": "Oracle Java Language Specification - Unboxing Conversion",
+        "url": "https://docs.oracle.com/javase/specs/jls/se17/html/jls-5.html#jls-5.1.8"
+      }
+    ]
+  },
+  {
+    "id": "java-concurrent-modification-iteration",
+    "language": "java",
+    "title": "ConcurrentModificationException During Collection Iteration",
+    "category": "runtime_error",
+    "difficulty": "intermediate",
+    "symptoms": "ConcurrentModificationException thrown when calling list.remove() inside an enhanced for-loop.",
+    "roast": "Chopping wood from the tree while standing on the leaves you just broke: gravity says hello.",
+    "diagnosis": "Enhanced for-loops use an internal Iterator. Modifying the collection directly (e.g. list.remove()) desynchronizes the iterator's modCount and expectedModCount.",
+    "debuggingSteps": [
+      "Use Iterator.remove() explicitly instead of collection.remove()",
+      "Use Collection.removeIf(predicate) in modern Java 8+",
+      "Collect items to delete in a separate collection, then removeAll"
+    ],
+    "badExample": "for (String item : list) {\n    if (item.isEmpty()) list.remove(item); // Throws ConcurrentModificationException\n}",
+    "fixedExample": "list.removeIf(String::isEmpty);",
+    "whyItWorks": "removeIf updates both the underlying array structure and modCount coherently without iterator desynchronization.",
+    "tests": "List<String> list = new ArrayList<>(List.of(\"a\", \"\", \"b\")); list.removeIf(String::isEmpty); assert list.size() == 2;",
+    "tags": ["java", "collections", "iterator", "concurrent-modification", "arraylist"],
+    "sources": [
+      {
+        "title": "Oracle Java API - ConcurrentModificationException",
+        "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ConcurrentModificationException.html"
+      }
+    ]
+  },
+  {
+    "id": "java-string-equality-double-equals",
+    "language": "java",
+    "title": "Comparing String Values Using '==' Instead of '.equals()'",
+    "category": "silly_mistake",
+    "difficulty": "beginner",
+    "symptoms": "String comparison evaluates to false even though both strings display identical characters.",
+    "roast": "Looking at two identical dirt blocks and insisting one isn't dirt because they have different entity IDs.",
+    "diagnosis": "The '==' operator in Java compares object references (memory identity), not lexical contents. Two different String objects with identical characters evaluate to false with '=='.",
+    "debuggingSteps": [
+      "Replace '==' with '.equals()' or Objects.equals(a, b)",
+      "Put constant string literal on the left side to prevent NPE: \"TARGET\".equals(val)",
+      "Never rely on the JVM String intern pool for business logic comparisons"
+    ],
+    "badExample": "String input = new String(\"admin\");\nif (input == \"admin\") {\n    grantAccess(); // Never executes!\n}",
+    "fixedExample": "String input = new String(\"admin\");\nif (\"admin\".equals(input)) {\n    grantAccess();\n}",
+    "whyItWorks": "String.equals compares character arrays sequentially, verifying true content equality rather than reference identity.",
+    "tests": "String input = new String(\"test\"); assert \"test\".equals(input);",
+    "tags": ["java", "strings", "equality", "references", "silly-mistake"],
+    "sources": [
+      {
+        "title": "Oracle Java API - String.equals",
+        "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#equals(java.lang.Object)"
+      }
+    ]
+  },
+  {
+    "id": "java-broken-equals-hashcode-contract",
+    "language": "java",
+    "title": "Overriding equals Without Overriding hashCode",
+    "category": "logic_error",
+    "difficulty": "intermediate",
+    "symptoms": "Objects cannot be retrieved from HashSet or HashMap even though an identical equal object is present.",
+    "roast": "Hiding your treasure chest in chunk (-5, 12) but searching for it in chunk (10, 4) because your compass is broken.",
+    "diagnosis": "Hash-based collections use hashCode() to select the storage bucket before checking equals(). If two equal objects have different hashCodes, they land in different buckets and lookups fail.",
+    "debuggingSteps": [
+      "Always override hashCode() whenever overriding equals()",
+      "Ensure all fields used in equals() are also factored into hashCode()",
+      "Use Objects.hash(field1, field2) for a clean hash computation"
+    ],
+    "badExample": "class User {\n    String id;\n    public boolean equals(Object o) {\n        return (o instanceof User) && ((User)o).id.equals(id);\n    }\n    // Missing hashCode!\n}",
+    "fixedExample": "class User {\n    String id;\n    public boolean equals(Object o) {\n        return (o instanceof User) && java.util.Objects.equals(id, ((User)o).id);\n    }\n    public int hashCode() {\n        return java.util.Objects.hash(id);\n    }\n}",
+    "whyItWorks": "Fulfilling the Object contract guarantees that userA.equals(userB) implies userA.hashCode() == userB.hashCode(), placing them in identical hash buckets.",
+    "tests": "Set<User> set = new HashSet<>(); User u1 = new User(\"1\"); User u2 = new User(\"1\"); set.add(u1); assert set.contains(u2);",
+    "tags": ["java", "hashcode", "equals", "hashmap", "contract"],
+    "sources": [
+      {
+        "title": "Oracle Java API - Object.hashCode contract",
+        "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()"
+      }
+    ]
+  },
+  {
+    "id": "java-unclosed-io-resource-leak",
+    "language": "java",
+    "title": "File/Stream Resource Leak Omitting try-with-resources",
+    "category": "runtime_error",
+    "difficulty": "intermediate",
+    "symptoms": "Operating system file descriptor exhaustion ('Too many open files') or locked files that cannot be deleted.",
+    "roast": "Opening 50 Nether portals and leaving every single one active until the lag freezes the universe.",
+    "diagnosis": "Failing to close streams when exceptions occur leaks OS native file descriptors because standard Garbage Collection does not promptly close underlying file handles.",
+    "debuggingSteps": [
+      "Wrap all AutoCloseable resources in try-with-resources statements",
+      "Avoid manual .close() calls in scattered finally blocks",
+      "Verify stream chains are safely managed"
+    ],
+    "badExample": "FileInputStream fis = new FileInputStream(\"data.txt\");\nint data = fis.read();\nfis.close(); // Skipped if read() throws IOException!",
+    "fixedExample": "try (FileInputStream fis = new FileInputStream(\"data.txt\")) {\n    int data = fis.read();\n}",
+    "whyItWorks": "try-with-resources guarantees that the resource's close() method is invoked deterministically, even if an exception is thrown.",
+    "tests": "try (ByteArrayInputStream bais = new ByteArrayInputStream(new byte[]{1})) { assert bais.read() == 1; }",
+    "tags": ["java", "try-with-resources", "io", "resource-leak", "autocloseable"],
+    "sources": [
+      {
+        "title": "Oracle Java Tutorials - The try-with-resources Statement",
+        "url": "https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html"
+      }
+    ]
+  },
+  {
+    "id": "java-integer-cache-reference-comparison",
+    "language": "java",
+    "title": "Integer Object Reference Equality Outside Cache Range [-128, 127]",
+    "category": "logic_error",
+    "difficulty": "intermediate",
+    "symptoms": "Integer comparison 'a == b' evaluates to true for numbers <= 127, but mysteriously evaluates to false for numbers >= 128.",
+    "roast": "Stacking 64 blocks works fine, but at block 128 your game decides your blocks are from an alternate dimension.",
+    "diagnosis": "JVM caches Integer objects in the range -128 to 127 via IntegerCache. Inside this range, autoboxing returns cached instances (so '==' succeeds). Outside, new instances are allocated.",
+    "debuggingSteps": [
+      "Always use .equals() for wrapper objects: a.equals(b)",
+      "Or unbox explicitly into primitive int before comparing with '=='",
+      "Never rely on JVM reference caching for numeric comparison"
+    ],
+    "badExample": "Integer a = 200;\nInteger b = 200;\nif (a == b) { /* false! */ }",
+    "fixedExample": "Integer a = 200;\nInteger b = 200;\nif (a.equals(b)) { /* true */ }",
+    "whyItWorks": ".equals() compares the encapsulated primitive int values rather than reference memory addresses.",
+    "tests": "Integer a = 200; Integer b = 200; assert a.equals(b);",
+    "tags": ["java", "integer-cache", "autoboxing", "equality", "subtle-bug"],
+    "sources": [
+      {
+        "title": "Oracle Java Language Specification - Integer Cache",
+        "url": "https://docs.oracle.com/javase/specs/jls/se17/html/jls-5.html#jls-5.1.7"
+      }
+    ]
+  },
+  {
+    "id": "java-exception-swallowing-empty-catch",
+    "language": "java",
+    "title": "Swallowing Exceptions in Empty Catch Blocks",
+    "category": "silly_mistake",
+    "difficulty": "beginner",
+    "symptoms": "Silent failure: application malfunctions downstream with no stack trace or logs explaining why.",
+    "roast": "Sweeping exploding TNT under the carpet and pretending nothing made that hissing sound.",
+    "diagnosis": "Catching an exception without logging or rethrowing swallows critical failure context, leaving the system in an invalid state without diagnostic breadcrumbs.",
+    "debuggingSteps": [
+      "Never leave catch blocks empty or containing just a comment",
+      "Log the exception message and full stack trace (logger.error(\"failed\", e))",
+      "Rethrow as a domain or runtime exception if recovery is impossible"
+    ],
+    "badExample": "try {\n    processOrder();\n} catch (Exception e) {\n    // do nothing\n}",
+    "fixedExample": "try {\n    processOrder();\n} catch (Exception e) {\n    logger.error(\"Order processing failed: \", e);\n    throw new IllegalStateException(\"Unable to process order\", e);\n}",
+    "whyItWorks": "Preserving the original exception in the exception chain maintains the stack trace for root-cause diagnosis.",
+    "tests": "try { throw new IOException(\"fail\"); } catch (IOException e) { assert e.getMessage().equals(\"fail\"); }",
+    "tags": ["java", "exceptions", "logging", "anti-pattern", "clean-code"],
+    "sources": [
+      {
+        "title": "Oracle Java Tutorials - Catching and Handling Exceptions",
+        "url": "https://docs.oracle.com/javase/tutorial/essential/exceptions/catch.html"
+      }
+    ]
+  },
+  {
+    "id": "java-arraylist-unsupported-as-list-add",
+    "language": "java",
+    "title": "UnsupportedOperationException When Mutating Arrays.asList()",
+    "category": "runtime_error",
+    "difficulty": "intermediate",
+    "symptoms": "UnsupportedOperationException thrown when calling .add() or .remove() on a list created with Arrays.asList().",
+    "roast": "Trying to craft armor inside an immutable display pedestal: you can look, but you can't touch.",
+    "diagnosis": "Arrays.asList() returns a fixed-size private wrapper around the array. Structural modifications (.add, .remove) are not supported and throw UnsupportedOperationException.",
+    "debuggingSteps": [
+      "Wrap Arrays.asList in a mutable new ArrayList<>(Arrays.asList(...))",
+      "Use ArrayList constructor when items need to be added or removed later",
+      "Understand the difference between fixed-size, unmodifiable (List.of), and mutable lists"
+    ],
+    "badExample": "List<String> list = Arrays.asList(\"a\", \"b\");\nlist.add(\"c\"); // Throws UnsupportedOperationException!",
+    "fixedExample": "List<String> list = new ArrayList<>(Arrays.asList(\"a\", \"b\"));\nlist.add(\"c\");",
+    "whyItWorks": "Instantiating a new java.util.ArrayList provides a fully mutable collection supporting structural add and remove operations.",
+    "tests": "List<String> list = new ArrayList<>(Arrays.asList(\"a\", \"b\")); list.add(\"c\"); assert list.size() == 3;",
+    "tags": ["java", "arrays", "collections", "unsupported-operation", "immutability"],
+    "sources": [
+      {
+        "title": "Oracle Java API - Arrays.asList",
+        "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Arrays.html#asList(T...)"
+      }
+    ]
+  },
+  {
+    "id": "java-polymorphic-method-hiding-static",
+    "language": "java",
+    "title": "Static Method Hiding Mistaken for Virtual Overriding",
+    "category": "logic_error",
+    "difficulty": "advanced",
+    "symptoms": "Subclass static method is not called when invoked through a base class reference.",
+    "roast": "Wearing diamond armor over gold armor and expecting the gold perks to trigger dynamically: static binding doesn't care about your outfit.",
+    "diagnosis": "Static methods are resolved at compile time based on the reference type, not runtime object type. Static methods cannot be overridden; they are only hidden.",
+    "debuggingSteps": [
+      "Remove 'static' modifier if polymorphic runtime dispatch is needed",
+      "Invoke static methods using the class name directly (Parent.show()) rather than object references",
+      "Add @Override annotation to catch illegal attempts to override static methods"
+    ],
+    "badExample": "class Parent { static void show() { System.out.print(\"P\"); } }\nclass Child extends Parent { static void show() { System.out.print(\"C\"); } }\nParent ref = new Child();\nref.show(); // Prints 'P', not 'C'!",
+    "fixedExample": "class Parent { void show() { System.out.print(\"P\"); } }\nclass Child extends Parent { @Override void show() { System.out.print(\"C\"); } }\nParent ref = new Child();\nref.show(); // Prints 'C' polymorphically",
+    "whyItWorks": "Instance methods utilize dynamic method dispatch (vtable) based on the actual runtime object instance.",
+    "tests": "Parent ref = new Child(); assert ref.getVal() == 2; // with virtual method dispatch",
+    "tags": ["java", "static-methods", "method-hiding", "polymorphism", "oop"],
+    "sources": [
+      {
+        "title": "Oracle Java Language Specification - Hiding of Methods",
+        "url": "https://docs.oracle.com/javase/specs/jls/se17/html/jls-8.html#jls-8.4.8.2"
+      }
+    ]
+  },
+  {
+    "id": "java-optional-get-without-presence-check",
+    "language": "java",
+    "title": "NoSuchElementException from Optional.get() Without isPresent()",
+    "category": "runtime_error",
+    "difficulty": "beginner",
+    "symptoms": "java.util.NoSuchElementException: No value present thrown at runtime.",
+    "roast": "Opening a lucky block expecting an enchanted golden apple and finding an empty void.",
+    "diagnosis": "Calling Optional.get() directly without verifying value presence recreates the same vulnerability as NullPointerException. Optional.get() is deprecated in favor of safe alternatives.",
+    "debuggingSteps": [
+      "Replace .get() with .orElse(defaultVal) or .orElseGet(supplier)",
+      "Use .orElseThrow(() -> new CustomException(...)) for explicit failure handling",
+      "Use functional chaining with .map() and .ifPresent()"
+    ],
+    "badExample": "Optional<String> opt = Optional.empty();\nString val = opt.get(); // Throws NoSuchElementException!",
+    "fixedExample": "Optional<String> opt = Optional.empty();\nString val = opt.orElse(\"default\");",
+    "whyItWorks": "orElse returns the default value gracefully when the Optional container is empty without throwing exceptions.",
+    "tests": "Optional<String> opt = Optional.empty(); assert opt.orElse(\"fallback\").equals(\"fallback\");",
+    "tags": ["java", "optional", "null-safety", "no-such-element", "clean-code"],
+    "sources": [
+      {
+        "title": "Oracle Java API - java.util.Optional",
+        "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html"
+      }
+    ]
+  }
+]

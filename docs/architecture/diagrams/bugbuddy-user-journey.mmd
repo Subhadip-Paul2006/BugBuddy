@@ -1,0 +1,27 @@
+flowchart TD
+    Start([Developer Launches BugBuddy]) --> BaseCamp[Screen A: Base Camp Dashboard]
+    
+    BaseCamp -->|View Stats & Mood| PetStatus[Check ByteBuddy Companion & Level]
+    BaseCamp -->|Select Inventory Slot 2| Confession[Screen B: Bug Confession Booth]
+    BaseCamp -->|Select Inventory Slot 3| Chat[Screen C: Interactive Debugging Chat]
+    BaseCamp -->|Select Inventory Slot 4| Habitat[Screen D: Pet Habitat Sanctuary]
+    BaseCamp -->|Select Inventory Slot 5| Quests[Screen E: Quest Board]
+    BaseCamp -->|Select Inventory Slot 6| Graveyard[Screen F: Bug Graveyard]
+    BaseCamp -->|Select Inventory Slot 7| Codex[Screen G: Knowledge Codex]
+
+    Confession --> Editor[Paste Buggy Snippet & Select Language]
+    Editor --> Submit[Submit to Judgment Altar]
+    Submit --> Judgment[JudgmentTerminal Displays:<br/>1. Satirical Roast<br/>2. Root Cause Analysis<br/>3. Verified Code Fix<br/>4. Grounded Citations]
+    
+    Judgment --> Verify{Click 'Verify & Resolve Bug'?}
+    Verify -->|Yes| AwardXP[+50 XP Awarded & Chiptune Chime]
+    AwardXP --> LevelUpCheck{XP >= MaxXP?}
+    LevelUpCheck -->|Yes| LevelUp[Level Up Celebration & Pet Mood: VICTORIOUS]
+    LevelUpCheck -->|No| PetHappy[Pet Mood: HAPPY]
+    
+    AwardXP --> Archive[Bug Archived into Bug Graveyard]
+    Archive --> Graveyard
+    
+    Chat --> ChatDiscuss[Ask Follow-up Questions & Request Action Chips]
+    ChatDiscuss --> ChatVerify[Slay Bug via Chat: +50 XP]
+    ChatVerify --> Archive

@@ -1,0 +1,55 @@
+flowchart TD
+    subgraph FrontendComponents ["Frontend Component Layer (React 18)"]
+        AppRoot["App.tsx (Global Nav, XP, Audio, State)"]
+        BaseCamp["BaseCampDashboard.tsx<br/>(Stats, Mood, Fast Actions)"]
+        Confession["BugConfessionBooth.tsx<br/>(Editor, Secret Redaction, Judgment)"]
+        Chat["DebugChat.tsx<br/>(Multi-Turn Sprint, 7 Action Chips)"]
+        Habitat["PetHabitat.tsx<br/>(ByteBuddy Sprite, Feed/Pet/Play)"]
+        Quests["QuestBoard.tsx<br/>(Daily Quests, Sprint Tasks)"]
+        Graveyard["BugGraveyard.tsx<br/>(Resolved Bugs, Tombstones)"]
+        Codex["KnowledgeCodex.tsx<br/>(Search, Filter, Detail Modals)"]
+        Settings["SettingsScreen.tsx<br/>(Font, Contrast, Audio, Storage Purge)"]
+    end
+
+    subgraph FrontendServices ["Client Services & State"]
+        AudioSys["audioSystem.ts (Web Audio Chiptune Synthesizer)"]
+        StorageEngine["storage.ts (Versioned localStorage)"]
+        ChatSvc["chatService.ts (Multi-Turn Thread Manager)"]
+        KnowledgeSvc["knowledgeService.ts (API Dispatch & Offline Fallback)"]
+        Redactor["secretRedactor.ts (Regex Token Sanitizer)"]
+    end
+
+    subgraph BackendCore ["Backend Core Architecture"]
+        ServerEntry["src/server/index.ts (Node HTTP, Port/Host Binding)"]
+        Router["src/server/aiRouter.ts (64KB Limit, CORS, Sanitizer)"]
+        Orchestrator["AIDebugOrchestrator.ts (Diagnosis Pipeline)"]
+        BM25["KnowledgeSearchIndex.ts (BM25 Inverted Index)"]
+        VectorEngine["vectorSearch.ts (Cosine Similarity)"]
+        Hybrid["hybridSearch.ts (RRF Fusion Algorithm)"]
+        EmbeddingAdapter["embeddings.ts (ONNX Xenova/all-MiniLM-L6-v2)"]
+        RespBuilder["response.ts (Structured Contract Assembly)"]
+    end
+
+    subgraph Providers ["AI Provider Abstraction"]
+        Registry["AIProviderRegistry.ts"]
+        Gemini["GeminiProvider.ts"]
+        OpenAI["OpenAIProvider.ts"]
+        Mock["MockAIProvider.ts"]
+    end
+
+    AppRoot --> BaseCamp & Confession & Chat & Habitat & Quests & Graveyard & Codex & Settings
+    Confession --> Redactor
+    Confession --> KnowledgeSvc
+    Chat --> ChatSvc
+    ChatSvc --> KnowledgeSvc
+    KnowledgeSvc --> ServerEntry
+
+    ServerEntry --> Router
+    Router --> Orchestrator
+    Orchestrator --> Hybrid
+    Hybrid --> BM25
+    Hybrid --> VectorEngine
+    VectorEngine --> EmbeddingAdapter
+    Orchestrator --> Registry
+    Registry --> Gemini & OpenAI & Mock
+    Orchestrator --> RespBuilder

@@ -7,10 +7,9 @@ import type {
   CanonicalLanguage,
   CanonicalCategory,
   CanonicalDifficulty,
-  KnowledgeEntry,
   NormalizedKnowledgeRecord,
-} from './types.ts';
-import { LANGUAGE_ALIASES, SUPPORTED_DIFFICULTIES } from './schema.ts';
+} from './types';
+import { LANGUAGE_ALIASES, SUPPORTED_DIFFICULTIES } from './schema';
 
 export function normalizeLanguage(lang: unknown): CanonicalLanguage | null {
   if (typeof lang !== 'string') return null;

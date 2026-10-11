@@ -1,0 +1,28 @@
+flowchart TD
+    subgraph LocalDev ["Local Workstation"]
+        Edit["Developer Edits & Refinements"]
+        LocalGates["Local Preflight Verification<br/>- npm run validate:knowledge<br/>- npm test (192 tests)<br/>- npm run evaluate:retrieval<br/>- npm run build"]
+        StageCommit["Careful Git Staging & Single Commit<br/>(Zero secrets, zero temp files)"]
+    end
+
+    subgraph GitHubPlatform ["GitHub Enterprise / Actions"]
+        PushBranch["Push to main / PR"]
+        CIJob["GitHub Actions CI (`.github/workflows/ci.yml`)<br/>- Node 20.x setup<br/>- npm ci<br/>- npm run build (tsc + vite)<br/>- npm test (192 unit tests)<br/>- npm run validate:knowledge<br/>- npm run evaluate:retrieval"]
+        CIPass["All CI Quality Gates Pass (Green)"]
+    end
+
+    subgraph ReleaseDeployment ["Release Candidate & Deployment Pipeline"]
+        OwnerReview["Owner Manual Review & Approval"]
+        DeployBackend["Manual Deploy Backend (Render Web Service)"]
+        SmokeBackend["Health & Endpoint Smoke Probe (`curl /health`)"]
+        DeployFrontend["Manual Deploy Frontend (Render Static Site)"]
+        BrowserQA["Live E2E Smoke Test in Browser"]
+        PublishRelease["Publish v0.1.0 Git Tag & GitHub Release"]
+    end
+
+    Edit --> LocalGates --> StageCommit --> PushBranch
+    PushBranch --> CIJob --> CIPass
+    CIPass --> OwnerReview
+    OwnerReview --> DeployBackend --> SmokeBackend
+    SmokeBackend --> DeployFrontend --> BrowserQA
+    BrowserQA --> PublishRelease

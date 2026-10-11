@@ -1,0 +1,43 @@
+services:
+  # ---------------------------------------------------------------------------
+  # BugBuddy Backend Web Service (Node.js)
+  # ---------------------------------------------------------------------------
+  - type: web
+    name: bugbuddy-backend
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: false
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: HOST
+        value: 0.0.0.0
+      - key: CORS_ORIGIN
+        sync: false
+      - key: DEFAULT_AI_PROVIDER
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+
+  # ---------------------------------------------------------------------------
+  # BugBuddy Frontend Static Site (Vite / React SPA)
+  # ---------------------------------------------------------------------------
+  - type: static
+    name: bugbuddy-frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    autoDeploy: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_BASE_URL
+        sync: false

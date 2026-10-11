@@ -1,0 +1,152 @@
+/* ==========================================================================
+   BugBuddy Master Application Stylesheet
+   Specification: docs/UI_UX.md
+   ========================================================================== */
+
+@import './tokens.css';
+@import './pixel-ui.css';
+
+/* Root App Container */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bb-surface-void);
+}
+
+.bb-app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bb-surface-void);
+}
+
+/* Three-Column Game Shell Layout */
+.bb-app-body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  height: calc(100vh - var(--bb-hud-height));
+  position: relative;
+}
+
+/* Custom Pixel Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bb-surface-inset);
+  border: 1px solid var(--bb-border-subtle);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3B4150;
+  border: 1px solid var(--bb-border-bevel-light);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #50586C;
+}
+
+/* Responsive Media Queries */
+@media (max-width: 1024px) {
+  :root {
+    --bb-drawer-width: 290px;
+  }
+}
+
+@media (max-width: 768px) {
+  .bb-app-body {
+    flex-direction: column;
+    height: auto;
+    overflow-y: visible;
+  }
+
+  .bb-developer-inventory {
+    width: 100% !important;
+    border-right: none !important;
+    border-bottom: 2px solid var(--bb-border-subtle);
+  }
+
+  .bb-developer-inventory nav {
+    flex-direction: row !important;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .bb-pet-status-drawer {
+    width: 100% !important;
+    border-left: none !important;
+    border-top: 2px solid var(--bb-border-subtle);
+  }
+
+  .hidden-mobile {
+    display: none !important;
+  }
+
+  .hud-xp-center {
+    width: 140px !important;
+  }
+}
+
+/* ==========================================================================
+   Accessibility & Display Preference Overrides (Prompt 10)
+   ========================================================================== */
+
+/* 1. Reduced Motion Override */
+body.bb-reduced-motion *,
+body.bb-reduced-motion *::before,
+body.bb-reduced-motion *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 2. WCAG AAA High-Contrast Mode */
+body.bb-high-contrast {
+  --bb-surface-void: #000000;
+  --bb-surface-base: #08090C;
+  --bb-surface-panel: #111317;
+  --bb-surface-slab: #1A1D24;
+  --bb-border-subtle: #7A8499;
+  --bb-border-bevel-light: #A0B0CC;
+  --bb-border-bevel-dark: #000000;
+  --bb-text-primary: #FFFFFF;
+  --bb-text-secondary: #E2E6EE;
+  --bb-color-emerald: #00FF66;
+  --bb-color-gold: #FFD700;
+  --bb-color-diamond: #00D4FF;
+  --bb-color-redstone: #FF3B30;
+}
+
+body.bb-high-contrast .bb-panel-slab,
+body.bb-high-contrast .bb-panel-inset,
+body.bb-high-contrast .bb-panel-hearth {
+  border: 2px solid var(--bb-border-subtle) !important;
+}
+
+/* 3. Clean System Typography Override */
+body.bb-clean-font {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+}
+
+body.bb-clean-font .bb-btn,
+body.bb-clean-font h1,
+body.bb-clean-font h2,
+body.bb-clean-font h3,
+body.bb-clean-font h4 {
+  letter-spacing: 0.2px !important;
+}
+

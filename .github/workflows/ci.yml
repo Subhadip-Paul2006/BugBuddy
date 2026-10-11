@@ -1,0 +1,41 @@
+name: BugBuddy CI Quality Gates
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate-and-test:
+    name: Verify, Test, and Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: npm
+
+      - name: Install dependencies (clean reproducible install)
+        run: npm ci
+
+      - name: Run Knowledge Base Ingestion & Quality Audit
+        run: npm run validate:knowledge
+
+      - name: Run Retrieval Benchmark Evaluation (BM25 & Hybrid)
+        run: npm run evaluate:retrieval
+
+      - name: Run Automated Unit & Integration Tests (192 assertions)
+        run: npm test
+
+      - name: Compile TypeScript & Build Production Static Bundle
+        run: npm run build

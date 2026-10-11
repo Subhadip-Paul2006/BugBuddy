@@ -1,0 +1,45 @@
+sequenceDiagram
+    autonumber
+    actor Dev as Developer
+    participant UI as BugConfessionBooth
+    participant Redact as secretRedactor
+    participant Net as knowledgeService
+    participant Server as Node Backend (/api/diagnose)
+    participant Orch as AIDebugOrchestrator
+    participant Hybrid as HybridSearchEngine
+    participant AI as AI Provider (Gemini / OpenAI)
+    participant Fallback as Deterministic Fallback Engine
+
+    Dev->>UI: Pastes buggy code & selects language
+    Dev->>UI: Clicks "Confess Bug"
+    UI->>Redact: scanAndRedactSecrets(code)
+    Redact-->>UI: Sanitized code (API keys replaced with [REDACTED])
+    UI->>Net: requestBackendDiagnosis(submission)
+    
+    alt Backend Reachable
+        Net->>Server: POST /api/diagnose (payload <= 64KB)
+        Server->>Orch: diagnose(submissionContext)
+        Orch->>Hybrid: search(query, language, limit=5)
+        Hybrid-->>Orch: Retrieved Knowledge Records (BM25 + Dense RRF)
+        
+        alt Cloud AI Key Available & Valid
+            Orch->>AI: generateStructuredDiagnosis(promptWithEvidence)
+            AI-->>Orch: Structured JSON (Roast, Fix, Explanation, Citations)
+            Orch-->>Server: AIDiagnosisResponse (isGrounded=true, fallback=false)
+        else Key Missing or Provider Error
+            Orch->>Fallback: assembleDeterministicDiagnosis(retrievedRecords)
+            Fallback-->>Orch: Structured Response (usedFallback=true)
+            Orch-->>Server: AIDiagnosisResponse (isGrounded=true, fallback=true)
+        end
+        
+        Server-->>Net: HTTP 200 JSON Response
+        Net-->>UI: ConfessionResult
+    else Backend Unreachable / Cold Start
+        Net->>Fallback: Local Stage 4 searchKnowledge fallback
+        Fallback-->>Net: Offline Deterministic Result
+        Net-->>UI: ConfessionResult (offline mode indicator)
+    end
+
+    UI->>Dev: Renders JudgmentTerminal (Roast, Root Cause, Fix Diff, Citations)
+    Dev->>UI: Clicks "Verify & Resolve Bug"
+    UI->>Dev: Awards +50 XP, triggers audio chime, archives to Bug Graveyard

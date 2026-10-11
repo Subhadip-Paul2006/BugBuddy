@@ -1,0 +1,37 @@
+flowchart TD
+    subgraph Client ["Client Browser"]
+        User["Developer Browser"]
+    end
+
+    subgraph RenderPlatform ["Render Cloud Hosting Platform"]
+        subgraph StaticFrontend ["Render Static Site: bugbuddy-frontend"]
+            CDN["Render Global CDN Edge"]
+            StaticFiles["Static SPA Bundle (dist/)<br/>index.html, JS, CSS, Assets"]
+            Rewrite["SPA Rewrite Rule: /* -> /index.html"]
+            FrontendEnv["Build Env: VITE_API_BASE_URL<br/>(https://bugbuddy-backend.onrender.com)"]
+        end
+
+        subgraph BackendWebService ["Render Web Service: bugbuddy-backend"]
+            LB["Render Reverse Proxy / TLS Terminator"]
+            NodeService["Node.js Runtime (Node 20+)<br/>Command: npm start (tsx src/server/index.ts)"]
+            HealthCheck["Health Probes: /health & /api/health<br/>(HTTP 200 OK)"]
+            BackendEnv["Server Env Secrets:<br/>- HOST: 0.0.0.0<br/>- PORT: 10000<br/>- CORS_ORIGIN: https://bugbuddy.onrender.com<br/>- DEFAULT_AI_PROVIDER: gemini<br/>- GEMINI_API_KEY: [SECRET]<br/>- OPENAI_API_KEY: [SECRET]"]
+        end
+    end
+
+    subgraph ExternalAPIs ["Upstream AI Services"]
+        GoogleAI["Google Generative Language API"]
+        OpenAICloud["OpenAI API"]
+    end
+
+    User -->|1. Loads SPA Assets| CDN
+    CDN --> StaticFiles
+    StaticFiles --> Rewrite
+
+    User -->|2. POST /api/diagnose| LB
+    LB --> NodeService
+    LB -.->|Health Check Interval| HealthCheck
+
+    NodeService -->|Reads Securely| BackendEnv
+    NodeService -->|Grounds & Calls| GoogleAI
+    NodeService -->|Grounds & Calls| OpenAICloud

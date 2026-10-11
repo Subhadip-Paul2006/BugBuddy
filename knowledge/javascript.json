@@ -1,0 +1,262 @@
+[
+  {
+    "id": "js-async-for-each-concurrency",
+    "language": "javascript",
+    "title": "Using async/await Inside Array.prototype.forEach",
+    "category": "runtime_error",
+    "difficulty": "intermediate",
+    "symptoms": "Asynchronous operations inside forEach finish out-of-order, and subsequent code runs before loop tasks complete.",
+    "roast": "Flipping every lever at once and wondering why the TNT cannon fired backwards into your own face.",
+    "diagnosis": "forEach does not await the Promises returned by its callback function; it executes synchronously and immediately returns undefined.",
+    "debuggingSteps": [
+      "Replace forEach with a standard 'for (const item of items)' loop for sequential execution",
+      "Use Promise.all(items.map(async item => ...)) for concurrent execution",
+      "Check return values of async loops"
+    ],
+    "badExample": "items.forEach(async (item) => {\n    await saveToDb(item);\n});\nconsole.log(\"Done\"); // Prints before saveToDb finishes!",
+    "fixedExample": "for (const item of items) {\n    await saveToDb(item);\n}\nconsole.log(\"Done\"); // Waits properly",
+    "whyItWorks": "A native 'for...of' loop awaits each iteration before proceeding, guaranteeing synchronous sequential execution.",
+    "tests": "const res = []; for (const x of [1, 2]) { res.push(await Promise.resolve(x)); } assert.deepStrictEqual(res, [1, 2]);",
+    "tags": ["javascript", "async-await", "foreach", "promises", "concurrency"],
+    "sources": [
+      {
+        "title": "MDN Web Docs - Array.prototype.forEach",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach"
+      }
+    ]
+  },
+  {
+    "id": "js-floating-point-math-equality",
+    "language": "javascript",
+    "title": "IEEE 754 Floating-Point Precision Equality Failure (0.1 + 0.2 !== 0.3)",
+    "category": "silly_mistake",
+    "difficulty": "beginner",
+    "symptoms": "Conditional check '0.1 + 0.2 === 0.3' evaluates to false, causing unexpected logic failure.",
+    "roast": "Counting three emeralds and the villager insists you only gave him 0.30000000000000004 emeralds.",
+    "diagnosis": "JavaScript numbers are 64-bit IEEE 754 binary floats. Decimal numbers like 0.1 cannot be represented precisely in base 2, accumulating small rounding inaccuracies.",
+    "debuggingSteps": [
+      "Compare difference with Number.EPSILON: Math.abs(a - b) < Number.EPSILON",
+      "Multiply by scale factors (e.g. cents instead of dollars) to perform integer arithmetic",
+      "Use a precision math library like decimal.js or BigInt for monetary figures"
+    ],
+    "badExample": "if (0.1 + 0.2 === 0.3) {\n    // Never reached!\n}",
+    "fixedExample": "if (Math.abs((0.1 + 0.2) - 0.3) < Number.EPSILON) {\n    // Safely reached\n}",
+    "whyItWorks": "Number.EPSILON represents the difference between 1 and the smallest floating point number greater than 1, accommodating binary rounding variance.",
+    "tests": "assert(Math.abs((0.1 + 0.2) - 0.3) < Number.EPSILON);",
+    "tags": ["javascript", "floating-point", "ieee-754", "epsilon", "math"],
+    "sources": [
+      {
+        "title": "MDN Web Docs - Number.EPSILON",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/EPSILON"
+      }
+    ]
+  },
+  {
+    "id": "js-lost-this-unbound-callback",
+    "language": "javascript",
+    "title": "Loss of Execution Context ('this') in Unbound Callbacks",
+    "category": "runtime_error",
+    "difficulty": "intermediate",
+    "symptoms": "TypeError: Cannot read properties of undefined when accessing this.property inside a method passed as callback.",
+    "roast": "Handing your dog collar to a villager and expecting the dog to sit when the villager yells.",
+    "diagnosis": "Extracting an object method and passing it as a callback decouples it from its parent object. At invocation time, 'this' defaults to undefined (in strict mode) or window/global.",
+    "debuggingSteps": [
+      "Use an arrow function wrapper: () => obj.method()",
+      "Explicitly bind in constructor: this.method = this.method.bind(this)",
+      "Declare the class method as an arrow property: method = () => { ... }"
+    ],
+    "badExample": "class Counter {\n    constructor() { this.count = 0; }\n    inc() { this.count++; }\n}\nconst c = new Counter();\nsetTimeout(c.inc, 100); // this is undefined!",
+    "fixedExample": "class Counter {\n    constructor() { this.count = 0; }\n    inc = () => { this.count++; }\n}\nconst c = new Counter();\nsetTimeout(c.inc, 100);",
+    "whyItWorks": "Arrow functions lexically bind 'this' to the enclosing instance context at creation time.",
+    "tests": "class C { v = 1; get = () => this.v; } const c = new C(); const fn = c.get; assert.strictEqual(fn(), 1);",
+    "tags": ["javascript", "this", "execution-context", "arrow-functions", "bind"],
+    "sources": [
+      {
+        "title": "MDN Web Docs - this keyword in JavaScript",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this"
+      }
+    ]
+  },
+  {
+    "id": "js-loose-equality-coercion-traps",
+    "language": "javascript",
+    "title": "Implicit Type Coercion Hazards with Loose Equality (==)",
+    "category": "logic_error",
+    "difficulty": "beginner",
+    "symptoms": "Unintended equality evaluations like '0 == false' or '[] == false' lead to bypasses in authentication or validation logic.",
+    "roast": "Accepting dirt blocks as gold ingots just because they're both stackable: check your trade receipts.",
+    "diagnosis": "Loose equality ('==') invokes complex implicit type coercion rules according to ECMAScript specifications, converting operands to common primitive types before checking value.",
+    "debuggingSteps": [
+      "Always use strict equality ('===') and strict inequality ('!==')",
+      "Enable ESLint rule 'eqeqeq: [\"error\", \"always\"]'",
+      "Coerce types explicitly when type conversion is intentional (e.g. Number(str) === 0)"
+    ],
+    "badExample": "function isZero(val) {\n    return val == 0; // Returns true for \"\", false, [], and nullish strings!\n}",
+    "fixedExample": "function isZero(val) {\n    return val === 0;\n}",
+    "whyItWorks": "Strict equality ('===') checks both type and value without performing any implicit type conversion.",
+    "tests": "assert.strictEqual(\"\" === 0, false); assert.strictEqual(0 === 0, true);",
+    "tags": ["javascript", "equality", "coercion", "types", "eslint"],
+    "sources": [
+      {
+        "title": "MDN Web Docs - Equality comparisons and sameness",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness"
+      }
+    ]
+  },
+  {
+    "id": "js-var-closure-loop-hoisting",
+    "language": "javascript",
+    "title": "Closure Capturing Hoisted 'var' in Asynchronous Loops",
+    "category": "logic_error",
+    "difficulty": "intermediate",
+    "symptoms": "Callbacks scheduled in a loop all print the final loop index instead of their respective step indices.",
+    "roast": "Naming 3 tame wolves in a loop, but all of them answer to 'Wolf #3' because 'var' forgot to create new tags.",
+    "diagnosis": "'var' declarations are function-scoped, not block-scoped. All callbacks capture a reference to the same single hoisted variable.",
+    "debuggingSteps": [
+      "Replace 'var' with block-scoped 'let' in the loop initialization",
+      "Avoid 'var' declarations in modern ES6+ codebases",
+      "Use Array.prototype.forEach or IIFE if targeting legacy environments"
+    ],
+    "badExample": "for (var i = 0; i < 3; i++) {\n    setTimeout(() => console.log(i), 10); // Prints 3, 3, 3\n}",
+    "fixedExample": "for (let i = 0; i < 3; i++) {\n    setTimeout(() => console.log(i), 10); // Prints 0, 1, 2\n}",
+    "whyItWorks": "'let' creates a new lexical binding for each loop iteration, ensuring every closure captures its own independent index value.",
+    "tests": "const res = []; for (let i = 0; i < 3; i++) { res.push(i); } assert.deepStrictEqual(res, [0, 1, 2]);",
+    "tags": ["javascript", "var", "let", "closures", "hoisting", "scope"],
+    "sources": [
+      {
+        "title": "MDN Web Docs - let statement",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let"
+      }
+    ]
+  },
+  {
+    "id": "js-unhandled-json-parse-throw",
+    "language": "javascript",
+    "title": "Crash from Unhandled JSON.parse SyntaxError on Invalid Input",
+    "category": "runtime_error",
+    "difficulty": "beginner",
+    "symptoms": "SyntaxError: Unexpected token in JSON at position 0 causes unhandled server or client crash.",
+    "roast": "Throwing a raw iron ore into a crafting table and expecting it to instantly produce armor.",
+    "diagnosis": "JSON.parse throws a synchronous SyntaxError if the input string is empty, undefined, malformed, or HTML error pages from broken network responses.",
+    "debuggingSteps": [
+      "Wrap JSON.parse in a try/catch block",
+      "Provide a fallback default object on failure",
+      "Create a safeParse helper utility function"
+    ],
+    "badExample": "function parseData(str) {\n    return JSON.parse(str); // Crashes if str is invalid!\n}",
+    "fixedExample": "function parseData(str, fallback = {}) {\n    try {\n        return JSON.parse(str);\n    } catch {\n        return fallback;\n    }\n}",
+    "whyItWorks": "Enclosing the parse attempt in a try/catch block intercepts the SyntaxError and returns a safe fallback.",
+    "tests": "function p(s) { try { return JSON.parse(s); } catch { return null; } } assert.strictEqual(p('bad'), null);",
+    "tags": ["javascript", "json", "syntaxerror", "exception-handling", "robustness"],
+    "sources": [
+      {
+        "title": "MDN Web Docs - JSON.parse()",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse"
+      }
+    ]
+  },
+  {
+    "id": "js-pass-by-sharing-object-mutation",
+    "language": "javascript",
+    "title": "Unintentional Object Mutation via Reference Sharing",
+    "category": "logic_error",
+    "difficulty": "intermediate",
+    "symptoms": "Modifying an object inside a function unexpectedly changes the caller's state in other components.",
+    "roast": "Handing your buddy your map, and he scribbles all over it: now your copy is ruined too.",
+    "diagnosis": "Objects and arrays in JavaScript are passed by sharing (reference). Modifying object properties inside a function mutates the original object in memory.",
+    "debuggingSteps": [
+      "Use object spread ({ ...obj }) or structuredClone(obj) for pure functions",
+      "Treat inputs as immutable parameters",
+      "Use Object.freeze() in development to catch mutation attempts"
+    ],
+    "badExample": "function addConfig(cfg) {\n    cfg.active = true; // Mutates caller's original config!\n    return cfg;\n}",
+    "fixedExample": "function addConfig(cfg) {\n    return { ...cfg, active: true }; // Pure clone with new property\n}",
+    "whyItWorks": "The spread operator shallowly clones properties into a new object, leaving the input object intact.",
+    "tests": "const orig = { a: 1 }; const updated = { ...orig, b: 2 }; assert.strictEqual(orig.b, undefined);",
+    "tags": ["javascript", "mutation", "immutability", "spread-operator", "functional"],
+    "sources": [
+      {
+        "title": "MDN Web Docs - Spread syntax (...)",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax"
+      }
+    ]
+  },
+  {
+    "id": "js-array-sort-numeric-lexicographical",
+    "language": "javascript",
+    "title": "Array.prototype.sort Default Lexicographical Ordering on Numbers",
+    "category": "silly_mistake",
+    "difficulty": "beginner",
+    "symptoms": "[10, 5, 2, 1].sort() produces [1, 10, 2, 5] instead of numeric ascending order.",
+    "roast": "Sorting your chests by alphabetizing the number of diamonds: now 10 diamonds ranks lower than 2 diamonds.",
+    "diagnosis": "By default, Array.prototype.sort converts elements to strings and compares UTF-16 code unit values, ordering '10' before '2'.",
+    "debuggingSteps": [
+      "Always supply a numeric comparator callback: arr.sort((a, b) => a - b)",
+      "For descending order: arr.sort((a, b) => b - a)",
+      "Remember that sort() mutates the array in-place; use arr.toSorted() if non-mutating is required"
+    ],
+    "badExample": "const nums = [10, 5, 2, 1];\nnums.sort(); // [1, 10, 2, 5]",
+    "fixedExample": "const nums = [10, 5, 2, 1];\nnums.sort((a, b) => a - b); // [1, 2, 5, 10]",
+    "whyItWorks": "A numeric comparison callback subtraction (a - b) returns a negative, zero, or positive value instructing the sort algorithm on mathematical order.",
+    "tests": "const n = [10, 5, 2]; n.sort((a, b) => a - b); assert.deepStrictEqual(n, [2, 5, 10]);",
+    "tags": ["javascript", "sort", "arrays", "comparator", "silly-mistake"],
+    "sources": [
+      {
+        "title": "MDN Web Docs - Array.prototype.sort()",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort"
+      }
+    ]
+  },
+  {
+    "id": "js-missing-return-arrow-implicit",
+    "language": "javascript",
+    "title": "Returning Undefined from Arrow Function with Block Body {}",
+    "category": "silly_mistake",
+    "difficulty": "beginner",
+    "symptoms": "Array.prototype.map produces array of [undefined, undefined, ...] when curly braces are added.",
+    "roast": "Putting ingredients into a furnace with a closed door and walking away before lighting the fire.",
+    "diagnosis": "In arrow functions, concise body (no braces: x => x * 2) returns implicitly. Block body (with braces: x => { x * 2 }) requires an explicit return statement; otherwise it returns undefined.",
+    "debuggingSteps": [
+      "Remove curly braces if returning a single expression: (x) => x * 2",
+      "Or add the 'return' keyword inside braces: (x) => { return x * 2; }",
+      "Wrap object literals in parentheses: (id) => ({ id })"
+    ],
+    "badExample": "const doubled = [1, 2, 3].map(x => {\n    x * 2; // Missing return!\n});",
+    "fixedExample": "const doubled = [1, 2, 3].map(x => {\n    return x * 2;\n});",
+    "whyItWorks": "An explicit return keyword directs the JavaScript execution engine to pass the calculated value out of the function block.",
+    "tests": "const doubled = [1, 2].map(x => { return x * 2; }); assert.deepStrictEqual(doubled, [2, 4]);",
+    "tags": ["javascript", "arrow-functions", "return", "map", "syntax"],
+    "sources": [
+      {
+        "title": "MDN Web Docs - Arrow function expressions",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions"
+      }
+    ]
+  },
+  {
+    "id": "js-unhandled-promise-rejection",
+    "language": "javascript",
+    "title": "Unhandled Promise Rejections Crashing Node.js Process",
+    "category": "runtime_error",
+    "difficulty": "intermediate",
+    "symptoms": "Process crash with 'UnhandledPromiseRejection: This error originated either by throwing inside of an async function without a catch block...'",
+    "roast": "Ignoring a zombie banging on your wooden door until it breaks in and ends your hardcore run.",
+    "diagnosis": "In Node.js 15+, unhandled Promise rejections terminate the process with non-zero exit code by default instead of issuing a warning.",
+    "debuggingSteps": [
+      "Chain .catch() on every un-awaited Promise chain",
+      "Enclose await expressions inside try/catch blocks",
+      "Register process.on('unhandledRejection', handler) as a safety net"
+    ],
+    "badExample": "async function fetchData() {\n    throw new Error(\"Network failed\");\n}\nfetchData(); // Crash: UnhandledPromiseRejection!",
+    "fixedExample": "async function fetchData() {\n    throw new Error(\"Network failed\");\n}\nfetchData().catch((err) => {\n    console.error(\"Handled failure:\", err.message);\n});",
+    "whyItWorks": "Attaching a .catch() callback attaches an error rejection handler, satisfying the unhandled rejection safety monitor.",
+    "tests": "let caught = false; Promise.reject(new Error('err')).catch(() => { caught = true; }); await new Promise(r => setTimeout(r, 10)); assert(caught);",
+    "tags": ["javascript", "promises", "unhandled-rejection", "error-handling", "async"],
+    "sources": [
+      {
+        "title": "Node.js Docs - Event: 'unhandledRejection'",
+        "url": "https://nodejs.org/api/process.html#event-unhandledrejection"
+      }
+    ]
+  }
+]

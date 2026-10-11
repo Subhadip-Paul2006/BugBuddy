@@ -10,10 +10,10 @@ import type {
   IngestionResult,
   NormalizedKnowledgeRecord,
   ValidationError,
-} from './types.ts';
-import { SUPPORTED_LANGUAGES } from './schema.ts';
-import { normalizeRecord } from './normalizer.ts';
-import { validateRecord } from './validator.ts';
+} from './types';
+import { SUPPORTED_LANGUAGES } from './schema';
+import { normalizeRecord } from './normalizer';
+import { validateRecord } from './validator';
 
 export interface IngestionOptions {
   strict?: boolean;

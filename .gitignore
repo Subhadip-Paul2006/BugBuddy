@@ -33,3 +33,7 @@ graphify-out/.needs_update
 .DS_Store
 Thumbs.db
 *.log
+.agents/
+.codex/
+.cursor/
+.gemini/

@@ -1,0 +1,262 @@
+[
+  {
+    "id": "c-null-ptr-dereference",
+    "language": "c",
+    "title": "Null Pointer Dereference During Pointer Access",
+    "category": "runtime_error",
+    "difficulty": "beginner",
+    "symptoms": "Segmentation fault (core dumped) or immediate crash when attempting to read or write through a pointer.",
+    "roast": "You tried to mine diamonds with an empty hand and wondered why your world crashed.",
+    "diagnosis": "Attempting to dereference a pointer holding NULL (0x0) triggers an operating system memory protection violation because page 0 is unmapped.",
+    "debuggingSteps": [
+      "Check pointer initialization before access",
+      "Inspect malloc return value for NULL allocation failures",
+      "Add assertion or conditional guard before dereferencing"
+    ],
+    "badExample": "int *ptr = NULL;\n*ptr = 42;",
+    "fixedExample": "int val = 0;\nint *ptr = &val;\nif (ptr != NULL) {\n    *ptr = 42;\n}",
+    "whyItWorks": "Guarding the dereference with a null check and pointing to a valid allocated stack address avoids illegal page faults.",
+    "tests": "assert(*ptr == 42);",
+    "tags": ["c", "pointers", "null-pointer", "segfault", "memory"],
+    "sources": [
+      {
+        "title": "C11 Specification - Null Pointers",
+        "url": "https://en.cppreference.com/w/c/language/pointer"
+      }
+    ]
+  },
+  {
+    "id": "c-buffer-overflow-strcpy",
+    "language": "c",
+    "title": "Buffer Overflow via Unbounded String Copy (strcpy)",
+    "category": "runtime_error",
+    "difficulty": "intermediate",
+    "symptoms": "Stack smashing detected, corrupted adjacent local variables, or erratic crash on function return.",
+    "roast": "Shoving an Ender Dragon into a 1x1 dirt hut: your stack didn't stand a chance.",
+    "diagnosis": "strcpy does not accept a destination buffer size constraint, copying until it finds a null terminator regardless of target boundary.",
+    "debuggingSteps": [
+      "Identify all unbounded string functions (strcpy, strcat, sprintf)",
+      "Calculate exact destination buffer capacity including the null terminator",
+      "Replace with bounded functions such as snprintf or strncpy with manual null-termination"
+    ],
+    "badExample": "char dest[5];\nstrcpy(dest, \"OverCapacityString\");",
+    "fixedExample": "char dest[5];\nsnprintf(dest, sizeof(dest), \"%s\", \"OverCapacityString\");",
+    "whyItWorks": "snprintf respects sizeof(dest) and guarantees null-termination without spilling over the destination buffer boundary.",
+    "tests": "assert(strlen(dest) < sizeof(dest) && dest[sizeof(dest)-1] == '\\0');",
+    "tags": ["c", "buffer-overflow", "strings", "security", "memory"],
+    "sources": [
+      {
+        "title": "CERT C Secure Coding Standard - STR31-C",
+        "url": "https://wiki.sei.cmu.edu/confluence/display/c/STR31-C.+Guarantee+that+storage+for+strings+has+sufficient+space+for+character+data+and+the+null+terminator"
+      }
+    ]
+  },
+  {
+    "id": "c-dangling-pointer-stack-escape",
+    "language": "c",
+    "title": "Returning Pointer to Local Stack Variable",
+    "category": "logic_error",
+    "difficulty": "intermediate",
+    "symptoms": "Pointer returns garbage values, or changes unexpectedly when other functions are invoked.",
+    "roast": "You offered a treasure chest coordinates that despawned the second you walked away.",
+    "diagnosis": "Stack frames are deallocated upon function return. Returning an address of a local variable produces a dangling pointer referencing invalid stack memory.",
+    "debuggingSteps": [
+      "Inspect function return types returning raw pointers",
+      "Verify whether the address belongs to a local automatic storage duration variable",
+      "Switch to caller-provided buffer, heap allocation (malloc), or static lifetime"
+    ],
+    "badExample": "int* get_val(void) {\n    int x = 100;\n    return &x;\n}",
+    "fixedExample": "int* get_val(void) {\n    int *x = (int*)malloc(sizeof(int));\n    if (x) *x = 100;\n    return x;\n}",
+    "whyItWorks": "Heap-allocated memory with malloc persists across function return boundaries until explicitly deallocated with free.",
+    "tests": "int *p = get_val(); assert(p != NULL && *p == 100); free(p);",
+    "tags": ["c", "pointers", "stack", "dangling-pointer", "lifetime"],
+    "sources": [
+      {
+        "title": "CppReference - Storage Duration in C",
+        "url": "https://en.cppreference.com/w/c/language/storage_duration"
+      }
+    ]
+  },
+  {
+    "id": "c-memory-leak-malloc-no-free",
+    "language": "c",
+    "title": "Heap Memory Leak from Missing free Call",
+    "category": "runtime_error",
+    "difficulty": "beginner",
+    "symptoms": "Process RSS memory grows continuously until the operating system kills it with OOM (Out Of Memory).",
+    "roast": "Spawning creepers endlessly without despawning them: congratulations, your memory just exploded.",
+    "diagnosis": "Dynamic memory allocated via malloc remains assigned to the process heap until explicitly released via free. Dropping the pointer creates unreachable allocated chunks.",
+    "debuggingSteps": [
+      "Run the program with Valgrind (valgrind --leak-check=full) or AddressSanitizer (-fsanitize=address)",
+      "Audit every malloc/calloc call site for corresponding free",
+      "Ensure early error returns do not bypass free cleanup"
+    ],
+    "badExample": "void process(void) {\n    char *buf = (char*)malloc(1024);\n    // work done\n    return;\n}",
+    "fixedExample": "void process(void) {\n    char *buf = (char*)malloc(1024);\n    if (!buf) return;\n    // work done\n    free(buf);\n}",
+    "whyItWorks": "Invoking free(buf) returns the heap block to the memory manager before function exit.",
+    "tests": "void *p = malloc(64); assert(p != NULL); free(p); p = NULL;",
+    "tags": ["c", "memory-leak", "malloc", "valgrind", "memory"],
+    "sources": [
+      {
+        "title": "CppReference - malloc / free memory management",
+        "url": "https://en.cppreference.com/w/c/memory/free"
+      }
+    ]
+  },
+  {
+    "id": "c-double-free",
+    "language": "c",
+    "title": "Double Free Memory Corruption",
+    "category": "runtime_error",
+    "difficulty": "intermediate",
+    "symptoms": "Aborted with 'double free or corruption (!prev)' glibc runtime error.",
+    "roast": "Trying to eat a steak twice in Minecraft: the server just disconnected you for cheating physics.",
+    "diagnosis": "Passing an already freed pointer to free corrupts the heap metadata binning structures and invites security exploitation or immediate SIGABRT.",
+    "debuggingSteps": [
+      "Trace the ownership lifecycle of the allocated pointer",
+      "Assign pointer to NULL immediately following free()",
+      "Verify multiple cleanup handlers or conditional branches do not re-free"
+    ],
+    "badExample": "int *p = (int*)malloc(sizeof(int));\nfree(p);\nfree(p);",
+    "fixedExample": "int *p = (int*)malloc(sizeof(int));\nfree(p);\np = NULL;\nfree(p); // free(NULL) is a defined safe no-op",
+    "whyItWorks": "Setting p = NULL guarantees subsequent free calls are safe no-ops according to the ANSI C standard.",
+    "tests": "int *p = malloc(4); free(p); p = NULL; free(p); assert(p == NULL);",
+    "tags": ["c", "double-free", "heap-corruption", "sigabrt", "memory"],
+    "sources": [
+      {
+        "title": "CWE-415: Double Free",
+        "url": "https://cwe.mitre.org/data/definitions/415.html"
+      }
+    ]
+  },
+  {
+    "id": "c-uninitialized-variable",
+    "language": "c",
+    "title": "Reading Uninitialized Local Variable",
+    "category": "silly_mistake",
+    "difficulty": "beginner",
+    "symptoms": "Calculations produce random unpredictable numbers or erratic conditional branching.",
+    "roast": "Opening an ungenerated loot chest and being shocked it contains random junk stack traces.",
+    "diagnosis": "Automatic local variables in C contain arbitrary leftover stack garbage until explicitly initialized.",
+    "debuggingSteps": [
+      "Compile with -Wall -Wextra to catch uninitialized variable warnings",
+      "Always initialize variables at the point of declaration",
+      "Verify conditional initialization covers every branch"
+    ],
+    "badExample": "int count;\ncount += 5;\nprintf(\"%d\\n\", count);",
+    "fixedExample": "int count = 0;\ncount += 5;\nprintf(\"%d\\n\", count);",
+    "whyItWorks": "Explicitly zeroing the counter provides a deterministic arithmetic base value.",
+    "tests": "int count = 0; count += 5; assert(count == 5);",
+    "tags": ["c", "uninitialized", "stack", "undefined-behavior", "silly-mistake"],
+    "sources": [
+      {
+        "title": "CppReference - Initialization in C",
+        "url": "https://en.cppreference.com/w/c/language/initialization"
+      }
+    ]
+  },
+  {
+    "id": "c-missing-null-terminator",
+    "language": "c",
+    "title": "Missing Null Terminator in Character Array",
+    "category": "runtime_error",
+    "difficulty": "intermediate",
+    "symptoms": "strlen and printf('%s') read past array memory into garbage bytes, occasionally segfaulting.",
+    "roast": "A minecart track with no terminal bumper: you just plummeted straight into the void.",
+    "diagnosis": "C string routines rely strictly on a sentinel '\\0' (ASCII 0) byte to detect end of string. Omitting it causes out-of-bounds reads.",
+    "debuggingSteps": [
+      "Ensure char array size is at least strlen + 1",
+      "Explicitly write '\\0' at the final position when manually filling arrays",
+      "Avoid strncpy without explicit terminal terminator assignment"
+    ],
+    "badExample": "char str[3] = {'a', 'b', 'c'};\nprintf(\"%s\\n\", str);",
+    "fixedExample": "char str[4] = {'a', 'b', 'c', '\\0'};\nprintf(\"%s\\n\", str);",
+    "whyItWorks": "Allocating index 3 for '\\0' establishes the terminating sentinel required by string formatting functions.",
+    "tests": "char str[4] = {'a', 'b', 'c', '\\0'}; assert(strlen(str) == 3);",
+    "tags": ["c", "strings", "null-terminator", "buffer", "memory"],
+    "sources": [
+      {
+        "title": "CppReference - C Strings",
+        "url": "https://en.cppreference.com/w/c/string/byte"
+      }
+    ]
+  },
+  {
+    "id": "c-format-string-specifier-mismatch",
+    "language": "c",
+    "title": "Printf Format Specifier Type Mismatch",
+    "category": "type_compilation",
+    "difficulty": "beginner",
+    "symptoms": "Compiler warning '-Wformat', corrupted numeric output, or segmentation fault when printing strings.",
+    "roast": "Placing a brewing stand recipe in a furnace: the game doesn't know what you're trying to cook.",
+    "diagnosis": "Variadic functions like printf rely on format specifiers to determine how many bytes to pop from the argument registers/stack. Mismatched specifiers corrupt stack alignment.",
+    "debuggingSteps": [
+      "Enable -Wformat compiler warning flag",
+      "Pair %d with int, %ld with long, %f with double, and %s with char*",
+      "Use inttypes.h macros (e.g. PRId64) for fixed-width integer types"
+    ],
+    "badExample": "long val = 1234567890123L;\nprintf(\"val: %d\\n\", val);",
+    "fixedExample": "long val = 1234567890123L;\nprintf(\"val: %ld\\n\", val);",
+    "whyItWorks": "%ld instructs the formatting engine to read the full width of a long integer.",
+    "tests": "char buf[32]; snprintf(buf, sizeof(buf), \"%ld\", 100L); assert(strcmp(buf, \"100\") == 0);",
+    "tags": ["c", "printf", "format-specifier", "variadic", "types"],
+    "sources": [
+      {
+        "title": "CppReference - printf specifiers",
+        "url": "https://en.cppreference.com/w/c/io/fprintf"
+      }
+    ]
+  },
+  {
+    "id": "c-array-out-of-bounds",
+    "language": "c",
+    "title": "Off-By-One Array Out-of-Bounds Loop Indexing",
+    "category": "silly_mistake",
+    "difficulty": "beginner",
+    "symptoms": "Loop overshoots array boundary by 1, corrupting adjacent stack variables.",
+    "roast": "Walking off the edge of the world block: Minecraft bedrock ends at index N-1, friend.",
+    "diagnosis": "C arrays are 0-indexed with valid elements [0, N-1]. A loop condition 'i <= N' accesses the invalid index N, causing undefined behavior.",
+    "debuggingSteps": [
+      "Inspect loop condition bounds: verify 'i < N' instead of 'i <= N'",
+      "Enable AddressSanitizer (-fsanitize=address) during debug builds",
+      "Check sizeof(arr)/sizeof(arr[0]) calculation"
+    ],
+    "badExample": "int arr[5] = {1, 2, 3, 4, 5};\nfor (int i = 0; i <= 5; i++) {\n    arr[i] = 0;\n}",
+    "fixedExample": "int arr[5] = {1, 2, 3, 4, 5};\nfor (int i = 0; i < 5; i++) {\n    arr[i] = 0;\n}",
+    "whyItWorks": "Constraining the loop predicate to 'i < 5' restricts iteration strictly to valid indices 0, 1, 2, 3, 4.",
+    "tests": "int arr[5]; for(int i = 0; i < 5; i++) arr[i] = i; assert(arr[4] == 4);",
+    "tags": ["c", "off-by-one", "arrays", "indexing", "loops"],
+    "sources": [
+      {
+        "title": "CppReference - Arrays in C",
+        "url": "https://en.cppreference.com/w/c/language/array"
+      }
+    ]
+  },
+  {
+    "id": "c-pointer-arithmetic-step-size",
+    "language": "c",
+    "title": "Misunderstanding Pointer Arithmetic Step Size",
+    "category": "logic_error",
+    "difficulty": "advanced",
+    "symptoms": "Pointer advances by unexpected byte offsets, causing alignment errors or data misinterpretation.",
+    "roast": "You tried to take 4 blocks per step in Nether portal math and landed inside solid obsidian.",
+    "diagnosis": "Adding 1 to a pointer of type T advances its memory address by sizeof(T) bytes, not 1 byte. Treating byte offsets as element counts causes multi-byte leaps.",
+    "debuggingSteps": [
+      "Remember that (ptr + k) increments memory by k * sizeof(*ptr)",
+      "Cast to char* or uint8_t* only if raw single-byte stride is intentional",
+      "Avoid mixing byte indexing with typed pointer offsets"
+    ],
+    "badExample": "int arr[4] = {10, 20, 30, 40};\nint *p = arr;\n// Intending to move 4 bytes (to next int), but adding 4 advances 16 bytes\np = p + 4;",
+    "fixedExample": "int arr[4] = {10, 20, 30, 40};\nint *p = arr;\n// Adding 1 advances by sizeof(int) (4 bytes) to next element\np = p + 1;",
+    "whyItWorks": "p + 1 advances by 1 element (sizeof(int) bytes), landing cleanly on arr[1].",
+    "tests": "int arr[4] = {10, 20, 30, 40}; int *p = arr + 1; assert(*p == 20);",
+    "tags": ["c", "pointers", "pointer-arithmetic", "stride", "memory"],
+    "sources": [
+      {
+        "title": "CppReference - Pointer Arithmetic",
+        "url": "https://en.cppreference.com/w/c/language/operator_arithmetic#Pointer_arithmetic"
+      }
+    ]
+  }
+]

@@ -1,0 +1,81 @@
+/* ==========================================================================
+   BugBuddy Design Tokens — Minecraft-Inspired Voxel World
+   Specification: docs/UI_UX.md Section 5
+   ========================================================================== */
+
+:root {
+  /* Surface Ground & Canvas (Deepslate Voxel Palette) */
+  --bb-surface-void: #0D0E11;          /* Deep void outer background */
+  --bb-surface-base: #14161B;          /* Main application deepslate base */
+  --bb-surface-panel: #1E2128;         /* Chiseled stone panel background */
+  --bb-surface-slab: #272B34;          /* Elevated stone slab surface */
+  --bb-surface-inset: #111216;         /* Inset inventory slot cavity */
+  --bb-surface-hud: #181A20;           /* Top Game HUD background */
+
+  /* Voxel Terrain Material Accents */
+  --bb-mat-grass-top: #5B8C32;         /* Lush voxel grass top */
+  --bb-mat-grass-side: #4A7328;        /* Grass fringe */
+  --bb-mat-dirt: #866043;              /* Loam soil */
+  --bb-mat-stone: #7F8287;             /* Granite slab */
+  --bb-mat-stone-shadow: #57585C;      /* Granite dark face */
+  --bb-mat-planks: #A27848;            /* Oak timber */
+  --bb-mat-planks-shadow: #6C4F2E;     /* Oak dark face */
+  --bb-mat-obsidian: #261B3D;          /* Deep altar obsidian */
+  --bb-mat-water: #2E72B8;             /* River stream */
+  --bb-mat-fire: #E67E22;              /* Campfire flame */
+  --bb-mat-fire-glow: #F39C12;         /* Campfire amber glow */
+
+  /* Functional Game Accent Colors */
+  --bb-color-emerald: #2ECC71;         /* Success, primary CTA, active navigation */
+  --bb-color-emerald-shadow: #1E8449;  /* Emerald bottom bevel */
+  --bb-color-emerald-glow: rgba(46, 204, 113, 0.25);
+
+  --bb-color-redstone: #E53935;        /* Compiler error, crash alert, confess CTA */
+  --bb-color-redstone-shadow: #922B21; /* Redstone bottom bevel */
+  --bb-color-redstone-glow: rgba(229, 57, 53, 0.3);
+
+  --bb-color-gold: #F1C40F;            /* XP orbs, star ratings, campfire embers */
+  --bb-color-gold-shadow: #B7950B;     /* Gold bottom bevel */
+  --bb-color-gold-glow: rgba(241, 196, 15, 0.3);
+
+  --bb-color-diamond: #3498DB;         /* Codex citations, info alerts, C++/TS chips */
+  --bb-color-diamond-shadow: #1F618D;  /* Diamond bottom bevel */
+  --bb-color-diamond-glow: rgba(52, 152, 219, 0.25);
+
+  /* Text & Legibility Colors (High-Contrast WCAG 2.1 AA Compliant) */
+  --bb-text-primary: #F0F2F5;          /* Crisp high-contrast reading text (11.8:1) */
+  --bb-text-secondary: #9DA3AE;        /* Slate gray secondary text (6.2:1) */
+  --bb-text-muted: #656C78;            /* Code line numbers, subtle hints */
+  --bb-text-gold: #F7DC6F;             /* Game stats, player level, streak counter */
+  --bb-text-code-green: #58D68D;       /* Terminal output and diff additions */
+  --bb-text-code-red: #EC7063;         /* Diff deletions and compiler panics */
+  --bb-text-white: #FFFFFF;
+
+  /* Block Border & Bevel Tokens */
+  --bb-border-subtle: #2D323E;         /* Outer panel separator */
+  --bb-border-bevel-light: #3D4353;    /* Top/Left light reflection */
+  --bb-border-bevel-dark: #0A0B0E;     /* Bottom/Right shadow bevel */
+  --bb-border-width: 2px;
+  --bb-border-bevel-size: 3px;
+
+  /* Typography Stacks (100% Authentic Retro Pixel UI) */
+  --bb-font-pixel-display: 'Press Start 2P', 'Silkscreen', monospace;
+  --bb-font-pixel-sub: 'VT323', monospace;
+  --bb-font-body: 'VT323', 'Silkscreen', monospace;
+  --bb-font-code: 'VT323', monospace;
+
+  /* Sizing & Spacing Scale (8px Grid Alignment) */
+  --bb-space-2xs: 2px;
+  --bb-space-xs: 4px;
+  --bb-space-sm: 8px;
+  --bb-space-md: 16px;
+  --bb-space-lg: 24px;
+  --bb-space-xl: 32px;
+  --bb-space-2xl: 48px;
+
+  /* Layout Heights & Widths */
+  --bb-hud-height: 56px;
+  --bb-sidebar-width: 240px;
+  --bb-sidebar-collapsed-width: 68px;
+  --bb-drawer-width: 340px;
+}

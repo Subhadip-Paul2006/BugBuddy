@@ -6,15 +6,15 @@
 import type {
   ValidationError,
   ValidationResult,
-} from './types.ts';
+} from './types';
 import {
   SUPPORTED_LANGUAGES,
   SUPPORTED_CATEGORIES,
   SUPPORTED_DIFFICULTIES,
   REQUIRED_FIELDS,
   ID_REGEX,
-} from './schema.ts';
-import { normalizeLanguage } from './normalizer.ts';
+} from './schema';
+import { normalizeLanguage } from './normalizer';
 
 export interface ValidationContext {
   file?: string;

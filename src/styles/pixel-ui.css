@@ -1,0 +1,396 @@
+/* ==========================================================================
+   BugBuddy Pixel UI — Tactile Voxel Components & Bevels
+   Specification: docs/UI_UX.md Section 5 & 11
+   ========================================================================== */
+
+/* Pixelated Base Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bb-surface-void);
+  color: var(--bb-text-primary);
+  font-family: var(--bb-font-body);
+  font-size: 17px;
+  line-height: 1.35;
+  letter-spacing: 0.5px;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  user-select: none;
+  image-rendering: pixelated;
+}
+
+button, input, textarea, select {
+  font-family: inherit;
+}
+
+/* --------------------------------------------------------------------------
+   Tactile Voxel Panels
+   -------------------------------------------------------------------------- */
+
+/* Standard Elevated Chiseled Stone Slab */
+.bb-panel-slab {
+  background: var(--bb-surface-panel);
+  border: var(--bb-border-width) solid var(--bb-border-subtle);
+  box-shadow: 
+    inset 2px 2px 0px 0px var(--bb-border-bevel-light),
+    inset -2px -2px 0px 0px var(--bb-border-bevel-dark),
+    0px 4px 0px 0px var(--bb-surface-void);
+  border-radius: 0;
+}
+
+/* Deep Inset Panel (e.g. Code Area, Terminal Cavity) */
+.bb-panel-inset {
+  background: var(--bb-surface-inset);
+  border: var(--bb-border-width) solid var(--bb-border-subtle);
+  box-shadow: 
+    inset 2px 2px 0px 0px var(--bb-border-bevel-dark),
+    inset -2px -2px 0px 0px var(--bb-border-bevel-light);
+  border-radius: 0;
+}
+
+/* Elevated Hearth Platform */
+.bb-panel-hearth {
+  background: var(--bb-surface-slab);
+  border: var(--bb-border-width) solid #3A3F4D;
+  box-shadow: 
+    inset 3px 3px 0px 0px #4F5668,
+    inset -3px -3px 0px 0px #121418,
+    0px 6px 0px 0px var(--bb-surface-void);
+}
+
+/* --------------------------------------------------------------------------
+   Inventory Slots
+   -------------------------------------------------------------------------- */
+
+.bb-inventory-slot {
+  width: 44px;
+  height: 44px;
+  background: var(--bb-surface-inset);
+  border: 2px solid var(--bb-border-subtle);
+  box-shadow: 
+    inset 2px 2px 0px 0px var(--bb-border-bevel-dark),
+    inset -2px -2px 0px 0px var(--bb-border-bevel-light);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 60ms linear, border-color 60ms linear;
+  position: relative;
+}
+
+.bb-inventory-slot:hover {
+  border-color: var(--bb-color-gold);
+  transform: translateY(-1px);
+}
+
+.bb-inventory-slot.active {
+  border-color: var(--bb-color-emerald);
+  box-shadow: 
+    inset 2px 2px 0px 0px rgba(0,0,0,0.6),
+    0 0 6px var(--bb-color-emerald-glow);
+}
+
+/* --------------------------------------------------------------------------
+   Tactile 3D Beveled Buttons
+   -------------------------------------------------------------------------- */
+
+.bb-btn {
+  font-family: var(--bb-font-pixel-display);
+  font-size: 10px;
+  line-height: 1.2;
+  text-transform: uppercase;
+  padding: 10px 16px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  letter-spacing: 0.5px;
+  border-radius: 0;
+  transition: transform 60ms linear, filter 60ms linear;
+}
+
+.bb-btn:focus-visible {
+  outline: 2px solid var(--bb-color-emerald);
+  outline-offset: 2px;
+}
+
+/* Emerald Primary CTA Button */
+.bb-btn-emerald {
+  background: var(--bb-color-emerald);
+  color: #052611;
+  box-shadow: 
+    inset 2px 2px 0px 0px rgba(255, 255, 255, 0.4),
+    inset -2px -2px 0px 0px var(--bb-color-emerald-shadow),
+    0px 4px 0px 0px var(--bb-surface-void);
+}
+
+.bb-btn-emerald:hover {
+  filter: brightness(1.1);
+  box-shadow: 
+    inset 2px 2px 0px 0px rgba(255, 255, 255, 0.6),
+    inset -2px -2px 0px 0px var(--bb-color-emerald-shadow),
+    0px 5px 0px 0px var(--bb-surface-void);
+}
+
+.bb-btn-emerald:active {
+  transform: translateY(3px);
+  box-shadow: 
+    inset 2px 2px 0px 0px rgba(0, 0, 0, 0.4),
+    inset -2px -2px 0px 0px rgba(255, 255, 255, 0.2),
+    0px 1px 0px 0px var(--bb-surface-void);
+}
+
+/* Stone Neutral Button */
+.bb-btn-stone {
+  background: var(--bb-surface-slab);
+  color: var(--bb-text-primary);
+  border: 1px solid var(--bb-border-subtle);
+  box-shadow: 
+    inset 2px 2px 0px 0px var(--bb-border-bevel-light),
+    inset -2px -2px 0px 0px var(--bb-border-bevel-dark),
+    0px 3px 0px 0px var(--bb-surface-void);
+}
+
+.bb-btn-stone:hover {
+  background: #323742;
+  border-color: #4A5060;
+}
+
+.bb-btn-stone:active {
+  transform: translateY(2px);
+  box-shadow: 
+    inset 2px 2px 0px 0px var(--bb-border-bevel-dark),
+    0px 1px 0px 0px var(--bb-surface-void);
+}
+
+/* Gold Reward Button */
+.bb-btn-gold {
+  background: var(--bb-color-gold);
+  color: #382B00;
+  box-shadow: 
+    inset 2px 2px 0px 0px rgba(255, 255, 255, 0.5),
+    inset -2px -2px 0px 0px var(--bb-color-gold-shadow),
+    0px 4px 0px 0px var(--bb-surface-void);
+}
+
+.bb-btn-gold:hover {
+  filter: brightness(1.1);
+}
+
+.bb-btn-gold:active {
+  transform: translateY(3px);
+  box-shadow: 
+    inset 2px 2px 0px 0px rgba(0, 0, 0, 0.4),
+    0px 1px 0px 0px var(--bb-surface-void);
+}
+
+/* Redstone Critical Button */
+.bb-btn-redstone {
+  background: var(--bb-color-redstone);
+  color: #FFFFFF;
+  box-shadow: 
+    inset 2px 2px 0px 0px rgba(255, 255, 255, 0.4),
+    inset -2px -2px 0px 0px var(--bb-color-redstone-shadow),
+    0px 4px 0px 0px var(--bb-surface-void);
+}
+
+.bb-btn-redstone:hover {
+  filter: brightness(1.1);
+}
+
+.bb-btn-redstone:active {
+  transform: translateY(3px);
+  box-shadow: 
+    inset 2px 2px 0px 0px rgba(0, 0, 0, 0.4),
+    0px 1px 0px 0px var(--bb-surface-void);
+}
+
+/* --------------------------------------------------------------------------
+   XP / Progress Bar
+   -------------------------------------------------------------------------- */
+
+.bb-xp-bar-track {
+  height: 14px;
+  background: var(--bb-surface-inset);
+  border: 2px solid var(--bb-border-subtle);
+  box-shadow: 
+    inset 2px 2px 0px 0px var(--bb-border-bevel-dark),
+    inset -2px -2px 0px 0px var(--bb-border-bevel-light);
+  position: relative;
+  overflow: hidden;
+}
+
+.bb-xp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #F39C12, #F1C40F);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.4);
+  transition: width 300ms steps(10);
+}
+
+/* --------------------------------------------------------------------------
+   Badges & Tags
+   -------------------------------------------------------------------------- */
+
+.bb-tag-lang {
+  font-family: var(--bb-font-pixel-display);
+  font-size: 8px;
+  padding: 3px 6px;
+  background: var(--bb-surface-inset);
+  border: 1px solid var(--bb-border-subtle);
+  color: var(--bb-color-diamond);
+  letter-spacing: 0.5px;
+}
+
+.bb-badge-mood {
+  font-family: var(--bb-font-pixel-display);
+  font-size: 9px;
+  padding: 4px 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bb-badge-mood.ECSTATIC {
+  background: rgba(46, 204, 113, 0.2);
+  color: #2ECC71;
+  border-color: #2ECC71;
+}
+
+.bb-badge-mood.HAPPY {
+  background: rgba(241, 196, 15, 0.2);
+  color: #F1C40F;
+  border-color: #F1C40F;
+}
+
+.bb-badge-mood.NEUTRAL {
+  background: rgba(157, 163, 174, 0.2);
+  color: #9DA3AE;
+  border-color: #9DA3AE;
+}
+
+.bb-badge-mood.DISAPPOINTED {
+  background: rgba(230, 126, 34, 0.2);
+  color: #E67E22;
+  border-color: #E67E22;
+}
+
+.bb-badge-mood.DRAMATIC_DESPAIR {
+  background: rgba(229, 57, 53, 0.2);
+  color: #E53935;
+  border-color: #E53935;
+}
+
+/* --------------------------------------------------------------------------
+   Retro Stepped Animations
+   -------------------------------------------------------------------------- */
+
+@keyframes bytebuddy-float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes bytebuddy-jump {
+  0% { transform: translateY(0) scale(1); }
+  30% { transform: translateY(-12px) scale(0.95, 1.05); }
+  60% { transform: translateY(-6px) scale(1.05, 0.95); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+@keyframes ember-drift {
+  0% { transform: translateY(0) translateX(0); opacity: 1; }
+  50% { transform: translateY(-16px) translateX(4px); opacity: 0.8; }
+  100% { transform: translateY(-32px) translateX(-3px); opacity: 0; }
+}
+
+@keyframes fire-flicker {
+  0% { opacity: 0.9; transform: scaleY(1); }
+  50% { opacity: 1; transform: scaleY(1.08); }
+  100% { opacity: 0.85; transform: scaleY(0.95); }
+}
+
+.bb-anim-fire {
+  animation: fire-flicker 400ms steps(3) infinite;
+}
+
+/* --------------------------------------------------------------------------
+   Pixel-Art Programming Language Emblems
+   -------------------------------------------------------------------------- */
+
+.bb-pixel-emblem {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  shape-rendering: crispEdges;
+  user-select: none;
+  transition: transform 60ms steps(2), filter 60ms steps(2);
+}
+
+.bb-pixel-emblem:hover {
+  filter: brightness(1.25) drop-shadow(0 0 5px var(--bb-color-emerald-glow));
+  transform: scale(1.1);
+}
+
+/* --------------------------------------------------------------------------
+   Retro Pixel Code Editor & CRT Scanlines
+   -------------------------------------------------------------------------- */
+
+.bb-crt-scanlines {
+  position: relative;
+}
+
+.bb-crt-scanlines::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.28) 50%), linear-gradient(90deg, rgba(46, 204, 113, 0.02), rgba(0, 0, 0, 0.01), rgba(52, 152, 219, 0.02));
+  z-index: 2;
+  background-size: 100% 3px, 6px 100%;
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+/* Retro Blinking Pixel Block Cursor */
+@keyframes bb-pixel-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.bb-pixel-cursor {
+  display: inline-block;
+  width: 9px;
+  height: 18px;
+  background-color: var(--bb-color-emerald);
+  vertical-align: text-bottom;
+  animation: bb-pixel-blink 700ms steps(1) infinite;
+  box-shadow: 0 0 6px var(--bb-color-emerald-glow);
+  margin-left: 2px;
+}
+
+/* Pixel Code Styling */
+.bb-pixel-code-editor {
+  font-family: var(--bb-font-code) !important;
+  font-size: 19px !important;
+  line-height: 22px !important;
+  letter-spacing: 0.75px !important;
+  color: #58D68D !important;
+  text-shadow: 0 0 4px rgba(88, 214, 141, 0.35);
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+

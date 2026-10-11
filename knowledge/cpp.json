@@ -1,0 +1,262 @@
+[
+  {
+    "id": "cpp-iterator-invalidation-erase",
+    "language": "cpp",
+    "title": "std::vector Iterator Invalidation During Erase in Loop",
+    "category": "runtime_error",
+    "difficulty": "intermediate",
+    "symptoms": "Crash with segfault or skipped elements when erasing items inside a standard vector iteration loop.",
+    "roast": "Erasing the track beneath your minecart while still rolling on it: high speed derailment guaranteed.",
+    "diagnosis": "Calling vec.erase(it) invalidates the erased iterator and all subsequent iterators in std::vector. Continuing to increment an invalidated iterator causes undefined behavior.",
+    "debuggingSteps": [
+      "Assign the iterator to the return value of erase(): it = vec.erase(it)",
+      "Alternatively, use the modern C++20 std::erase_if algorithm",
+      "Do not unconditionally increment '++it' when an element is removed"
+    ],
+    "badExample": "for (auto it = vec.begin(); it != vec.end(); ++it) {\n    if (*it == target) vec.erase(it);\n}",
+    "fixedExample": "for (auto it = vec.begin(); it != vec.end();) {\n    if (*it == target) {\n        it = vec.erase(it);\n    } else {\n        ++it;\n    }\n}",
+    "whyItWorks": "vec.erase(it) returns an iterator following the removed element, maintaining a valid traversal cursor without skipping or reading invalid memory.",
+    "tests": "std::vector<int> v = {1, 2, 3}; for(auto it = v.begin(); it != v.end();) { if(*it == 2) it = v.erase(it); else ++it; } assert(v.size() == 2 && v[1] == 3);",
+    "tags": ["cpp", "vector", "iterator-invalidation", "stl", "containers"],
+    "sources": [
+      {
+        "title": "CppReference - std::vector::erase",
+        "url": "https://en.cppreference.com/w/cpp/container/vector/erase"
+      }
+    ]
+  },
+  {
+    "id": "cpp-object-slicing-by-value",
+    "language": "cpp",
+    "title": "Object Slicing When Passing Polymorphic Classes by Value",
+    "category": "logic_error",
+    "difficulty": "intermediate",
+    "symptoms": "Derived class member variables and overridden virtual methods are ignored or lost when passed to a function.",
+    "roast": "Crafting a diamond sword, but dropping it into a wooden sword slot: you just sliced off the diamond blade.",
+    "diagnosis": "Passing polymorphic types by value invokes the base copy constructor, constructing only the base subobject and discarding (slicing) the derived portion.",
+    "debuggingSteps": [
+      "Check function signature taking polymorphic Base parameter by value",
+      "Change parameter to pass by reference (const Base&) or pointer (std::unique_ptr<Base>)",
+      "Verify virtual dispatch resolves to Derived implementation"
+    ],
+    "badExample": "void render(Base obj) {\n    obj.draw(); // Calls Base::draw, derived sliced\n}",
+    "fixedExample": "void render(const Base &obj) {\n    obj.draw(); // Dispatches dynamically to Derived::draw\n}",
+    "whyItWorks": "Passing by reference retains the full derived dynamic type in memory and enables virtual method dispatch through the vtable.",
+    "tests": "Derived d; const Base &b = d; assert(b.getName() == \"Derived\");",
+    "tags": ["cpp", "polymorphism", "object-slicing", "virtual-functions", "oop"],
+    "sources": [
+      {
+        "title": "CppReference - Virtual functions & Slicing",
+        "url": "https://en.cppreference.com/w/cpp/language/virtual"
+      }
+    ]
+  },
+  {
+    "id": "cpp-missing-virtual-destructor",
+    "language": "cpp",
+    "title": "Missing Virtual Destructor in Base Class",
+    "category": "runtime_error",
+    "difficulty": "advanced",
+    "symptoms": "Derived class destructors are never invoked when deleting through base pointer, leaking member resources.",
+    "roast": "Destroying a chest with an axe, but only deleting the lid while all the diamonds remain orphaned in limbo.",
+    "diagnosis": "Deleting an object through a pointer to Base when Base does not declare a virtual destructor results in undefined behavior (C++ Standard [expr.delete]) and skips Derived cleanup.",
+    "debuggingSteps": [
+      "Locate base classes with virtual methods",
+      "Declare 'virtual ~Base() = default;' in the base class definition",
+      "Run AddressSanitizer or leak sanitizer to confirm complete cleanup"
+    ],
+    "badExample": "class Base {\npublic:\n    ~Base() {}\n};\nclass Derived : public Base {\n    int *data = new int[100];\npublic:\n    ~Derived() { delete[] data; }\n};",
+    "fixedExample": "class Base {\npublic:\n    virtual ~Base() = default;\n};\nclass Derived : public Base {\n    int *data = new int[100];\npublic:\n    ~Derived() override { delete[] data; }\n};",
+    "whyItWorks": "A virtual destructor ensures the runtime uses vtable dispatch to execute Derived's destructor before tearing down Base.",
+    "tests": "Base *b = new Derived(); delete b; // Derived destructor executed without leaks",
+    "tags": ["cpp", "virtual-destructor", "inheritance", "resource-leak", "memory"],
+    "sources": [
+      {
+        "title": "CppReference - Destructors",
+        "url": "https://en.cppreference.com/w/cpp/language/destructor"
+      }
+    ]
+  },
+  {
+    "id": "cpp-shared-ptr-circular-reference",
+    "language": "cpp",
+    "title": "Cyclic Memory Leak via Circular std::shared_ptr",
+    "category": "runtime_error",
+    "difficulty": "intermediate",
+    "symptoms": "Objects managed by std::shared_ptr never get destroyed, leaking memory indefinitely despite falling out of scope.",
+    "roast": "Two Redstone repeaters pointing into each other: infinite loop, zero progress, perpetual lockup.",
+    "diagnosis": "When object A holds a shared_ptr to B and B holds a shared_ptr to A, their reference counts never drop to zero, preventing deallocation.",
+    "debuggingSteps": [
+      "Identify back-references or parent-child pointer relationships",
+      "Break ownership cycles by converting non-owning back-references to std::weak_ptr",
+      "Inspect use_count() during debugging to detect stuck counts"
+    ],
+    "badExample": "struct Node {\n    std::shared_ptr<Node> next;\n    std::shared_ptr<Node> prev;\n};",
+    "fixedExample": "struct Node {\n    std::shared_ptr<Node> next;\n    std::weak_ptr<Node> prev; // Non-owning weak reference\n};",
+    "whyItWorks": "std::weak_ptr observes the managed object without incrementing the strong reference counter, allowing destructors to trigger naturally when strong owners release.",
+    "tests": "auto n1 = std::make_shared<Node>(); auto n2 = std::make_shared<Node>(); n1->next = n2; n2->prev = n1; assert(n1.use_count() == 1);",
+    "tags": ["cpp", "smart-pointers", "shared-ptr", "weak-ptr", "memory-leak"],
+    "sources": [
+      {
+        "title": "CppReference - std::weak_ptr",
+        "url": "https://en.cppreference.com/w/cpp/memory/weak_ptr"
+      }
+    ]
+  },
+  {
+    "id": "cpp-dangling-string-view",
+    "language": "cpp",
+    "title": "Dangling std::string_view from Temporary std::string",
+    "category": "runtime_error",
+    "difficulty": "advanced",
+    "symptoms": "Garbage characters, memory corruption, or intermittent segfaults when inspecting string_view data.",
+    "roast": "Peeking through a spyglass at a sunset that already turned to midnight: you are viewing dead pixels.",
+    "diagnosis": "std::string_view does not own underlying string storage. Binding a string_view to a temporary std::string leaves it dangling once the temporary statement ends.",
+    "debuggingSteps": [
+      "Check functions returning string_view referencing local string concatenations",
+      "Return std::string by value if the function generates a new string",
+      "Ensure the backing string outlives any string_view referencing it"
+    ],
+    "badExample": "std::string_view get_view() {\n    std::string s = \"temp_string\";\n    return s; // s destroyed at closing brace!\n}",
+    "fixedExample": "std::string get_view() {\n    std::string s = \"temp_string\";\n    return s; // Returned by value, safely moved/copied\n}",
+    "whyItWorks": "Returning std::string by value transfers ownership of the underlying buffer to the caller instead of leaving an unowned view into dead stack space.",
+    "tests": "std::string s = get_view(); assert(s == \"temp_string\");",
+    "tags": ["cpp", "string-view", "dangling-reference", "lifetime", "undefined-behavior"],
+    "sources": [
+      {
+        "title": "CppReference - std::basic_string_view",
+        "url": "https://en.cppreference.com/w/cpp/string/basic_string_view"
+      }
+    ]
+  },
+  {
+    "id": "cpp-use-after-move",
+    "language": "cpp",
+    "title": "Accessing Moved-From Object (Use-After-Move)",
+    "category": "logic_error",
+    "difficulty": "intermediate",
+    "symptoms": "Empty containers, null pointers, or invalid state after passing an object with std::move.",
+    "roast": "You moved all your iron into the chest and then tried to craft armor from your empty inventory.",
+    "diagnosis": "std::move casts an lvalue to an rvalue, allowing ownership to be pilfered. The moved-from object is left in a valid but unspecified state, typically hollowed out.",
+    "debuggingSteps": [
+      "Audit code using an object after passing it into std::move",
+      "Re-initialize or assign the object before subsequent reads",
+      "Pass const reference if caller still requires read access"
+    ],
+    "badExample": "std::vector<int> src = {1, 2, 3};\nauto dest = std::move(src);\nint first = src[0]; // Undefined behavior: src is hollowed out",
+    "fixedExample": "std::vector<int> src = {1, 2, 3};\nauto dest = src; // Copy instead of move if src is still needed\nint first = src[0];",
+    "whyItWorks": "Copying preserves the source vector's elements, ensuring src retains valid elements for subsequent indexing.",
+    "tests": "std::vector<int> src = {1, 2, 3}; auto dest = src; assert(src.size() == 3 && dest.size() == 3);",
+    "tags": ["cpp", "move-semantics", "rvalue", "use-after-move", "stl"],
+    "sources": [
+      {
+        "title": "CppReference - std::move",
+        "url": "https://en.cppreference.com/w/cpp/utility/move"
+      }
+    ]
+  },
+  {
+    "id": "cpp-lambda-reference-outliving-scope",
+    "language": "cpp",
+    "title": "Dangling Reference in Lambda Capture [&]",
+    "category": "runtime_error",
+    "difficulty": "advanced",
+    "symptoms": "Intermittent corruption or segfault when asynchronous callbacks or stored lambdas are executed.",
+    "roast": "Storing a map with tether lines tied to sand blocks: the moment sand drops, your lines snap.",
+    "diagnosis": "Capturing automatic variables by reference ([&] or [&var]) inside a lambda that outlives the enclosing function scope leaves dangling references to popped stack frames.",
+    "debuggingSteps": [
+      "Inspect lambdas returned from functions or dispatched across threads",
+      "Switch from reference capture [&] to value capture [=] or explicit init capture [val = var]",
+      "Use std::shared_ptr if shared state is needed across asynchronous tasks"
+    ],
+    "badExample": "auto create_callback() {\n    int factor = 10;\n    return [&factor](int x) { return x * factor; }; // factor dies!\n}",
+    "fixedExample": "auto create_callback() {\n    int factor = 10;\n    return [factor](int x) { return x * factor; }; // captured by value\n}",
+    "whyItWorks": "Capturing factor by value copies the integer into the lambda closure object, ensuring its lifetime is bound to the lambda itself.",
+    "tests": "auto cb = create_callback(); assert(cb(5) == 50);",
+    "tags": ["cpp", "lambdas", "captures", "closure", "lifetime"],
+    "sources": [
+      {
+        "title": "CppReference - Lambda expressions",
+        "url": "https://en.cppreference.com/w/cpp/language/lambda"
+      }
+    ]
+  },
+  {
+    "id": "cpp-const-reference-to-temporary-lifecycle",
+    "language": "cpp",
+    "title": "Dangling Member Reference to Temporary in Constructor",
+    "category": "logic_error",
+    "difficulty": "advanced",
+    "symptoms": "Member references contain corrupted data when accessed outside constructor body.",
+    "roast": "Binding your leash to a ghost: as soon as the constructor finishes, your horse runs wild.",
+    "diagnosis": "While binding a temporary to a local const reference extends its lifetime, binding a temporary to a class reference member does NOT extend its lifetime past constructor execution.",
+    "debuggingSteps": [
+      "Avoid storing raw reference members (const T&) inside classes unless lifetime is strictly managed",
+      "Store member variables by value or smart pointer",
+      "Verify constructor parameters outlive the constructed class instance"
+    ],
+    "badExample": "class Holder {\n    const std::string &ref;\npublic:\n    Holder(const std::string &s) : ref(s) {}\n};\n// Invoked as Holder h(\"temporary\"); ref immediately dangles!",
+    "fixedExample": "class Holder {\n    std::string val;\npublic:\n    Holder(std::string s) : val(std::move(s)) {}\n    const std::string& get() const { return val; }\n};",
+    "whyItWorks": "Storing the string by value inside Holder ensures the string data is owned by and tied to the lifetime of the Holder instance.",
+    "tests": "Holder h(\"temporary\"); assert(h.get() == \"temporary\");",
+    "tags": ["cpp", "references", "temporaries", "constructors", "lifetime"],
+    "sources": [
+      {
+        "title": "CppReference - Reference initialization",
+        "url": "https://en.cppreference.com/w/cpp/language/reference_initialization"
+      }
+    ]
+  },
+  {
+    "id": "cpp-vector-push-back-reallocation-pointer-invalidation",
+    "language": "cpp",
+    "title": "Pointer Invalidation Caused by std::vector Reallocation",
+    "category": "runtime_error",
+    "difficulty": "intermediate",
+    "symptoms": "Reading through an element pointer or reference yields stale or garbage data after calling push_back.",
+    "roast": "Renovating your castle by bulldozing the foundation while your buddy is still standing on the 2nd floor.",
+    "diagnosis": "When std::vector exceeds its current capacity, push_back allocates a new larger buffer, copies elements over, and frees old memory, invalidating all existing pointers.",
+    "debuggingSteps": [
+      "Call vec.reserve(N) ahead of time if pointers/references to elements are cached",
+      "Store indices rather than pointers or references to vector elements",
+      "Avoid caching pointers across push_back or emplace_back calls"
+    ],
+    "badExample": "std::vector<int> v = {10};\nint *ptr = &v[0];\nv.push_back(20); // reallocation may happen\nint val = *ptr; // ptr may be dangling!",
+    "fixedExample": "std::vector<int> v;\nv.reserve(10); // Guarantee sufficient capacity upfront\nv.push_back(10);\nint *ptr = &v[0];\nv.push_back(20); // No reallocation occurs\nint val = *ptr;",
+    "whyItWorks": "Reserving capacity guarantees no heap reallocation takes place during subsequent push_backs within the reserved limit.",
+    "tests": "std::vector<int> v; v.reserve(5); v.push_back(10); int *p = &v[0]; v.push_back(20); assert(*p == 10);",
+    "tags": ["cpp", "vector", "reallocation", "pointer-invalidation", "memory"],
+    "sources": [
+      {
+        "title": "CppReference - std::vector::reserve",
+        "url": "https://en.cppreference.com/w/cpp/container/vector/reserve"
+      }
+    ]
+  },
+  {
+    "id": "cpp-destructor-throwing-exception-terminate",
+    "language": "cpp",
+    "title": "Exception Thrown in Destructor Triggers std::terminate",
+    "category": "runtime_error",
+    "difficulty": "advanced",
+    "symptoms": "Process abruptly terminates with 'terminate called after throwing an instance of...' without catching exception.",
+    "roast": "Blowing up a TNT block inside your base while cleaning up spider webs: instant rage quit.",
+    "diagnosis": "Since C++11, destructors are noexcept(true) by default. Throwing an exception from a destructor (especially during stack unwinding) immediately invokes std::terminate.",
+    "debuggingSteps": [
+      "Audit destructors to guarantee no unhandled exceptions can escape",
+      "Enclose potentially throwing calls inside try-catch blocks within the destructor",
+      "Log errors rather than throwing exceptions during destruction cleanup"
+    ],
+    "badExample": "class Resource {\npublic:\n    ~Resource() {\n        throw std::runtime_error(\"Cleanup failed\");\n    }\n};",
+    "fixedExample": "class Resource {\npublic:\n    ~Resource() noexcept {\n        try {\n            // Cleanup routine\n        } catch (...) {\n            // Log failure, do not let exception escape destructor\n        }\n    }\n};",
+    "whyItWorks": "Catching all internal exceptions inside the destructor prevents exceptions from escaping, preserving the noexcept contract and preventing std::terminate.",
+    "tests": "{ Resource r; } // Exits scope smoothly without throwing or terminating",
+    "tags": ["cpp", "destructor", "exceptions", "noexcept", "terminate"],
+    "sources": [
+      {
+        "title": "CppReference - noexcept specifier",
+        "url": "https://en.cppreference.com/w/cpp/language/noexcept_spec"
+      }
+    ]
+  }
+]

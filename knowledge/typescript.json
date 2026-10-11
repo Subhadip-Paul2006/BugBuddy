@@ -1,0 +1,262 @@
+[
+  {
+    "id": "ts-excess-property-checks-type-mismatch",
+    "language": "typescript",
+    "title": "TS2322: Excess Property Checks on Object Literals",
+    "category": "type_compilation",
+    "difficulty": "beginner",
+    "symptoms": "Type error: Type '{ ... }' has no properties in common with type or Object literal may only specify known properties.",
+    "roast": "Trying to craft armor by stuffing an apple into the crafting grid: TypeScript rejects unknown ingredients.",
+    "diagnosis": "TypeScript performs Excess Property Checking when object literals are assigned directly to typed variables or passed as function arguments, rejecting unmodeled properties.",
+    "debuggingSteps": [
+      "Add the property to the interface/type definition if it is genuinely part of the model",
+      "Add an index signature [key: string]: unknown if dynamic properties are permissible",
+      "Pass through an intermediate variable to bypass excess check if intended"
+    ],
+    "badExample": "interface User {\n    name: string;\n}\nconst u: User = { name: \"Alex\", age: 25 }; // Error TS2322: 'age' does not exist in type 'User'",
+    "fixedExample": "interface User {\n    name: string;\n    age?: number;\n}\nconst u: User = { name: \"Alex\", age: 25 };",
+    "whyItWorks": "Declaring 'age?: number' informs the TypeScript type checker that the age property is an authorized optional field.",
+    "tests": "interface U { name: string; age?: number; } const u: U = { name: 'A', age: 20 }; assert.strictEqual(u.name, 'A');",
+    "tags": ["typescript", "excess-properties", "interfaces", "ts2322", "type-checking"],
+    "sources": [
+      {
+        "title": "TypeScript Handbook - Excess Property Checks",
+        "url": "https://www.typescriptlang.org/docs/handbook/2/objects.html#excess-property-checks"
+      }
+    ]
+  },
+  {
+    "id": "ts-unsound-any-escape-hatch",
+    "language": "typescript",
+    "title": "Unsound 'any' Bypass Causing Unchecked Runtime Crashes",
+    "category": "logic_error",
+    "difficulty": "intermediate",
+    "symptoms": "TypeError: Cannot read properties of undefined at runtime despite code compiling with zero TypeScript errors.",
+    "roast": "Turning off mob griefing on your server and wondering why creepers still blow up in hardcore mode.",
+    "diagnosis": "'any' disables the TypeScript compiler's safety checks completely. Passing incorrect shapes across an 'any' boundary silences compile-time detection.",
+    "debuggingSteps": [
+      "Replace 'any' with 'unknown' for untyped API responses or payloads",
+      "Use type guards or zod/valibot schema parsers before property access",
+      "Enable 'noImplicitAny' in tsconfig.json"
+    ],
+    "badExample": "function parse(raw: any) {\n    return raw.profile.email.toLowerCase(); // Runtime crash if profile is undefined!\n}",
+    "fixedExample": "interface ProfileData {\n    profile?: { email?: string };\n}\nfunction parse(raw: ProfileData) {\n    return raw.profile?.email?.toLowerCase() ?? \"no-email\";\n}",
+    "whyItWorks": "Using typed interfaces with optional chaining informs the compiler of possible nullish shapes and guarantees fallback handling.",
+    "tests": "const res = parse({}); assert.strictEqual(res, 'no-email');",
+    "tags": ["typescript", "any", "unknown", "type-safety", "runtime-crash"],
+    "sources": [
+      {
+        "title": "TypeScript Handbook - Any and Unknown Types",
+        "url": "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#any"
+      }
+    ]
+  },
+  {
+    "id": "ts-discriminated-union-narrowing-failure",
+    "language": "typescript",
+    "title": "Discriminated Union Type Narrowing Failure from Missing Guard",
+    "category": "type_compilation",
+    "difficulty": "intermediate",
+    "symptoms": "TS2339: Property 'payload' does not exist on type 'SuccessAction | ErrorAction'.",
+    "roast": "Attacking an Enderman with water while expecting it not to teleport: check its identity first.",
+    "diagnosis": "TypeScript requires checking the discriminator tag (e.g. action.type) within a conditional block to narrow the union to a specific variant.",
+    "debuggingSteps": [
+      "Add a switch (action.type) or if (action.type === '...') block",
+      "Ensure all union variants share a literal discriminant property",
+      "Use exhaustive matching with 'never' type in default cases"
+    ],
+    "badExample": "type Action = { type: 'success'; data: string } | { type: 'error'; error: string };\nfunction handle(action: Action) {\n    console.log(action.data); // Error TS2339: Property 'data' does not exist on type 'Action'\n}",
+    "fixedExample": "type Action = { type: 'success'; data: string } | { type: 'error'; error: string };\nfunction handle(action: Action) {\n    if (action.type === 'success') {\n        console.log(action.data);\n    }\n}",
+    "whyItWorks": "Checking action.type === 'success' allows the compiler control-flow analysis to narrow action to the Success variant where 'data' is guaranteed.",
+    "tests": "const a: Action = { type: 'success', data: 'ok' }; if (a.type === 'success') assert.strictEqual(a.data, 'ok');",
+    "tags": ["typescript", "discriminated-unions", "type-narrowing", "control-flow", "ts2339"],
+    "sources": [
+      {
+        "title": "TypeScript Handbook - Narrowing and Discriminated Unions",
+        "url": "https://www.typescriptlang.org/docs/handbook/2/narrowing.html#discriminated-unions"
+      }
+    ]
+  },
+  {
+    "id": "ts-optional-chaining-undefined-non-null-param",
+    "language": "typescript",
+    "title": "TS2345: Optional Chaining Passing Undefined to Non-Nullable Parameter",
+    "category": "type_compilation",
+    "difficulty": "beginner",
+    "symptoms": "TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.",
+    "roast": "Giving a villager an empty invisible hand and expecting emerald trades: you handed him undefined.",
+    "diagnosis": "Optional chaining (?.) returns 'undefined' if any parent property is null or undefined. Passing that expression to a function requiring a non-nullable type causes TS2345.",
+    "debuggingSteps": [
+      "Provide a nullish coalescing default value: user?.name ?? 'Anonymous'",
+      "Or wrap the invocation in an if (user?.name) guard",
+      "Audit parameter signatures for nullability requirements"
+    ],
+    "badExample": "function greet(name: string) { return `Hello ${name}`; }\nconst user: { name?: string } = {};\ngreet(user?.name); // Error TS2345: string | undefined not assignable to string",
+    "fixedExample": "function greet(name: string) { return `Hello ${name}`; }\nconst user: { name?: string } = {};\ngreet(user?.name ?? \"Anonymous\");",
+    "whyItWorks": "Nullish coalescing (??) guarantees a non-null string fallback if user?.name evaluates to null or undefined.",
+    "tests": "function g(n: string) { return n; } assert.strictEqual(g(undefined ?? 'def'), 'def');",
+    "tags": ["typescript", "optional-chaining", "nullish-coalescing", "ts2345", "types"],
+    "sources": [
+      {
+        "title": "TypeScript Docs - Optional Chaining and Nullish Coalescing",
+        "url": "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-7.html#optional-chaining"
+      }
+    ]
+  },
+  {
+    "id": "ts-readonly-array-mutation-attempt",
+    "language": "typescript",
+    "title": "TS2542: Index Signature in Type ReadonlyArray Only Permits Reading",
+    "category": "type_compilation",
+    "difficulty": "beginner",
+    "symptoms": "TS2542: Index signature in type 'readonly number[]' only permits reading.",
+    "roast": "Trying to carve runes into bedrock: it's marked readonly for a reason.",
+    "diagnosis": "ReadonlyArray<T> or readonly T[] removes mutable array methods (push, pop, splice) and marks indices read-only. Attempting to assign or push triggers compile-time errors.",
+    "debuggingSteps": [
+      "Use non-mutating operations like .concat(), spread [...arr, item], or .slice()",
+      "Remove 'readonly' if the function is intentionally designed to mutate the array",
+      "Return a new array rather than mutating inputs"
+    ],
+    "badExample": "function append(nums: readonly number[], val: number) {\n    nums.push(val); // Error TS2339: Property 'push' does not exist on 'readonly number[]'\n}",
+    "fixedExample": "function append(nums: readonly number[], val: number): number[] {\n    return [...nums, val];\n}",
+    "whyItWorks": "Spreading the readonly array into a new mutable array produces a new array instance without violating the input's readonly immutability guarantee.",
+    "tests": "const r: readonly number[] = [1]; const res = [...r, 2]; assert.deepStrictEqual(res, [1, 2]);",
+    "tags": ["typescript", "readonly", "immutability", "ts2542", "arrays"],
+    "sources": [
+      {
+        "title": "TypeScript Handbook - ReadonlyArray Type",
+        "url": "https://www.typescriptlang.org/docs/handbook/2/objects.html#the-readonlyarray-type"
+      }
+    ]
+  },
+  {
+    "id": "ts-unsafe-type-assertion-blind-cast",
+    "language": "typescript",
+    "title": "Blind Type Assertion 'as unknown as Target' Masking Schema Divergence",
+    "category": "logic_error",
+    "difficulty": "advanced",
+    "symptoms": "Downstream code crashes with 'undefined is not a function' because the actual runtime JSON structure did not match the asserted type.",
+    "roast": "Slapping a Netherite texture on a wooden shovel: it looks shiny until you hit an obsidian block and it shatters.",
+    "diagnosis": "Type assertions ('as T') do not perform any runtime validation; they merely silence the compiler. If API payloads drift, the asserted type creates a false sense of security.",
+    "debuggingSteps": [
+      "Use runtime schema parsing with libraries like Zod or custom type predicates (isTarget(x))",
+      "Validate required properties before casting",
+      "Avoid chaining 'as unknown as T' as an escape hatch"
+    ],
+    "badExample": "interface ApiResponse { data: { id: string } }\nconst res = (JSON.parse(str) as unknown) as ApiResponse;\nconsole.log(res.data.id); // Crash if str did not contain { data: { id } }!",
+    "fixedExample": "interface ApiResponse { data: { id: string } }\nfunction isApiResponse(obj: any): obj is ApiResponse {\n    return obj && typeof obj === 'object' && obj.data && typeof obj.data.id === 'string';\n}\nconst parsed = JSON.parse(str);\nif (isApiResponse(parsed)) {\n    console.log(parsed.data.id);\n}",
+    "whyItWorks": "User-defined type guards ('obj is ApiResponse') verify actual runtime properties before allowing TypeScript to narrow the type safely.",
+    "tests": "function isU(o: any): o is { id: string } { return Boolean(o?.id); } assert.strictEqual(isU({ id: '1' }), true);",
+    "tags": ["typescript", "type-assertions", "type-guards", "runtime-validation", "type-safety"],
+    "sources": [
+      {
+        "title": "TypeScript Handbook - Type Predicates",
+        "url": "https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates"
+      }
+    ]
+  },
+  {
+    "id": "ts-enum-reverse-mapping-numeric-runtime-pitfall",
+    "language": "typescript",
+    "title": "Numeric Enum Reverse Mapping Generating Unexpected Object Keys",
+    "category": "logic_error",
+    "difficulty": "intermediate",
+    "symptoms": "Object.keys(StatusEnum) contains both strings and numbers, doubling the expected length.",
+    "roast": "Opening a dispenser and getting twice as many arrows as you put in, half of which are labeled with upside-down numbers.",
+    "diagnosis": "TypeScript compiles numeric enums with reverse mappings: Status[0] = 'Pending' and Status['Pending'] = 0. Object.keys() returns both sets of keys.",
+    "debuggingSteps": [
+      "Use string enums (enum Status { Pending = 'PENDING' }) which do not emit reverse mappings",
+      "Or prefer const object literals: const Status = { Pending: 'pending' } as const",
+      "Filter numeric keys when iterating numeric enums"
+    ],
+    "badExample": "enum Status { Active, Inactive }\nconsole.log(Object.keys(Status)); // ['0', '1', 'Active', 'Inactive']",
+    "fixedExample": "export const Status = {\n    Active: 'ACTIVE',\n    Inactive: 'INACTIVE',\n} as const;\nexport type Status = typeof Status[keyof typeof Status];\nconsole.log(Object.keys(Status)); // ['Active', 'Inactive']",
+    "whyItWorks": "'as const' object literals emit clean JavaScript objects without synthetic numeric reverse mappings.",
+    "tests": "const S = { A: 'a' } as const; assert.deepStrictEqual(Object.keys(S), ['A']);",
+    "tags": ["typescript", "enums", "as-const", "reverse-mapping", "object-keys"],
+    "sources": [
+      {
+        "title": "TypeScript Handbook - Enums and Reverse Mapping",
+        "url": "https://www.typescriptlang.org/docs/handbook/enums.html#reverse-mappings"
+      }
+    ]
+  },
+  {
+    "id": "ts-generic-unconstrained-property-access",
+    "language": "typescript",
+    "title": "TS2339: Property Does Not Exist on Unconstrained Generic Type T",
+    "category": "type_compilation",
+    "difficulty": "intermediate",
+    "symptoms": "TS2339: Property 'id' does not exist on type 'T' inside a generic function.",
+    "roast": "Telling a generic crafting table to craft without specifying any recipe blueprints: what is 'T' supposed to be?",
+    "diagnosis": "An unconstrained generic <T> can be any type (number, boolean, null, undefined). Accessing specific properties like item.id requires constraining T.",
+    "debuggingSteps": [
+      "Add a generic constraint with 'extends': <T extends { id: string }>",
+      "Define an interface for the required shape: <T extends HasId>",
+      "Verify caller arguments fulfill the constraint contract"
+    ],
+    "badExample": "function getId<T>(item: T) {\n    return item.id; // Error TS2339: Property 'id' does not exist on type 'T'\n}",
+    "fixedExample": "interface HasId {\n    id: string;\n}\nfunction getId<T extends HasId>(item: T): string {\n    return item.id;\n}",
+    "whyItWorks": "The 'extends HasId' constraint proves to the compiler that every permissible substitution of T will contain an 'id: string' property.",
+    "tests": "function getId<T extends { id: string }>(x: T) { return x.id; } assert.strictEqual(getId({ id: '123' }), '123');",
+    "tags": ["typescript", "generics", "type-constraints", "ts2339", "extends"],
+    "sources": [
+      {
+        "title": "TypeScript Handbook - Generic Constraints",
+        "url": "https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints"
+      }
+    ]
+  },
+  {
+    "id": "ts-index-signature-undefined-access",
+    "language": "typescript",
+    "title": "Unchecked Undefined Access on Record/Index Signature Types",
+    "category": "logic_error",
+    "difficulty": "intermediate",
+    "symptoms": "TypeScript assumes dict[key] is always present (type string), but at runtime it returns undefined and throws TypeError.",
+    "roast": "Looking for cake in an empty chest without checking if the chest has items: surprise, it's air.",
+    "diagnosis": "By default, TypeScript treats Record<string, string>[key] as 'string'. If the key doesn't exist, runtime returns undefined without compiler warning unless noUncheckedIndexedAccess is enabled.",
+    "debuggingSteps": [
+      "Enable 'noUncheckedIndexedAccess: true' in tsconfig.json compilerOptions",
+      "Explicitly type records with undefined: Record<string, string | undefined>",
+      "Check presence before use: if (key in dict) or dict[key] !== undefined"
+    ],
+    "badExample": "const dict: Record<string, string> = {};\nconst upper = dict[\"missing\"].toUpperCase(); // Compiles fine, crashes at runtime!",
+    "fixedExample": "const dict: Record<string, string | undefined> = {};\nconst upper = dict[\"missing\"]?.toUpperCase() ?? \"DEFAULT\";",
+    "whyItWorks": "Typing values as 'string | undefined' forces callers to handle the absent key case with optional chaining or default guards.",
+    "tests": "const d: Record<string, string | undefined> = {}; assert.strictEqual(d['a']?.toUpperCase() ?? 'DEF', 'DEF');",
+    "tags": ["typescript", "index-signature", "nouncheckedindexedaccess", "records", "null-safety"],
+    "sources": [
+      {
+        "title": "TypeScript TSConfig Reference - noUncheckedIndexedAccess",
+        "url": "https://www.typescriptlang.org/tsconfig/#noUncheckedIndexedAccess"
+      }
+    ]
+  },
+  {
+    "id": "ts-record-key-type-widening",
+    "language": "typescript",
+    "title": "Key Type Widening from Object.keys() to string[]",
+    "category": "type_compilation",
+    "difficulty": "advanced",
+    "symptoms": "TS7053: Element implicitly has an 'any' type because type 'string' can't be used to index type 'Config'.",
+    "roast": "Labeling your chest slots with infinite string names and wondering why the 3-slot inventory rejects them.",
+    "diagnosis": "Object.keys(obj) returns string[] rather than (keyof typeof obj)[], because JavaScript objects can have additional runtime properties added at prototype level.",
+    "debuggingSteps": [
+      "Cast keys safely: (Object.keys(obj) as (keyof typeof obj)[])",
+      "Use Object.entries() with typed tuple destructuring",
+      "Define a typedKeys helper function"
+    ],
+    "badExample": "interface Config { port: number; host: string }\nconst cfg: Config = { port: 8080, host: 'localhost' };\nObject.keys(cfg).forEach(k => {\n    const v = cfg[k]; // Error TS7053: No index signature with parameter of type 'string'\n});",
+    "fixedExample": "interface Config { port: number; host: string }\nconst cfg: Config = { port: 8080, host: 'localhost' };\n(Object.keys(cfg) as (keyof Config)[]).forEach(k => {\n    const v = cfg[k]; // Typed accurately as number | string\n});",
+    "whyItWorks": "Casting to (keyof Config)[] refines the key type from broad string down to the exact union ('port' | 'host'), permitting safe indexing.",
+    "tests": "const o = { a: 1 }; (Object.keys(o) as (keyof typeof o)[]).forEach(k => assert.strictEqual(o[k], 1));",
+    "tags": ["typescript", "object-keys", "keyof", "type-widening", "ts7053"],
+    "sources": [
+      {
+        "title": "TypeScript Handbook - Keyof Type Operator",
+        "url": "https://www.typescriptlang.org/docs/handbook/2/keyof-types.html"
+      }
+    ]
+  }
+]

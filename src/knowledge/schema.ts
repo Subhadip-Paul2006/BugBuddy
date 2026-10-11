@@ -6,7 +6,7 @@ import type {
   CanonicalLanguage,
   CanonicalCategory,
   CanonicalDifficulty,
-} from './types.ts';
+} from './types';
 
 export const SUPPORTED_LANGUAGES: readonly CanonicalLanguage[] = [
   'c',

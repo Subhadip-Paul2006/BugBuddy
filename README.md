@@ -2,15 +2,17 @@
 
 > **"Your bugs are fixable. Your pet's disappointment is optional."**
 
-[![Phase: 0 - Baseline Spec](https://img.shields.io/badge/phase-0__baseline-blue.svg?style=flat-square)](docs/DOCUMENTATION_AUDIT.md)
-[![UI/UX: Minecraft-Inspired](https://img.shields.io/badge/UI%2FUX-Minecraft--Inspired-brightgreen.svg?style=flat-square)](docs/UI_UX.md)
-[![Architecture: Bounded SPA](https://img.shields.io/badge/architecture-Bounded__SPA-blueviolet.svg?style=flat-square)](docs/TRD.md)
-[![TypeScript 5.x](https://img.shields.io/badge/TypeScript-5.x-blue.svg?style=flat-square)](https://www.typescriptlang.org/)
-[![React 18+](https://img.shields.io/badge/React-18+-61DAFB.svg?style=flat-square)](https://react.dev/)
-[![Accessibility: WCAG 2.1 AA](https://img.shields.io/badge/accessibility-WCAG_2.1_AA-success.svg?style=flat-square)](https://www.w3.org/WAI/WCAG21/quickref/)
+[![Release: v0.1.0-rc](https://img.shields.io/badge/release-v0.1.0--rc-orange.svg?style=flat-square)](releases/v0.1.0/)
+[![Tests: 192 Passing](https://img.shields.io/badge/tests-192%20passing-brightgreen.svg?style=flat-square)](releases/v0.1.0/QA_REPORT.md)
+[![Knowledge Base: 60 Records](https://img.shields.io/badge/knowledge__base-60%20records-blue.svg?style=flat-square)](knowledge/)
+[![TypeScript: 5.6](https://img.shields.io/badge/TypeScript-5.6-blue.svg?style=flat-square)](https://www.typescriptlang.org/)
+[![React: 18.3](https://img.shields.io/badge/React-18.3-61DAFB.svg?style=flat-square)](https://react.dev/)
+[![Vite: 5.4](https://img.shields.io/badge/Vite-5.4-646CFF.svg?style=flat-square)](https://vitejs.dev/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat-square)](LICENSE)
 
-BugBuddy is a gamified, AI-powered debugging companion and developer productivity web application styled as a **Minecraft-Inspired Developer Survival World**. It transforms the soul-crushing experience of chasing cryptic compiler panics, syntax blunders, and runtime exceptions into an entertaining, highly educational, and emotionally accountable quest.
+BugBuddy is a gamified, AI-powered debugging assistant and developer productivity web application styled as a **Minecraft-Inspired Developer Survival World**. It transforms the soul-crushing experience of chasing cryptic compiler panics, syntax blunders, and runtime exceptions into an entertaining, highly educational, and emotionally accountable quest.
+
+> ℹ️ **Deployment Status**: Current status is **v0.1.0 Release Candidate (Local & Pre-Deployment Verified)**. Cloud deployment to Render is prepared and documented; public demo URLs will be posted upon final release publication.
 
 ---
 
@@ -18,34 +20,34 @@ BugBuddy is a gamified, AI-powered debugging companion and developer productivit
 
 - [The Problem & The Solution](#-the-problem--the-solution)
 - [Visual Direction & World Metaphor](#-visual-direction--world-metaphor)
-- [Core Features](#-core-features)
-- [First-Class Supported Languages](#-first-class-supported-languages)
-- [System Architecture & Archify Integration](#-system-architecture--archify-integration)
+- [Feature Matrix: Implemented vs. Planned](#-feature-matrix)
+- [Supported Languages](#-supported-languages)
+- [System Architecture](#-system-architecture)
 - [Technology Stack](#-technology-stack)
-- [MVP Capabilities vs. Explicit Non-Goals](#-mvp-capabilities-vs-explicit-non-goals)
-- [Authoritative Documentation Index](#-authoritative-documentation-index)
-- [Repository Structure](#-repository-structure)
-- [Quickstart & Development Setup](#-quickstart--development-setup)
+- [Quickstart & Local Setup](#-quickstart--local-setup)
 - [Environment Configuration](#-environment-configuration)
 - [Testing & Quality Assurance](#-testing--quality-assurance)
-- [Contributing Guidelines](#-contributing-guidelines)
-- [Current Project Status & Roadmap](#-current-project-status--roadmap)
+- [Deployment Readiness](#-deployment-readiness)
+- [Security & Limitations](#-security--limitations)
+- [Documentation Index](#-documentation-index)
+- [Contributing & Code of Conduct](#-contributing--code-of-conduct)
+- [License](#-license)
 
 ---
 
 ## 💡 The Problem & The Solution
 
 ### The Problem
-Debugging modern code is frustrating, lonely, and cognitively exhausting:
+Debugging modern software is frustrating, lonely, and cognitively exhausting:
 1. **Silent Isolation**: Developers spend up to 50% of their working hours staring at cryptic compiler outputs or stack traces in total isolation.
-2. **The Procrastination Trap**: Confronted with intimidating or ambiguous bugs, developers instinctively flee to social media or video streams under the guise of "taking a quick break," leaving tasks unfinished.
+2. **The Procrastination Spiral**: Intimidating bugs prompt tab-switching to social media or videos, derailing development velocity.
 3. **Sycophantic, Bloated AI**: Generic commercial AI assistants offer corporate pleasantries (*"I'd love to help with this great question!"*), bury the root cause under paragraphs of conversational fluff, and fail to call out bad programming habits.
 4. **Zero Emotional Reward**: Standard issue trackers and IDEs are utilitarian databases providing zero dopamine for fixing hard bugs.
 
 ### The Solution
 BugBuddy blends tough love with pragmatic software engineering through two tightly synchronized subsystems:
-1. **The Bug Confession Booth (Altar of Penance)**: Developers submit code snippets, compiler tantrums, or bug descriptions across six major programming languages. They receive an ego-bruising, hilarious roast targeting code flaws, followed immediately by structured root-cause diagnosis, minimal diffs, and reproducible verification tests.
-2. **The Procrastination Pet (Survival Base Companion)**: Users adopt an animated pixel-art coding companion whose emotional well-being reflects their real-world productivity. Completing tasks and resolving bugs awards XP, levels up the pet, and triggers celebrations. Procrastinating, snoozing timers, or abandoning commitments plunges the pet into theatrical, expressive despair.
+1. **The Bug Confession Booth (Altar of Penance)**: Developers submit code snippets or compiler tantrums across six programming languages. They receive a humorous roast targeting code flaws, followed immediately by structured root-cause diagnosis, minimal diffs, and reproducible verification tests.
+2. **The Procrastination Pet (ByteBuddy Cyber-Golem)**: Users adopt an animated pixel-art coding companion whose emotional well-being reflects their real-world productivity. Resolving bugs and finishing quests awards XP, levels up the pet, and triggers celebrations. Neglecting tasks plunges the pet into expressive despair.
 
 ---
 
@@ -54,293 +56,220 @@ BugBuddy blends tough love with pragmatic software engineering through two tight
 BugBuddy rejects generic corporate dashboards in favor of an original **Minecraft-Inspired Developer Survival World**:
 - **The Base Camp**: Your developer sanctuary featuring a cozy pixel-art hearth where your virtual pet rests and reacts.
 - **Voxel Depth & Blocky Borders**: Deepslate (`#121417`), cobblestone (`#2B2D31`), and obsidian surfaces with tactile beveled pixel borders.
-- **Inventory Hotbars**: A persistent developer inventory sidebar and game HUD displaying player level, XP progress, and active streak campfire.
+- **Inventory Hotbars**: A persistent 8-slot developer inventory sidebar and HUD displaying player level, XP progress, and active streak campfire.
 - **Hostile Mobs as Bugs**: Bugs and syntax errors are treated as hostile encounters; resolving them awards golden XP orbs.
-- **Material Accents**: Emerald green (`#2ECC71`) for success/actions, Redstone crimson (`#E53935`) for errors and compiler tantrums, and Gold (`#F1C40F`) for XP and quests.
+- **Material Accents**: Emerald green (`#2ECC71`) for success/actions, Redstone crimson (`#E53935`) for errors, and Gold (`#F1C40F`) for XP and quests.
 - *Detailed specification*: See [docs/UI_UX.md](docs/UI_UX.md).
 
----
-
-## ✨ Core Features
-
-- **Harsh & Hilarious Roasts**: Direct, sharp, developer-focused satire targeting code smells, obsolete patterns, and careless blunders without personal malice.
-- **Actionable Diagnostic Breakdown**: Every roast is paired with root-cause identification, step-by-step fix instructions, clean code diffs, and test suggestions.
-- **6 First-Class Languages**: Extensible registry supporting C, C++, Java, Python, JavaScript, and TypeScript with dedicated heuristic parsers.
-- **Deterministic Pet Lifecycle**: 5 expressive moods (`ECSTATIC`, `HAPPY`, `NEUTRAL`, `DISAPPOINTED`, `DRAMATIC_DESPAIR`) governed by transparent, user-driven rules.
-- **Interactive Multi-Turn Debugging**: Deep-dive into submissions with one-click follow-up actions: *Simpler Explanation*, *Deeper Technical Breakdown*, *Minimal Fix*, *Worked Example*, *More Tests*, *Explain Specific Line*, or *Roast Me Again*.
-- **Grounded Knowledge (RAG)**: Integrates language documentation and common pitfall indices with strict source attribution, prompt injection filtering, and offline fallbacks.
-- **Zero-Key Offline Capability**: Fully functional out of the box with built-in heuristic analysis and rich mock responses when no AI API key is configured.
-- **Client-Side Secret Redaction**: Sensitive credentials (API keys, JWTs, passwords) are automatically stripped before processing.
-- **Local Data Persistence**: Browser storage (`IndexedDB` with `localStorage` fallback) preserves pet state, tasks, streaks, and confession history with JSON export/import.
-
----
-
-## 💻 First-Class Supported Languages
-
-BugBuddy ships with dedicated language adapters for six core programming languages. All six are treated as first-class citizens:
-
-| Language | Primary Detection Heuristics | Common Error Classes Handled | Text Analysis vs Sandbox Scope |
-| :--- | :--- | :--- | :--- |
-| **C** | `#include <stdio.h>`, pointers `*`, `malloc`, `printf`, `gcc`/`clang` outputs | Segfaults, memory leaks, dangling pointers, buffer overflows, format string mismatches | Text-based static heuristic & LLM diagnosis (No remote compiler sandbox in MVP) |
-| **C++** | `#include <iostream>`, `std::`, `template<`, `cout`, `g++`/`clang++` templates | Template instantiation cascades, iterator invalidation, lifetime/RAII violations | Text-based static heuristic & LLM diagnosis (No remote compiler sandbox in MVP) |
-| **Java** | `public class`, `System.out.println`, `javac`, stack traces | `NullPointerException`, `ClassNotFoundException`, type mismatch, JVM exceptions | Text-based static heuristic & LLM diagnosis (No remote compiler sandbox in MVP) |
-| **Python** | `def `, `import `, indentation, `traceback`, `self`, `kwargs` | `IndentationError`, `TypeError`, `NameError`, `KeyError`, list index out of bounds | Text-based static heuristic & LLM diagnosis (No remote compiler sandbox in MVP) |
-| **JavaScript** | `const `, `let `, `function()`, `console.log`, `node`/V8 errors | `TypeError: undefined is not a function`, unhandled promise rejections, closure scope bugs | Text-based static heuristic & LLM diagnosis (No remote compiler sandbox in MVP) |
-| **TypeScript** | `interface `, `type `, `as `, `tsconfig.json`, `tsc` outputs | TS2322 (type assignability), TS2339 (property missing), generics mismatch, strict null checks | Text-based static heuristic & LLM diagnosis (No remote compiler sandbox in MVP) |
-
-> **Architectural Boundary**: In the MVP release, all language assistance is static and textual. BugBuddy does not execute untrusted user code inside a remote server sandbox.
-
----
-
-## 🏛️ System Architecture & Archify Integration
-
-BugBuddy's system architecture, specification taxonomy, and diagram standards are modeled directly on the design principles of [tt-a1i/archify](https://github.com/tt-a1i/archify) (version 3.0.x):
-
-```mermaid
-graph TD
-    subgraph Client [BugBuddy Web Application - Browser Runtime]
-        UI[User Interface Shell\nMinecraft-Inspired Vanilla CSS + React]
-        
-        subgraph InputPipeline [Input & Preprocessing]
-            CB[Confession Booth Altar]
-            SR[Client Secret Redactor]
-            LR[Language Registry & Adapters]
-        end
-        
-        subgraph CoreEngines [Core Logic Engines]
-            EC[Error Classification Engine]
-            RAG[Curated RAG Retriever / Codex]
-            PSM[Pet State Machine & Progression]
-            TM[Task & Productivity Manager]
-        end
-        
-        subgraph StorageLayer [Local Persistence]
-            STORE[(IndexedDB / LocalStorage Engine)]
-        end
-        
-        subgraph ProviderLayer [AI Provider Abstraction Layer]
-            PROV{ILLMProvider Router}
-            MOCK[Offline Mock Provider]
-            GEM[Gemini Provider Adapter]
-            OAI[OpenAI Provider Adapter]
-            ANT[Anthropic Provider Adapter]
-        end
-    end
-
-    subgraph ExternalCloud [Optional Cloud Providers]
-        GEM_API[Google Gemini API]
-        OAI_API[OpenAI API]
-        ANT_API[Anthropic API]
-    end
-
-    UI --> CB
-    CB --> SR
-    SR --> LR
-    LR --> EC
-    EC --> RAG
-    RAG --> PROV
-    
-    PROV -->|Default / Zero Key| MOCK
-    PROV -->|Configured| GEM
-    PROV -->|Configured| OAI
-    PROV -->|Configured| ANT
-    
-    GEM -.-> GEM_API
-    OAI -.-> OAI_API
-    ANT -.-> ANT_API
-    
-    PROV --> UI
-    UI --> PSM
-    UI --> TM
-    PSM <--> STORE
-    TM <--> STORE
+```
+┌───────────────────────────────────────────────────────────────┐
+│                    [PRODUCT SCREENSHOT]                       │
+│    (Interactive Minecraft HUD, ByteBuddy Pet, Altar Altar)    │
+│                                                               │
+│       [Placeholder: Add production screenshot upon deploy]    │
+└───────────────────────────────────────────────────────────────┘
 ```
 
-### Architectural Tenets Inspired by Archify:
-1. **Bounded Subsystems**: Systems are partitioned into loosely coupled modules (UI Shell, Language Registry, Debug Engine, Pet State Machine, Storage, Provider Abstraction).
-2. **Contract-First Interfaces**: Rigid TypeScript interfaces and JSON Schemas define all data interchange boundaries.
-3. **Multi-View System Mapping**: Visualized via Archify-compliant models:
-   - System Context Architecture ([TRD Section 2](docs/TRD.md#2-system-context-and-component-architecture))
-   - Debugging & RAG Sequence Flow ([TRD Section 10](docs/TRD.md#10-retrieval-augmented-generation-rag-architecture))
-   - Pet Emotional State Machine ([TRD Section 13](docs/TRD.md#13-pet-state-machine-moods-xp-levels-quests-and-progression-rules))
-4. **Verifiable Traceability**: Every architectural component maps directly to PRD requirement IDs (`FR-001`–`FR-018`, `NFR-001`–`NFR-010`) via the [Requirements Traceability Matrix](docs/TRD.md#23-requirements-traceability-matrix).
-5. **Offline Tooling Workflow**: Archify is leveraged as an offline developer/agent documentation tool (`node bin/archify.mjs finalize`) to generate standalone interactive HTML diagrams stored in `docs/archify/`, without bloating production client runtime bundles.
+---
+
+## 🚀 Feature Matrix
+
+| Feature | Status | Description |
+| :--- | :---: | :--- |
+| **Bug Confession Booth** | ✅ Implemented | Code editor, language selector, client secret scrubbing, and JudgmentTerminal. |
+| **Satirical Roast Engine** | ✅ Implemented | Sarcastic, ego-bruising developer roasts paired with respectful technical fixes. |
+| **Grounded Diagnostic RAG** | ✅ Implemented | BM25 keyword matching + dense ONNX vector search fused with Reciprocal Rank Fusion. |
+| **Interactive Debugging Chat** | ✅ Implemented | Multi-turn chat with 7 action chips (`Simpler`, `Deeper`, `Worked Example`, etc.). |
+| **ByteBuddy Virtual Pet** | ✅ Implemented | 5 emotional mood states, Web Audio chiptune synthesizer, Feed/Pet/Play interactions. |
+| **Quest Board & Daily Sprints** | ✅ Implemented | Daily quests and sprint goals awarding XP with real-time level progression. |
+| **Bug Graveyard Archive** | ✅ Implemented | Tombstone history of slayed bugs with category filtering and persistent storage. |
+| **Knowledge Codex** | ✅ Implemented | Searchable index of all 60 curated knowledge records with source citation modals. |
+| **Settings & Accessibility** | ✅ Implemented | Clean Sans-Serif font toggle, High Contrast mode, Audio mute, and Local Storage wipe. |
+| **Server-Side AI Integration** | ✅ Implemented | Node.js backend supporting Google Gemini, OpenAI, and Mock providers with 64KB boundary. |
+| **Boss Fight / Bug Raids** | ⏳ Planned | Ender Dragon boss encounter modal & cooperative team debugging raids (Phase 4). |
+| **Cloud User Accounts** | ⏳ Planned | Multi-device cloud sync and persistent user authentication (Phase 5). |
+
+---
+
+## 💻 Supported Languages
+
+BugBuddy ships with first-class support for six canonical programming languages:
+- **C**: Memory management, pointer arithmetic, buffer overflows, format string specifiers.
+- **C++**: Object lifecycles, RAII violations, template errors, smart pointer circular references.
+- **Java**: NullPointerExceptions, concurrency pitfalls, collection mutation contracts.
+- **Python**: Mutable default arguments, generator exhaustion, GIL misconceptions, indent errors.
+- **JavaScript**: Type coercion traps, event loop starvation, unhandled async promise rejections.
+- **TypeScript**: Discriminated union narrowing, excessive type recursion, readonly mutations.
+
+---
+
+## 🏗️ System Architecture
+
+```mermaid
+flowchart TB
+    subgraph Client ["Client Browser (localhost:3000)"]
+        SPA["BugBuddy Web App (React 18 + Vite 5 SPA)"]
+        Storage["Versioned LocalStorage (bugbuddy_v1_*)"]
+        OfflineEngine["Offline Deterministic Engine (Stage 4 Fallback)"]
+    end
+
+    subgraph Backend ["Backend Web Service (localhost:3001)"]
+        Server["Node.js HTTP Server (`src/server/index.ts`)"]
+        Router["Router (`src/server/aiRouter.ts`) - 64KB Limit, CORS"]
+        Orchestrator["AIDebugOrchestrator (Grounded Synthesis)"]
+        BM25["BM25 Index (60 Curated Records)"]
+        Vector["ONNX Vector Index (`all-MiniLM-L6-v2`)"]
+    end
+
+    subgraph External ["External Cloud AI"]
+        Gemini["Google Gemini API (gemini-2.5-flash)"]
+        OpenAI["OpenAI API (gpt-4o-mini)"]
+    end
+
+    SPA -->|POST /api/diagnose| Server
+    SPA <--> Storage
+    SPA -.->|If Server Unreachable| OfflineEngine
+    Server --> Router --> Orchestrator
+    Orchestrator --> BM25 & Vector
+    Orchestrator -->|GEMINI_API_KEY| Gemini
+    Orchestrator -->|OPENAI_API_KEY| OpenAI
+```
+
+For detailed architecture diagrams, explore [`docs/architecture/diagrams/`](docs/architecture/diagrams/).
 
 ---
 
 ## 🛠️ Technology Stack
 
-| Layer | Proposed Architecture (MVP) | Implementation Status | Future Production Architecture |
-| :--- | :--- | :--- | :--- |
-| **Frontend Framework** | React 18+ with TypeScript & Vite | Proposed (Phase 1) | Next.js / Remix SSR |
-| **Styling & Design System** | Minecraft-Inspired Vanilla CSS Tokens (Deepslate, Voxel Borders) | Specified ([docs/UI_UX.md](docs/UI_UX.md)) | Vanilla CSS Modules / Tailwind (if requested) |
-| **Client State Management** | Zustand / Lightweight React Context | Proposed (Phase 1) | Zustand with persistent middleware |
-| **Local Persistence** | `IndexedDB` with `localStorage` fallback | Proposed (Phase 1) | SQLite / PGlite / Cloud Sync |
-| **AI Provider Abstraction** | Unified Adapter: Google Gemini, OpenAI, Anthropic, Mock Fallback | Proposed (Phase 2 & 3) | Edge server proxy with token bucket rate limiting |
-| **Knowledge Base (RAG)** | In-memory curated TF-IDF Cosine Similarity index | Proposed (Phase 3) | ChromaDB / Pgvector serverless store |
-| **Testing Suite** | Vitest, React Testing Library, Playwright | Proposed (Phase 4) | Full CI/CD with Vitest & Playwright matrix |
+- **Frontend**: React 18.3, TypeScript 5.6, Vite 5.4, Vanilla CSS Design System (no Tailwind soup).
+- **Backend**: Node.js 20+ (`node:http`), `tsx` runtime.
+- **Embeddings & Vector**: Transformers.js (`@xenova/transformers` 2.17) with ONNX `all-MiniLM-L6-v2`.
+- **Audio System**: Web Audio API Chiptune 8-bit Procedural Synthesizer.
+- **AI Providers**: Google Gemini REST API, OpenAI Chat Completions API, Deterministic Mock Engine.
+- **Testing**: Node.js Native Test Runner (`tsx --test`).
 
 ---
 
-## 🎯 MVP Capabilities vs. Explicit Non-Goals
+## 🚀 Quickstart & Local Setup
 
-### In Scope for MVP
-- ✅ Interactive single-page web application with Minecraft-inspired voxel styling and dark palette.
-- ✅ Confession Booth accepting code snippets, bug descriptions, and compiler outputs.
-- ✅ First-class adapter support for C, C++, Java, Python, JavaScript, and TypeScript.
-- ✅ Sarcastic roast generator followed by actionable diagnosis, fix steps, and tests.
-- ✅ Deterministic Procrastination Pet state machine with 5 moods, XP, levels, and quests.
-- ✅ Interactive multi-turn chat follow-ups (Simpler, Deeper, Minimal Fix, Tests, etc.).
-- ✅ Zero-key offline mock mode enabling full functionality without third-party API keys.
-- ✅ Client-side data persistence for tasks, XP, pet state, and confession history.
-- ✅ Client-side sensitive credential stripping before transmission.
+### 1. Prerequisites
+- Node.js `20.x` or higher
+- npm `10.x` or higher
 
-### Explicit Non-Goals (Out of Scope for MVP)
-- ❌ **No Remote Code Execution Sandbox**: BugBuddy will not compile or execute untrusted C/C++/Java/Python/JS code on remote servers.
-- ❌ **No Inferred/Creepy User Surveillance**: No webcam gaze tracking, tab-switch penalties, or keyboard biometric spying. Pet reactions depend strictly on explicit user actions and configured deadlines.
-- ❌ **No Complex Cloud Microservices or Mandatory Paid Subscriptions**: The app remains lightweight, fast, and hostable on static edge platforms (e.g., Vercel, Netlify, GitHub Pages).
-- ❌ **No Multi-User Social Network or Public Leaderboard**: All progression is private to the local user.
-
----
-
-## 📚 Authoritative Documentation Index
-
-The complete documentation suite for BugBuddy is structured across the following authoritative documents:
-
-1. **[Product Requirements Document (docs/PRD.md)](docs/PRD.md)**  
-   *Defines product vision, user personas, functional requirements (`FR-001` to `FR-018`), non-functional requirements (`NFR-001` to `NFR-010`), MVP scope, user stories, and success metrics.*
-
-2. **[Technical Requirements Document (docs/TRD.md)](docs/TRD.md)**  
-   *Comprehensive engineering specification: component architectures, language registry, error classifications, response schemas, RAG pipelines, pet state machine equations, security protocols, ADRs, and the Requirements Traceability Matrix.*
-
-3. **[UI/UX Design Specification (docs/UI_UX.md)](docs/UI_UX.md)**  
-   *Authoritative visual design specification: Minecraft-inspired voxel design system, HUD and inventory navigation, confession booth layout, interactive chatbot contracts, virtual pet mood matrix, design tokens, animations, and WCAG 2.1 AA accessibility standards.*
-
-4. **[AI Coding Agent Instructions (AI_INSTRUCTIONS.md)](AI_INSTRUCTIONS.md)**  
-   *Strict operational guidelines for Cursor and autonomous coding agents: persona rules, forbidden pleasantries, sarcastic tone contracts, architecture boundaries, and quality gates.*
-
-5. **[Implementation Phases Roadmap (docs/PHASES.md)](docs/PHASES.md)**  
-   *Sequential five-phase implementation guide (Phase 0 through Phase 4) complete with objectives, deliverables, dependencies, acceptance criteria, and definitions of done.*
-
-6. **[Documentation Audit & Archify Blueprint (docs/DOCUMENTATION_AUDIT.md)](docs/DOCUMENTATION_AUDIT.md)**  
-   *Baseline repository audit, Archify capability research, and document-by-document synchronization blueprint.*
-
----
-
-## 📁 Repository Structure
-
-```text
-BugBuddy/
-├── README.md                  # Project landing page, overview, and quickstart
-├── LICENSE                    # MIT License
-├── AI_INSTRUCTIONS.md         # Operational rules and personality constraints for AI agents
-├── docs/
-│   ├── PRD.md                 # Product Requirements Document (Behavioral & Product Spec)
-│   ├── TRD.md                 # Technical Requirements Document (Engineering & Architecture Spec)
-│   ├── UI_UX.md               # Minecraft-Inspired UI/UX Design System Specification
-│   ├── PHASES.md              # Sequential implementation roadmap & milestones
-│   └── DOCUMENTATION_AUDIT.md # Phase 0 Repository Audit & Archify Blueprint
-├── src/                       # Application source code (Planned - Phase 1+)
-│   ├── adapters/              # Language adapters (C, C++, Java, Python, JS, TS)
-│   ├── components/            # UI components (HUD, PetStage, ConfessionBooth, Chat, TaskBoard)
-│   ├── engine/                # Debugging pipeline, error classifier, RAG retrieval
-│   ├── providers/             # LLM provider abstraction (Gemini, OpenAI, Anthropic, Mock)
-│   ├── state/                 # Pet state machine, task store, conversation store
-│   └── styles/                # Vanilla CSS tokens, voxel beveled themes, pixel animations
-└── tests/                     # Test suites (Planned - Phase 4)
-```
-
----
-
-## 🚀 Quickstart & Development Setup
-
-*(Active starting in Phase 1)*
-
-### Prerequisites
-- Node.js `v18.0.0` or higher (verified with Node `v22.x`)
-- npm `v9.x` or higher
-
-### Installation Steps
+### 2. Installation
 ```bash
-# Clone the repository
 git clone https://github.com/Subhadip-Paul2006/BugBuddy.git
 cd BugBuddy
-
-# Install dependencies (Phase 1+)
 npm install
-
-# Start local development server
-npm run dev
 ```
 
----
-
-## 🔑 Environment & Key Configuration
-
-BugBuddy operates completely out of the box with zero third-party API keys using its built-in offline mock engine (`OfflineMockProvider`).
-
-### Safe Credential Architecture
-- **Zero Build-Time Secrets**: Private API keys must **never** be hardcoded or compiled into client JavaScript bundles using `VITE_*_API_KEY` environment variables.
-- **In-App Runtime Configuration**: To connect live cloud models (Google Gemini, OpenAI, Anthropic), users can optionally enter their personal key in the in-app **Settings Modal**. Keys are held strictly in memory or `sessionStorage` during the active tab session and are never sent to external telemetry servers.
-- **Default Provider**: When no key is entered, the app functions seamlessly in offline mock mode.
-
----
-
-## 🧠 Developer Tooling & Context Graph (Graphify)
-
-BugBuddy is configured with **[Graphify](https://github.com/Graphify-Labs/graphify)** (free open-source version) to optimize AI coding assistant workflows and dramatically lower LLM token consumption.
-
-### Token Minimization Workflow
-Instead of dumping entire source files or running massive grep searches into the context window, coding agents query the local deterministic knowledge graph:
+### 3. Launching Locally
 ```bash
-# Query architectural questions (BFS traversal returning targeted subgraphs)
-graphify query "How does the AST debugging engine work?"
+# Terminal 1: Start Backend Server
+npm start
+# Listens at http://0.0.0.0:3001 (Health check: http://localhost:3001/health)
 
-# Trace relationship paths between modules
-graphify path "Minecraft Survival Metaphor" "Ender Dragon Boss Fight Modal"
-
-# View interactive D3/WebGL knowledge graph in browser
-# Open graphify-out/graph.html
-
-# Incremental update after modifying code (free, AST-only, zero API cost)
-graphify update .
+# Terminal 2: Start Frontend Development Server
+npm run dev
+# Open http://localhost:3000 in your browser
 ```
-- **Knowledge Graph**: [`graphify-out/graph.json`](graphify-out/graph.json)
-- **Visual Graph**: [`graphify-out/graph.html`](graphify-out/graph.html)
-- **Audit Report**: [`graphify-out/GRAPH_REPORT.md`](graphify-out/GRAPH_REPORT.md)
-- **Token Efficiency**: Up to 99% token reduction when exploring repository structure.
+
+Full setup instructions: [docs/SETUP.md](docs/SETUP.md).
+
+---
+
+## ⚙️ Environment Configuration
+
+BugBuddy works **completely offline with rich mock heuristics out of the box** without any external API keys.
+
+To connect real cloud AI providers, copy `.env.example` to `.env`:
+```bash
+cp .env.example .env
+```
+Key configuration parameters:
+- `PORT`: Server port (default `3001`).
+- `HOST`: Server interface binding (default `0.0.0.0`).
+- `CORS_ORIGIN`: Allowed frontend origin (e.g. `https://bugbuddy.onrender.com` or `*`).
+- `DEFAULT_AI_PROVIDER`: Preferred AI model (`gemini`, `openai`, or `mock`).
+- `GEMINI_API_KEY`: Google Generative Language API key.
+- `OPENAI_API_KEY`: OpenAI API key.
+- `VITE_API_BASE_URL`: Base URL for production deployed backend.
+
+*(See [.env.example](.env.example) for placeholder definitions. Never commit real keys).*
 
 ---
 
 ## 🧪 Testing & Quality Assurance
 
-*(Active starting in Phase 4)*
+All quality gates are automated and verifiable:
 
 ```bash
-# Run unit and contract tests
-npm run test
+# Run unit & integration test suite (192 assertions, 27 suites)
+npm test
 
-# Run component test suites
-npm run test:ui
+# Ingest and validate all 60 knowledge records
+npm run validate:knowledge
 
-# Run end-to-end user journey tests
-npm run test:e2e
+# Run BM25 & Hybrid RRF benchmark evaluation
+npm run evaluate:retrieval
+
+# Verify local ONNX embedding pipeline
+npm run verify:stage6
+
+# Run live AI smoke test / fallback verification
+npm run smoke:ai
+
+# Execute production TypeScript build
+npm run build
 ```
 
----
-
-## 🤝 Contributing Guidelines
-
-Contributions are welcome! Please ensure that:
-1. All changes align strictly with [PRD.md](docs/PRD.md), [TRD.md](docs/TRD.md), and [UI_UX.md](docs/UI_UX.md).
-2. Autonomous coding agents adhere faithfully to [AI_INSTRUCTIONS.md](AI_INSTRUCTIONS.md).
-3. The sarcastic personality guidelines and voxel visual direction are maintained without introducing toxic violations or proprietary game assets.
+Full QA audit report: [releases/v0.1.0/QA_REPORT.md](releases/v0.1.0/QA_REPORT.md).
 
 ---
 
-## 🚦 Current Project Status & Roadmap
+## 🚢 Deployment Readiness
 
-- **Current Milestone**: **Phase 0 — Documentation & Architecture Baseline**
-- **Status**: Completed. All specifications (PRD, TRD, UI/UX, AI Instructions, Phases, Audit) are fully synchronized and approved.
-- **Next Milestone**: **Phase 1 — UI Foundation & Virtual Pet** (Application shell, Minecraft-inspired HUD/Inventory, pet visualizer, task manager, and local persistence).
+BugBuddy is configured for zero-friction deployment to **Render** via [render.yaml](render.yaml):
+- **Frontend**: Render Static Site (`bugbuddy-frontend`), build command `npm install && npm run build`, publish dir `dist`, SPA rewrite rule `/* -> /index.html`.
+- **Backend**: Render Web Service (`bugbuddy-backend`), start command `npm start`, health check `/health`.
 
+Step-by-step instructions: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+
+---
+
+## 🔒 Security & Limitations
+
+- **No Code Execution**: Submissions are analyzed statically. User code is never compiled, eval'd, or executed on the server.
+- **Client-Side Secret Redaction**: All API keys, passwords, and tokens are scrubbed client-side before submission.
+- **Payload Limits**: 64 KB maximum request size enforced on backend endpoints.
+- **Current Limitations**: Cloud AI features require valid server-side API keys. Player stats are stored locally in the browser (`localStorage`) without multi-device cloud sync.
+
+Full security policy: [SECURITY.md](SECURITY.md).
+
+---
+
+## 📚 Documentation Index
+
+- [Product Requirements Document (PRD)](PRD.md) | [docs/PRD.md](docs/PRD.md)
+- [Technical Requirements Document (TRD)](TRD.md) | [docs/TRD.md](docs/TRD.md)
+- [Developer Setup Guide](docs/SETUP.md)
+- [Architecture & Diagrams](docs/architecture/diagrams/)
+- [Architecture Workflow & Archify Status](docs/ARCHITECTURE_WORKFLOW.md)
+- [Production Deployment Guide](docs/DEPLOYMENT.md)
+- [Release Process & Quality Gates](docs/RELEASE_PROCESS.md)
+- [v0.1.0 Release Candidate Package](releases/v0.1.0/)
+
+---
+
+## 🤝 Contributing & Code of Conduct
+
+We welcome community contributions! Please review:
+- [CONTRIBUTING.md](CONTRIBUTING.md) for pull request and coding standards.
+- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for community standards.
+- [SECURITY.md](SECURITY.md) for responsible vulnerability disclosure.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
