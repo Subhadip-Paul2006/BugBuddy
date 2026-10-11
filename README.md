@@ -2,17 +2,115 @@
 
 > **"Your bugs are fixable. Your pet's disappointment is optional."**
 
+[![Hacktoberfest Global Hack Day](https://img.shields.io/badge/Hacktoberfest-Global%20Hack%20Day-FF7700.svg?style=flat-square&logo=hacktoberfest)](https://hacktoberfest.com/)
+[![Organized by MLH x DEV](https://img.shields.io/badge/Organized%20by-MLH%20x%20DEV-blueviolet.svg?style=flat-square)](https://mlh.io/)
+[![Built with Cursor](https://img.shields.io/badge/Built%20with-Cursor%20AI-000000.svg?style=flat-square&logo=cursor)](https://cursor.com/)
 [![Release: v0.1.0-rc](https://img.shields.io/badge/release-v0.1.0--rc-orange.svg?style=flat-square)](releases/v0.1.0/)
-[![Tests: 192 Passing](https://img.shields.io/badge/tests-192%20passing-brightgreen.svg?style=flat-square)](releases/v0.1.0/QA_REPORT.md)
+[![Tests: 202 Passing](https://img.shields.io/badge/tests-202%20passing-brightgreen.svg?style=flat-square)](releases/v0.1.0/QA_REPORT.md)
 [![Knowledge Base: 60 Records](https://img.shields.io/badge/knowledge__base-60%20records-blue.svg?style=flat-square)](knowledge/)
 [![TypeScript: 5.6](https://img.shields.io/badge/TypeScript-5.6-blue.svg?style=flat-square)](https://www.typescriptlang.org/)
 [![React: 18.3](https://img.shields.io/badge/React-18.3-61DAFB.svg?style=flat-square)](https://react.dev/)
-[![Vite: 5.4](https://img.shields.io/badge/Vite-5.4-646CFF.svg?style=flat-square)](https://vitejs.dev/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat-square)](LICENSE)
 
-BugBuddy is a gamified, AI-powered debugging assistant and developer productivity web application styled as a **Minecraft-Inspired Developer Survival World**. It transforms the soul-crushing experience of chasing cryptic compiler panics, syntax blunders, and runtime exceptions into an entertaining, highly educational, and emotionally accountable quest.
+---
 
-> ℹ️ **Deployment Status**: Current status is **v0.1.0 Release Candidate (Local & Pre-Deployment Verified)**. Cloud deployment to Render is prepared and documented; public demo URLs will be posted upon final release publication.
+### 🏆 Hackathon Spotlight: Hacktoberfest Global Hack Day (MLH x DEV Community)
+
+> **Challenge 1: Build a Mini App with Cursor**  
+> **Sprint Duration**: Built in a **single-day hackathon sprint (24 Hours)**  
+> **AI Pair Programmer**: **100% scaffolded, engineered, and tested with [Cursor](https://cursor.com/)**
+
+BugBuddy was built from scratch in a single day for the **Hacktoberfest Global Hack Day**, organized by **Major League Hacking (MLH)** in collaboration with the **DEV Community**. Tackling *Challenge 1 (Build with Cursor)*, we pushed the boundaries of rapid AI pair-programming: taking an ambitious idea—a **Minecraft-inspired gamified debugging companion backed by a grounded multi-lingual RAG chatbot and local ONNX vector embeddings**—from a blank workspace to a fully tested, production-grade application featuring **202 automated assertions**, 60 curated knowledge records, and zero external runtime UI dependencies.
+
+---
+
+## 📸 Product Tour & Showcase
+
+Experience the full journey of BugBuddy across its developer survival world:
+
+### 1. Base Camp Living World & Virtual Pet Companion
+The central 2.5D isometric world stage where your companion **ByteBuddy** lives. Your productivity, solved bugs, and sprint tasks dynamically dictate ByteBuddy's emotional mood states.
+
+![Base Camp Living World](screenshots/HomePage.png)
+
+---
+
+### 2. The Bug Confession Booth (Altar of Penance)
+Submit your buggy code across 6 supported programming languages (**C, C++, Java, Python, JavaScript, TypeScript**). Features client-side automatic secret redaction (`scanAndRedactSecrets`) to scrub API keys, JWTs, and tokens before they leave the browser.
+
+![Bug Confession Booth](screenshots/BuggyCode.png)
+
+---
+
+### 3. Satirical Roast & Grounded Technical Diagnosis
+Get roasted with witty, good-natured developer humor, followed immediately by an authentic, mathematically grounded technical fix: root-cause diagnosis, minimal unified diffs, why the fix works, verification test cases, and real documentation citations.
+
+![Satirical Roast and Grounded Fix](screenshots/Roastiong_Bug_Code.png)
+
+---
+
+### 4. Interactive RAG Debugging Chatbot Workbench
+Continue debugging in a persistent multi-turn conversational chat. Powered by hybrid retrieval (BM25 + dense ONNX vector embeddings) with genuine source provenance and zero fabricated links.
+
+| Conversational Multi-Turn Chat | Deep Explanations & Citations |
+| :---: | :---: |
+| ![Chatbot Multi-Turn](screenshots/ChatBot01.png) | ![Chatbot Explanations](screenshots/ChatBot02.png) |
+
+---
+
+### 5. Instant Follow-Up Action Chips
+Dive deeper into any bug with one-click action chips: `Make it simpler`, `Go deeper`, `Show minimal diff`, `Worked example`, `More tests`, `Explain line-by-line`, or `Roast me again`.
+
+![Chatbot Action Chips](screenshots/ChatBotOptions.png)
+![Action Chip Follow-Up](screenshots/ChatBot03.png)
+
+---
+
+## ⚡ Built in 1 Day with Cursor: The AI Pair Programming Story
+
+Building a full-stack, RAG-grounded application in 24 hours required a disciplined, high-velocity AI workflow. Here is how **Cursor** served as the ultimate engineering copilot from minute zero to final release:
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                   THE 24-HOUR CURSOR SPRINT TIMELINE                   │
+├────────────────────────────────────────────────────────────────────────┤
+│ 00:00 - 04:00 │ Scaffolding & Architecture (Vite + Node + Types)       │
+│ 04:00 - 08:00 │ Curating 60 Knowledge Records across 6 Languages       │
+│ 08:00 - 13:00 │ Building the Local Hybrid RAG Engine (BM25 + ONNX RRF) │
+│ 13:00 - 17:00 │ Developing Multi-Turn Chatbot & 7 Follow-Up Chips      │
+│ 17:00 - 20:00 │ Minecraft UI, Web Audio Chiptunes & Ender Boss Raid    │
+│ 20:00 - 24:00 │ Zero-Tolerance QA: Generating 202 Passing Tests        │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+### 1. Zero-to-One Project Scaffolding
+Using Cursor's Chat and Composer, we began from an empty folder. We prompted Cursor with our design tokens, architectural boundaries, and type safety constraints. Cursor drafted:
+- Clean TypeScript configurations and strict contracts (`src/types/index.ts`).
+- Dual-server setup: React 18 + Vite 5 frontend on port 3000, and standalone Node.js HTTP server on port 3001.
+- Tactile Minecraft-inspired CSS design system in vanilla CSS (`src/styles/pixel-ui.css`) with zero heavy CSS framework bloat.
+
+### 2. Engineering the Entire RAG Knowledge Retrieval Pipeline
+To make BugBuddy truthful and prevent hallucinated debugging advice, we built a complete two-tier retrieval system:
+- **Curated Corpus**: Cursor helped structure and validate **60 high-signal knowledge records** covering critical language footguns in C, C++, Java, Python, JavaScript, and TypeScript.
+- **BM25 Okapi Algorithm**: Implemented a zero-dependency lexical search engine (`src/knowledge/search.ts`) with custom tokenization, stopword filtering, and length normalization.
+- **Local Dense Embeddings with ONNX**: Integrated `@xenova/transformers` running `all-MiniLM-L6-v2` locally on Node.js with cosine similarity vector scoring.
+- **Hybrid Fusion**: Cursor implemented **Reciprocal Rank Fusion (RRF)** to combine sparse BM25 and dense vector results into a unified evidence ranking.
+
+### 3. Crafting the RAG Chatbot & Action Chips
+Cursor allowed us to build the multi-turn debugging chat in record time:
+- Seamless streaming and structured payload generation (`ConfessionResult`).
+- The 7 interactive follow-up chips (`simpler`, `deeper`, `minimal_diff`, `worked_example`, `more_tests`, `explain_line`, `roast_again`) were wired directly into the knowledge retrieval service.
+- Client-side privacy filter (`src/utils/secretRedactor.ts`) that regex-scans and redacts API keys, JWTs, and passwords before anything is transmitted.
+
+### 4. Minecraft Pixel UI, Web Audio Synthesizers & Boss Raid
+- **Handcrafted Pixel SVGs**: Cursor generated crisp 16x16 and 64x64 pixel art vectors for the companion ByteBuddy, language emblems, and the Ender Dragon boss.
+- **Web Audio API Procedural Chiptunes**: Zero external `.mp3` dependencies. Cursor synthesized square, sawtooth, and triangle waves for retro 8-bit jump, level-up, boss roar, dragon breath, and pet chirp sounds.
+- **Ender Dragon Boss Raid**: Added a multi-wave boss fight modal with 10-segmented boss health bar, combat logs, and victory rewards (+150 XP).
+
+### 5. Rapid Test-Driven Verification (202 Passing Tests)
+Instead of manually clicking through features, we used Cursor to write comprehensive automated test suites using Node's native test runner (`tsx --test`):
+- Language adapters, ingestion schema validation, BM25 scoring, hybrid fusion, secret redactor, UI static markup rendering, and combat state transitions.
+- **Result**: **202 automated assertions across 30 test suites passing 100% cleanly!**
 
 ---
 
@@ -20,7 +118,7 @@ BugBuddy is a gamified, AI-powered debugging assistant and developer productivit
 
 - [The Problem & The Solution](#-the-problem--the-solution)
 - [Visual Direction & World Metaphor](#-visual-direction--world-metaphor)
-- [Feature Matrix: Implemented vs. Planned](#-feature-matrix)
+- [Feature Matrix](#-feature-matrix)
 - [Supported Languages](#-supported-languages)
 - [System Architecture](#-system-architecture)
 - [Technology Stack](#-technology-stack)
@@ -30,7 +128,6 @@ BugBuddy is a gamified, AI-powered debugging assistant and developer productivit
 - [Deployment Readiness](#-deployment-readiness)
 - [Security & Limitations](#-security--limitations)
 - [Documentation Index](#-documentation-index)
-- [Contributing & Code of Conduct](#-contributing--code-of-conduct)
 - [License](#-license)
 
 ---
@@ -38,37 +135,18 @@ BugBuddy is a gamified, AI-powered debugging assistant and developer productivit
 ## 💡 The Problem & The Solution
 
 ### The Problem
-Debugging modern software is frustrating, lonely, and cognitively exhausting:
-1. **Silent Isolation**: Developers spend up to 50% of their working hours staring at cryptic compiler outputs or stack traces in total isolation.
-2. **The Procrastination Spiral**: Intimidating bugs prompt tab-switching to social media or videos, derailing development velocity.
-3. **Sycophantic, Bloated AI**: Generic commercial AI assistants offer corporate pleasantries (*"I'd love to help with this great question!"*), bury the root cause under paragraphs of conversational fluff, and fail to call out bad programming habits.
-4. **Zero Emotional Reward**: Standard issue trackers and IDEs are utilitarian databases providing zero dopamine for fixing hard bugs.
+Debugging software is frustrating, lonely, and mentally exhausting:
+1. **Silent Isolation**: Developers spend hours staring at cryptic compiler outputs or stack traces in total isolation.
+2. **The Procrastination Spiral**: Intimidating bugs prompt tab-switching to social media, draining velocity.
+3. **Fluffy, Sycophantic AI**: Generic commercial AI assistants bury root causes under polite conversational fluff (*"I'd love to help with that great question!"*) and hallucinate package APIs.
+4. **Zero Emotional Reward**: Standard issue trackers and IDEs provide zero dopamine for fixing stubborn bugs.
 
 ### The Solution
-BugBuddy blends tough love with pragmatic software engineering through two tightly synchronized subsystems:
-1. **The Bug Confession Booth (Altar of Penance)**: Developers submit code snippets or compiler tantrums across six programming languages. They receive a humorous roast targeting code flaws, followed immediately by structured root-cause diagnosis, minimal diffs, and reproducible verification tests.
-2. **The Procrastination Pet (ByteBuddy Cyber-Golem)**: Users adopt an animated pixel-art coding companion whose emotional well-being reflects their real-world productivity. Resolving bugs and finishing quests awards XP, levels up the pet, and triggers celebrations. Neglecting tasks plunges the pet into expressive despair.
-
----
-
-## ⛏️ Visual Direction & World Metaphor
-
-BugBuddy rejects generic corporate dashboards in favor of an original **Minecraft-Inspired Developer Survival World**:
-- **The Base Camp**: Your developer sanctuary featuring a cozy pixel-art hearth where your virtual pet rests and reacts.
-- **Voxel Depth & Blocky Borders**: Deepslate (`#121417`), cobblestone (`#2B2D31`), and obsidian surfaces with tactile beveled pixel borders.
-- **Inventory Hotbars**: A persistent 8-slot developer inventory sidebar and HUD displaying player level, XP progress, and active streak campfire.
-- **Hostile Mobs as Bugs**: Bugs and syntax errors are treated as hostile encounters; resolving them awards golden XP orbs.
-- **Material Accents**: Emerald green (`#2ECC71`) for success/actions, Redstone crimson (`#E53935`) for errors, and Gold (`#F1C40F`) for XP and quests.
-- *Detailed specification*: See [docs/UI_UX.md](docs/UI_UX.md).
-
-```
-┌───────────────────────────────────────────────────────────────┐
-│                    [PRODUCT SCREENSHOT]                       │
-│    (Interactive Minecraft HUD, ByteBuddy Pet, Altar Altar)    │
-│                                                               │
-│       [Placeholder: Add production screenshot upon deploy]    │
-└───────────────────────────────────────────────────────────────┘
-```
+BugBuddy blends tough love with pragmatic software engineering:
+1. **The Bug Confession Booth (Altar of Penance)**: Submit code snippets across six languages. Get a satirical roast targeting bad habits, followed immediately by structured root-cause diagnosis, minimal diffs, and reproducible tests.
+2. **Grounded Multi-Turn Chatbot**: Continue exploring the bug interactively with source-backed citations from canonical language specifications.
+3. **The Procrastination Pet (ByteBuddy Cyber-Golem)**: Adopt an animated pixel-art companion whose mood reflects your real-world progress. Resolving bugs and finishing sprint quests awards XP and levels up your pet; neglecting tasks plunges your pet into despair!
+4. **Ender Dragon Boss Raids**: Slay monumental multi-wave boss bugs in retro RPG combat for massive XP payouts!
 
 ---
 
@@ -79,26 +157,26 @@ BugBuddy rejects generic corporate dashboards in favor of an original **Minecraf
 | **Bug Confession Booth** | ✅ Implemented | Code editor, language selector, client secret scrubbing, and JudgmentTerminal. |
 | **Satirical Roast Engine** | ✅ Implemented | Sarcastic, ego-bruising developer roasts paired with respectful technical fixes. |
 | **Grounded Diagnostic RAG** | ✅ Implemented | BM25 keyword matching + dense ONNX vector search fused with Reciprocal Rank Fusion. |
-| **Interactive Debugging Chat** | ✅ Implemented | Multi-turn chat with 7 action chips (`Simpler`, `Deeper`, `Worked Example`, etc.). |
+| **Interactive Debugging Chat** | ✅ Implemented | Multi-turn chat with 7 action chips (`Simpler`, `Deeper`, `Minimal Diff`, etc.). |
 | **ByteBuddy Virtual Pet** | ✅ Implemented | 5 emotional mood states, Web Audio chiptune synthesizer, Feed/Pet/Play interactions. |
+| **Pet Wardrobe & Customization** | ✅ Implemented | Equip Diamond Helmet, Wizard Hat, Night Cap, or Crown with dance and spin tricks! |
+| **Ender Dragon Boss Raid** | ✅ Implemented | Turn-based RPG boss encounter with segmented boss bar, multi-wave attacks, and +150 XP. |
 | **Quest Board & Daily Sprints** | ✅ Implemented | Daily quests and sprint goals awarding XP with real-time level progression. |
 | **Bug Graveyard Archive** | ✅ Implemented | Tombstone history of slayed bugs with category filtering and persistent storage. |
 | **Knowledge Codex** | ✅ Implemented | Searchable index of all 60 curated knowledge records with source citation modals. |
 | **Settings & Accessibility** | ✅ Implemented | Clean Sans-Serif font toggle, High Contrast mode, Audio mute, and Local Storage wipe. |
 | **Server-Side AI Integration** | ✅ Implemented | Node.js backend supporting Google Gemini, OpenAI, and Mock providers with 64KB boundary. |
-| **Boss Fight / Bug Raids** | ⏳ Planned | Ender Dragon boss encounter modal & cooperative team debugging raids (Phase 4). |
-| **Cloud User Accounts** | ⏳ Planned | Multi-device cloud sync and persistent user authentication (Phase 5). |
 
 ---
 
 ## 💻 Supported Languages
 
-BugBuddy ships with first-class support for six canonical programming languages:
-- **C**: Memory management, pointer arithmetic, buffer overflows, format string specifiers.
-- **C++**: Object lifecycles, RAII violations, template errors, smart pointer circular references.
-- **Java**: NullPointerExceptions, concurrency pitfalls, collection mutation contracts.
-- **Python**: Mutable default arguments, generator exhaustion, GIL misconceptions, indent errors.
-- **JavaScript**: Type coercion traps, event loop starvation, unhandled async promise rejections.
+BugBuddy ships with first-class, verified support for six programming languages:
+- **C**: Memory leaks, pointer arithmetic, buffer overflows, format string specifiers.
+- **C++**: Object lifecycles, RAII violations, template metaprogramming errors, smart pointer circular references.
+- **Java**: NullPointerExceptions, thread concurrency hazards, collection mutation contracts.
+- **Python**: Mutable default arguments, generator exhaustion, GIL misconceptions, indentation traps.
+- **JavaScript**: Type coercion pitfalls, event loop starvation, unhandled async promise rejections.
 - **TypeScript**: Discriminated union narrowing, excessive type recursion, readonly mutations.
 
 ---
@@ -111,17 +189,18 @@ flowchart TB
         SPA["BugBuddy Web App (React 18 + Vite 5 SPA)"]
         Storage["Versioned LocalStorage (bugbuddy_v1_*)"]
         OfflineEngine["Offline Deterministic Engine (Stage 4 Fallback)"]
+        Synthesizer["Web Audio Chiptune Engine (SFX & Music)"]
     end
 
     subgraph Backend ["Backend Web Service (localhost:3001)"]
         Server["Node.js HTTP Server (`src/server/index.ts`)"]
         Router["Router (`src/server/aiRouter.ts`) - 64KB Limit, CORS"]
         Orchestrator["AIDebugOrchestrator (Grounded Synthesis)"]
-        BM25["BM25 Index (60 Curated Records)"]
-        Vector["ONNX Vector Index (`all-MiniLM-L6-v2`)"]
+        BM25["BM25 Lexical Index (60 Curated Records)"]
+        Vector["ONNX Dense Vector Index (`all-MiniLM-L6-v2`)"]
     end
 
-    subgraph External ["External Cloud AI"]
+    subgraph External ["External Cloud AI (Optional)"]
         Gemini["Google Gemini API (gemini-2.5-flash)"]
         OpenAI["OpenAI API (gpt-4o-mini)"]
     end
@@ -135,18 +214,19 @@ flowchart TB
     Orchestrator -->|OPENAI_API_KEY| OpenAI
 ```
 
-For detailed architecture diagrams, explore [`docs/architecture/diagrams/`](docs/architecture/diagrams/).
+Explore the detailed architecture diagrams in [`docs/architecture/diagrams/`](docs/architecture/diagrams/).
 
 ---
 
 ## 🛠️ Technology Stack
 
-- **Frontend**: React 18.3, TypeScript 5.6, Vite 5.4, Vanilla CSS Design System (no Tailwind soup).
-- **Backend**: Node.js 20+ (`node:http`), `tsx` runtime.
-- **Embeddings & Vector**: Transformers.js (`@xenova/transformers` 2.17) with ONNX `all-MiniLM-L6-v2`.
-- **Audio System**: Web Audio API Chiptune 8-bit Procedural Synthesizer.
-- **AI Providers**: Google Gemini REST API, OpenAI Chat Completions API, Deterministic Mock Engine.
-- **Testing**: Node.js Native Test Runner (`tsx --test`).
+- **Frontend**: React 18.3, TypeScript 5.6, Vite 5.4, Vanilla CSS Custom Properties (Zero Tailwind/Bootstrap overhead).
+- **Backend**: Node.js 20+ (`node:http`), `tsx` high-performance runtime.
+- **Embeddings & Vector Search**: `@xenova/transformers` (Transformers.js 2.17) running ONNX `all-MiniLM-L6-v2` locally.
+- **Lexical Search**: Custom BM25 Okapi implementation with language-specific tokenizers.
+- **Audio Synthesis**: Pure Web Audio API procedural oscillator synthesis (zero external audio asset files).
+- **AI Providers**: Google Gemini REST API, OpenAI Chat Completions API, Deterministic Mock Fallback.
+- **Testing**: Node.js Native Test Runner (`tsx --test`) with 202 assertions.
 
 ---
 
@@ -167,7 +247,7 @@ npm install
 ```bash
 # Terminal 1: Start Backend Server
 npm start
-# Listens at http://0.0.0.0:3001 (Health check: http://localhost:3001/health)
+# Server listens at http://0.0.0.0:3001 (Health check: http://localhost:3001/health)
 
 # Terminal 2: Start Frontend Development Server
 npm run dev
@@ -180,20 +260,19 @@ Full setup instructions: [docs/SETUP.md](docs/SETUP.md).
 
 ## ⚙️ Environment Configuration
 
-BugBuddy works **completely offline with rich mock heuristics out of the box** without any external API keys.
+BugBuddy works **100% offline out of the box** using its local deterministic RAG engine and built-in knowledge base.
 
-To connect real cloud AI providers, copy `.env.example` to `.env`:
+To connect live cloud AI providers, copy `.env.example` to `.env`:
 ```bash
 cp .env.example .env
 ```
 Key configuration parameters:
 - `PORT`: Server port (default `3001`).
 - `HOST`: Server interface binding (default `0.0.0.0`).
-- `CORS_ORIGIN`: Allowed frontend origin (e.g. `https://bugbuddy.onrender.com` or `*`).
+- `CORS_ORIGIN`: Allowed frontend origin (e.g. `http://localhost:3000` or `*`).
 - `DEFAULT_AI_PROVIDER`: Preferred AI model (`gemini`, `openai`, or `mock`).
 - `GEMINI_API_KEY`: Google Generative Language API key.
 - `OPENAI_API_KEY`: OpenAI API key.
-- `VITE_API_BASE_URL`: Base URL for production deployed backend.
 
 *(See [.env.example](.env.example) for placeholder definitions. Never commit real keys).*
 
@@ -201,10 +280,10 @@ Key configuration parameters:
 
 ## 🧪 Testing & Quality Assurance
 
-All quality gates are automated and verifiable:
+BugBuddy enforces complete verification with **202 passing automated tests across 30 test suites**:
 
 ```bash
-# Run unit & integration test suite (192 assertions, 27 suites)
+# Run full unit & integration test suite (202 assertions)
 npm test
 
 # Ingest and validate all 60 knowledge records
@@ -216,7 +295,7 @@ npm run evaluate:retrieval
 # Verify local ONNX embedding pipeline
 npm run verify:stage6
 
-# Run live AI smoke test / fallback verification
+# Run live AI provider smoke test
 npm run smoke:ai
 
 # Execute production TypeScript build
@@ -227,22 +306,12 @@ Full QA audit report: [releases/v0.1.0/QA_REPORT.md](releases/v0.1.0/QA_REPORT.m
 
 ---
 
-## 🚢 Deployment Readiness
-
-BugBuddy is configured for zero-friction deployment to **Render** via [render.yaml](render.yaml):
-- **Frontend**: Render Static Site (`bugbuddy-frontend`), build command `npm install && npm run build`, publish dir `dist`, SPA rewrite rule `/* -> /index.html`.
-- **Backend**: Render Web Service (`bugbuddy-backend`), start command `npm start`, health check `/health`.
-
-Step-by-step instructions: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
-
----
-
 ## 🔒 Security & Limitations
 
-- **No Code Execution**: Submissions are analyzed statically. User code is never compiled, eval'd, or executed on the server.
-- **Client-Side Secret Redaction**: All API keys, passwords, and tokens are scrubbed client-side before submission.
-- **Payload Limits**: 64 KB maximum request size enforced on backend endpoints.
-- **Current Limitations**: Cloud AI features require valid server-side API keys. Player stats are stored locally in the browser (`localStorage`) without multi-device cloud sync.
+- **Zero Code Execution**: Code submissions are analyzed statically. User code is never compiled, eval'd, or executed.
+- **Client-Side Secret Redaction**: All API keys, passwords, and tokens are scrubbed client-side before leaving the browser.
+- **Strict Payload Limits**: 64 KB maximum request size enforced on backend endpoints.
+- **State Management**: Player profile, slayed bugs, and quests persist locally in the browser via `localStorage` with versioned keys (`bugbuddy_v1_*`).
 
 Full security policy: [SECURITY.md](SECURITY.md).
 
@@ -250,26 +319,20 @@ Full security policy: [SECURITY.md](SECURITY.md).
 
 ## 📚 Documentation Index
 
-- [Product Requirements Document (PRD)](PRD.md) | [docs/PRD.md](docs/PRD.md)
-- [Technical Requirements Document (TRD)](TRD.md) | [docs/TRD.md](docs/TRD.md)
+- [Product Requirements Document (PRD)](PRD.md)
+- [Technical Requirements Document (TRD)](TRD.md)
 - [Developer Setup Guide](docs/SETUP.md)
 - [Architecture & Diagrams](docs/architecture/diagrams/)
-- [Architecture Workflow & Archify Status](docs/ARCHITECTURE_WORKFLOW.md)
 - [Production Deployment Guide](docs/DEPLOYMENT.md)
 - [Release Process & Quality Gates](docs/RELEASE_PROCESS.md)
 - [v0.1.0 Release Candidate Package](releases/v0.1.0/)
 
 ---
 
-## 🤝 Contributing & Code of Conduct
+## 📄 License
 
-We welcome community contributions! Please review:
-- [CONTRIBUTING.md](CONTRIBUTING.md) for pull request and coding standards.
-- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for community standards.
-- [SECURITY.md](SECURITY.md) for responsible vulnerability disclosure.
+This project is open-source under the [MIT License](LICENSE).
 
 ---
 
-## 📄 License
-
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+*Crafted with 💚 and Cursor for Hacktoberfest Global Hack Day 2026 (Major League Hacking x DEV Community).*
