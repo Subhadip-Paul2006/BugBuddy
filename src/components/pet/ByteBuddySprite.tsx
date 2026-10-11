@@ -1,16 +1,27 @@
 import React from 'react';
 import { ByteBuddyMood } from '../../types';
 
-interface ByteBuddySpriteProps {
+export type PetAccessory = 'NONE' | 'CROWN' | 'DIAMOND_HELMET' | 'WIZARD_HAT' | 'NIGHT_CAP';
+export type PetAnimationOverride = 'DEFAULT' | 'DANCE' | 'SPIN' | 'POKE' | 'CELEBRATE';
+
+export interface ByteBuddySpriteProps {
   mood: ByteBuddyMood;
   size?: number;
   className?: string;
+  accessory?: PetAccessory;
+  animation?: PetAnimationOverride;
+  onClick?: () => void;
+  interactive?: boolean;
 }
 
 export const ByteBuddySprite: React.FC<ByteBuddySpriteProps> = ({
   mood,
   size = 140,
   className = '',
+  accessory = 'NONE',
+  animation = 'DEFAULT',
+  onClick,
+  interactive = false,
 }) => {
   // Crystal & Eye colors per mood
   const moodTheme = {
@@ -61,14 +72,45 @@ export const ByteBuddySprite: React.FC<ByteBuddySpriteProps> = ({
     },
   }[mood];
 
+  const activeAnimation = (() => {
+    if (animation === 'DANCE') return 'bytebuddy-dance 0.8s steps(4) infinite';
+    if (animation === 'SPIN') return 'bytebuddy-spin 0.8s steps(8) infinite';
+    if (animation === 'POKE') return 'bytebuddy-poke 0.4s ease-out';
+    if (animation === 'CELEBRATE') return 'bytebuddy-jump 0.5s steps(4) infinite';
+    if (mood === 'ECSTATIC') return 'bytebuddy-jump 0.8s steps(4) infinite';
+    if (mood === 'HAPPY') return 'bytebuddy-float 1.4s steps(4) infinite';
+    if (mood === 'DRAMATIC_DESPAIR') return 'none';
+    return 'bytebuddy-float 2.5s steps(2) infinite';
+  })();
+
+  const showCrown = accessory === 'CROWN' || (accessory === 'NONE' && moodTheme.crown);
+  const showDiamondHelmet = accessory === 'DIAMOND_HELMET';
+  const showWizardHat = accessory === 'WIZARD_HAT';
+  const showNightCap = accessory === 'NIGHT_CAP';
+
   return (
     <div
-      className={`bytebuddy-wrapper ${className}`}
+      className={`bytebuddy-wrapper ${className} ${interactive || onClick ? 'bytebuddy-interactive' : ''}`}
+      onClick={onClick}
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      onKeyDown={
+        onClick
+          ? (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onClick();
+              }
+            }
+          : undefined
+      }
       style={{
         display: 'inline-flex',
         flexDirection: 'column',
         alignItems: 'center',
         position: 'relative',
+        cursor: interactive || onClick ? 'pointer' : 'default',
+        transition: 'transform 0.15s ease',
       }}
     >
       <svg
@@ -80,7 +122,7 @@ export const ByteBuddySprite: React.FC<ByteBuddySpriteProps> = ({
           shapeRendering: 'crispEdges',
           overflow: 'visible',
         }}
-        aria-label={`ByteBuddy cyber-golem companion in ${mood} mood`}
+        aria-label={`ByteBuddy cyber-golem companion in ${mood} mood${accessory !== 'NONE' ? ` wearing ${accessory}` : ''}`}
         role="img"
       >
         <defs>
@@ -111,8 +153,8 @@ export const ByteBuddySprite: React.FC<ByteBuddySpriteProps> = ({
           </g>
         )}
 
-        {/* 3. Golden Sparkles for ECSTATIC */}
-        {mood === 'ECSTATIC' && (
+        {/* 3. Golden Sparkles for ECSTATIC or CELEBRATE */}
+        {(mood === 'ECSTATIC' || animation === 'CELEBRATE') && (
           <g>
             <rect x="12" y="10" width="3" height="3" fill="#F1C40F" />
             <rect x="10" y="11" width="7" height="1" fill="#F39C12" />
@@ -134,14 +176,7 @@ export const ByteBuddySprite: React.FC<ByteBuddySpriteProps> = ({
         <g
           style={{
             transformOrigin: '32px 48px',
-            animation:
-              mood === 'ECSTATIC'
-                ? 'bytebuddy-jump 0.8s steps(4) infinite'
-                : mood === 'HAPPY'
-                ? 'bytebuddy-float 1.4s steps(4) infinite'
-                : mood === 'DRAMATIC_DESPAIR'
-                ? 'none'
-                : 'bytebuddy-float 2.5s steps(2) infinite',
+            animation: activeAnimation,
           }}
         >
           {/* Head & Antenna Assembly */}
@@ -151,14 +186,57 @@ export const ByteBuddySprite: React.FC<ByteBuddySpriteProps> = ({
           <rect x="30" y="8" width="4" height="4" fill={moodTheme.crystal} />
           <rect x="31" y="9" width="2" height="2" fill="#FFFFFF" />
 
-          {/* Golden Crown if ECSTATIC */}
-          {moodTheme.crown && (
+          {/* Golden Crown */}
+          {showCrown && (
             <g>
               <rect x="23" y="15" width="18" height="3" fill="#F1C40F" />
               <rect x="23" y="13" width="3" height="2" fill="#F1C40F" />
               <rect x="30" y="12" width="4" height="3" fill="#F1C40F" />
               <rect x="38" y="13" width="3" height="2" fill="#F1C40F" />
               <rect x="31" y="13" width="2" height="2" fill="#E74C3C" />
+            </g>
+          )}
+
+          {/* Minecraft Diamond Helmet */}
+          {showDiamondHelmet && (
+            <g>
+              {/* Helmet Top Band */}
+              <rect x="21" y="16" width="22" height="5" fill="#00E5FF" />
+              <rect x="21" y="16" width="22" height="2" fill="#70FFFF" />
+              {/* Side Flaps */}
+              <rect x="21" y="21" width="4" height="12" fill="#00B4D8" />
+              <rect x="39" y="21" width="4" height="12" fill="#0077B6" />
+              {/* Nose Guard */}
+              <rect x="31" y="21" width="2" height="5" fill="#00B4D8" />
+            </g>
+          )}
+
+          {/* Voxel Wizard Hat */}
+          {showWizardHat && (
+            <g>
+              {/* Wide Brim */}
+              <rect x="18" y="17" width="28" height="3" fill="#5B2C6F" />
+              {/* Hat Cone Body */}
+              <rect x="24" y="12" width="16" height="5" fill="#7D3C98" />
+              <rect x="27" y="7" width="10" height="5" fill="#8E44AD" />
+              <rect x="29" y="3" width="6" height="4" fill="#9B59B6" />
+              {/* Gold Buckle */}
+              <rect x="29" y="15" width="6" height="3" fill="#F1C40F" />
+              <rect x="31" y="16" width="2" height="1" fill="#1C2833" />
+              {/* Star on tip */}
+              <rect x="31" y="1" width="2" height="2" fill="#F1C40F" />
+            </g>
+          )}
+
+          {/* Retro Night Cap */}
+          {showNightCap && (
+            <g>
+              <rect x="21" y="16" width="22" height="4" fill="#2980B9" />
+              <rect x="25" y="12" width="18" height="4" fill="#3498DB" />
+              <rect x="33" y="8" width="14" height="4" fill="#2980B9" />
+              <rect x="42" y="10" width="8" height="4" fill="#3498DB" />
+              {/* White Pom-Pom */}
+              <rect x="48" y="13" width="4" height="4" fill="#ECF0F1" />
             </g>
           )}
 

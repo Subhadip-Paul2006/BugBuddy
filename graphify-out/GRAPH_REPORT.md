@@ -1,53 +1,53 @@
 # Graph Report - GHW_Challange01  (2026-10-11)
 
 ## Corpus Check
-- 118 files · ~139,707 words
+- 116 files · ~143,738 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 13 file(s) not represented in the graph (top: .mmd 8, (none) 2, .css 2)
 
 ## Summary
-- 879 nodes · 2224 edges · 49 communities (45 shown, 4 thin omitted)
-- Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 128 edges (avg confidence: 0.91)
+- 890 nodes · 2280 edges · 50 communities (45 shown, 5 thin omitted)
+- Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 132 edges (avg confidence: 0.91)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `7f085cae`
+- Built from commit: `62571f22`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - Minecraft HUD Design System
-- knowledgeService.ts
-- ai/types.ts
+- types/index.ts
+- search.ts
 - package.json
-- json
+- graphify_pretool.py
 - Quickstart & Setup Workflow
 - 🤖 General Agent Working Directives
 - GEMINI.md
 - compilerOptions
 - BugBuddy Knowledge Base — Status & Audit Report
 - compilerOptions
-- EmbeddingError
-- BugBuddy Knowledge Base — Architecture, Schema & Ingestion Guide
+- knowledgeSearch.test.ts
+- 11. Stage 6: Semantic & Hybrid Retrieval
 - knowledge.test.ts
 - App.tsx
 - KnowledgeSearchIndex
-- validator.ts
+- 10. Stage 5: Source Attribution & Retrieval Evaluation
 - 🛠️ BugBuddy — Developer Environment Setup Guide
-- matchesFilter
-- search.ts
-- VectorSearchIndex
-- aiIntegration.test.ts
+- 8.1 Architecture & Capabilities
+- attribution.test.ts
 - semantic.test.ts
+- aiIntegration.test.ts
+- BugBuddy Knowledge Base — Architecture, Schema & Ingestion Guide
 - 🚀 BugBuddy — Production Deployment Guide
 - 2. Pre-Release Quality Gates (Must Pass 100%)
-- 8. Stage 6 Implementation & Verification Report
+- IndexInvalidationTracker
 - maintenance.ts
-- evaluator.ts
-- SyntheticTestEmbeddingProvider
-- verifyStage6
+- 7. How to Run Validation and Tests
+- 🔒 Security Policy
+- 9. Stage 4 Structured Debugging Response Engine
 - 📢 BugBuddy v0.1.0 Release Notes
-- NormalizedKnowledgeRecord
+- 10.4 Actual Evaluation Benchmark Results
 - 1. Implemented Security Controls
 - 🏛️ BugBuddy — Architecture Documentation & Visualization Workflow
 - BugBuddy — Product Requirements Document (PRD)
@@ -65,26 +65,27 @@
 - AI System Prompt & Coding Directives
 - 🧪 BugBuddy v0.1.0 — QA Audit & Verification Report
 - Client State & Survival Engine
+- 3. Canonical Metadata Schema
 
 ## God Nodes (most connected - your core abstractions)
 1. `KnowledgeSearchIndex` - 40 edges
 2. `NormalizedKnowledgeRecord` - 34 edges
-3. `PixelIcon()` - 31 edges
-4. `App()` - 29 edges
-5. `CanonicalLanguage` - 29 edges
-6. `react` - 28 edges
+3. `PixelIcon()` - 33 edges
+4. `react` - 30 edges
+5. `App()` - 30 edges
+6. `CanonicalLanguage` - 29 edges
 7. `CanonicalLanguage` - 25 edges
 8. `VectorSearchIndex` - 25 edges
 9. `ByteBuddyMood` - 22 edges
 10. `scanAndRedactSecrets()` - 22 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `12.4 Strict Grounding & Anti-Fabrication Pipeline` --references--> `AIDebugOrchestrator`  [INFERRED]
+  docs/KNOWLEDGE_BASE.md → src/knowledge/ai/orchestrator.ts
 - `Retrieval Modes` --references--> `EmbeddingError`  [INFERRED]
   docs/KNOWLEDGE_BASE.md → src/knowledge/embeddings.ts
 - `11.1.2 Model Specification & Local Setup` --references--> `LocalTransformersEmbeddingAdapter`  [INFERRED]
   docs/KNOWLEDGE_BASE.md → src/knowledge/embeddings.ts
-- `8.3 Hybrid Search & Reciprocal Rank Fusion (`src/knowledge/hybridSearch.ts`)` --references--> `HybridSearchEngine`  [INFERRED]
-  docs/KNOWLEDGE_BASE_STATUS.md → src/knowledge/hybridSearch.ts
 - `7.1 Scope & Architecture` --references--> `DiagnosisResponse`  [INFERRED]
   docs/KNOWLEDGE_BASE_STATUS.md → src/knowledge/response.ts
 - `Stage 4 Specific Test Breakdown (`tests/response.test.ts`)` --references--> `DiagnosisResponse`  [INFERRED]
@@ -97,19 +98,19 @@
 - **AST Debugging Pipeline Architecture** — docs_audit_archify_research, docs_phases_phase1_engine, docs_trd_ast_debugging_engine [INFERRED 0.95]
 - **Minecraft Gamified Survival Loop** — readme_survival_metaphor, docs_phases_phase2_gamification, docs_trd_state_management, docs_ui_ux_hud_components [INFERRED 0.95]
 
-## Communities (49 total, 4 thin omitted)
+## Communities (50 total, 5 thin omitted)
 
 ### Community 0 - "Minecraft HUD Design System"
 Cohesion: 0.21
 Nodes (12): Archify AST Analysis Research, Phase 0 Documentation Audit, Phase 1: AST Debugging Engine, Phase 3: Minecraft HUD & Canvas World, Phase 4: Co-Op Multiplayer & Bug Raids, Implementation Roadmap & Milestones, AST Debugging & Pattern Matcher, 8-Bit Retro Audio Design (+4 more)
 
-### Community 1 - "knowledgeService.ts"
-Cohesion: 0.09
-Nodes (37): react-dom, runLiveIntegrationTest(), verifyServerFlow(), Reporting a Vulnerability, Safe Handling of User Source Code & Credentials, 🔒 Security Policy, Supported Versions, What to Include in Your Report (+29 more)
+### Community 1 - "types/index.ts"
+Cohesion: 0.10
+Nodes (40): react-dom, runLiveIntegrationTest(), verifyServerFlow(), CHIP_PIXEL_ICONS, DebugChat(), DebugChatProps, renderMessageContent(), KnowledgeCodexProps (+32 more)
 
-### Community 2 - "ai/types.ts"
+### Community 2 - "search.ts"
 Cohesion: 0.07
-Nodes (42): 12.1 Overview & Architecture, 12.2 Security Architecture & Credentials Management, 12.3 Provider Abstraction Layer & Supported Models, 12.4 Strict Grounding & Anti-Fabrication Pipeline, 12.5 Deterministic Fallback Engine, 12.6 Environment Configuration & Server Execution, 12.7 Automated Test Suite & Verification Results, 12. Stage 7: AI Provider Integration & Grounded Diagnosis Orchestrator (+34 more)
+Nodes (62): 12.1 Overview & Architecture, 12.2 Security Architecture & Credentials Management, 12.4 Strict Grounding & Anti-Fabrication Pipeline, 12.5 Deterministic Fallback Engine, 12.6 Environment Configuration & Server Execution, 12.7 Automated Test Suite & Verification Results, 12. Stage 7: AI Provider Integration & Grounded Diagnosis Orchestrator, Configuration (`.env.example`): (+54 more)
 
 ### Community 3 - "package.json"
 Cohesion: 0.06
@@ -125,59 +126,55 @@ Nodes (17): compilerOptions, isolatedModules, jsx, lib, module, moduleResolution
 
 ### Community 9 - "BugBuddy Knowledge Base — Status & Audit Report"
 Cohesion: 0.06
-Nodes (32): 10. Knowledge Roadmap & Planned Stages, 11. Parallel-Agent Safety Confirmation, 1. Executive Summary, 2.1 Tool Execution & Environment Verification, 2. Workspace & Environment Verification, 3.1 Initial Entry Counts Baseline, 3.2 Content Quality Baseline, 3.3 Initial Stage 1 Decision (+24 more)
+Nodes (31): 10. Knowledge Roadmap & Planned Stages, 11. Parallel-Agent Safety Confirmation, 1. Executive Summary, 2.1 Tool Execution & Environment Verification, 2. Workspace & Environment Verification, 3.1 Initial Entry Counts Baseline, 3.2 Content Quality Baseline, 3.3 Initial Stage 1 Decision (+23 more)
 
 ### Community 10 - "compilerOptions"
 Cohesion: 0.25
 Nodes (7): compilerOptions, allowSyntheticDefaultImports, composite, module, moduleResolution, skipLibCheck, include
 
-### Community 11 - "EmbeddingError"
-Cohesion: 0.24
-Nodes (5): EmbeddingError, evaluateHybridRetrieval(), evaluateHybridRetrievalCase(), calculateRRFScore(), cosineSimilarity()
-
-### Community 12 - "BugBuddy Knowledge Base — Architecture, Schema & Ingestion Guide"
-Cohesion: 0.04
-Nodes (47): 10.1.1 AttributedSource Contract, 10.1.2 Attribution & Anti-Fabrication Principles, 10.1 Source Attribution & Citation Provenance, 10.2.1 Dataset Schema, 10.2.2 Query Distribution, 10.2 Retrieval Evaluation Dataset, 10.3 Evaluation Metrics & Definitions, 10.4 Actual Evaluation Benchmark Results (+39 more)
+### Community 12 - "11. Stage 6: Semantic & Hybrid Retrieval"
+Cohesion: 0.18
+Nodes (11): 11.1.1 Typed Provider Interface, 11.1.2 Model Specification & Local Setup, 11.1 Embedding Provider Architecture, 11.2 In-Memory Vector Search Index, 11.3 Hybrid Search & Reciprocal Rank Fusion (RRF), 11.4 Benchmark Comparisons & Evaluation Results, 11.5 Running Stage 6 Commands, 11. Stage 6: Semantic & Hybrid Retrieval (+3 more)
 
 ### Community 13 - "knowledge.test.ts"
-Cohesion: 0.16
-Nodes (9): main(), createLanguageCountMap(), IngestionOptions, ingestKnowledgeDirectory(), ingestKnowledgeFile(), formatCorpusQualityAudit(), formatDiagnostics(), formatIngestionSummary() (+1 more)
+Cohesion: 0.13
+Nodes (14): createLanguageCountMap(), IngestionOptions, ingestKnowledgeDirectory(), ingestKnowledgeFile(), normalizeLanguage(), ID_REGEX, LANGUAGE_ALIASES, REQUIRED_FIELDS (+6 more)
 
 ### Community 14 - "App.tsx"
-Cohesion: 0.06
-Nodes (115): react, B. Core Application Source (`src/`), App(), DebugChatProps, KnowledgeCodex(), KnowledgeCodexProps, LanguagePixelLogo(), LanguagePixelLogoProps (+107 more)
+Cohesion: 0.05
+Nodes (119): react, B. Core Application Source (`src/`), App(), BossAttackType, BossFightModal(), BossFightModalProps, CombatLogEntry, KnowledgeCodex() (+111 more)
 
 ### Community 15 - "KnowledgeSearchIndex"
-Cohesion: 0.20
-Nodes (6): evaluateRetrievalCase(), HybridSearchEngine, diagnoseProblem(), KnowledgeSearchIndex, splitCamelCase(), tokenize()
+Cohesion: 0.19
+Nodes (10): evaluateRetrieval(), evaluateRetrievalCase(), findUnknownExpectedIds(), IndexedDocument, KnowledgeSearchIndex, searchKnowledgeBase(), splitCamelCase(), tokenize() (+2 more)
 
-### Community 16 - "validator.ts"
-Cohesion: 0.29
-Nodes (10): normalizeLanguage(), ID_REGEX, LANGUAGE_ALIASES, REQUIRED_FIELDS, SUPPORTED_CATEGORIES, SUPPORTED_DIFFICULTIES, isValidHttpUrl(), validateDataset() (+2 more)
+### Community 16 - "10. Stage 5: Source Attribution & Retrieval Evaluation"
+Cohesion: 0.20
+Nodes (10): 10.1.1 AttributedSource Contract, 10.1.2 Attribution & Anti-Fabrication Principles, 10.1 Source Attribution & Citation Provenance, 10.2.1 Dataset Schema, 10.2.2 Query Distribution, 10.2 Retrieval Evaluation Dataset, 10.3 Evaluation Metrics & Definitions, 10.5 Known Ranking Weaknesses & BM25 Limitations (+2 more)
 
 ### Community 17 - "🛠️ BugBuddy — Developer Environment Setup Guide"
 Cohesion: 0.14
 Nodes (13): 1. Prerequisites, 2. Clone & Dependency Installation, 3. Environment Configuration, 4. Running BugBuddy Locally, 5. Verification & Testing Commands, 6. Troubleshooting Common Issues, 7. Safe Shutdown, 🛠️ BugBuddy — Developer Environment Setup Guide (+5 more)
 
-### Community 18 - "matchesFilter"
-Cohesion: 0.29
-Nodes (8): 8.1 Architecture & Capabilities, 8.2 Usage Examples, 8. Stage 3 Keyword Retrieval & Search Filtering Engine, Grounding LLM Prompts with `buildKnowledgePromptContext`, Indexing and Searching via `KnowledgeSearchIndex`, Standalone Functional Search, buildKnowledgePromptContext(), matchesFilter()
+### Community 18 - "8.1 Architecture & Capabilities"
+Cohesion: 0.33
+Nodes (7): 8.1 Architecture & Capabilities, 8.2 Usage Examples, 8. Stage 3 Keyword Retrieval & Search Filtering Engine, Grounding LLM Prompts with `buildKnowledgePromptContext`, Indexing and Searching via `KnowledgeSearchIndex`, Standalone Functional Search, buildKnowledgePromptContext()
 
-### Community 19 - "search.ts"
-Cohesion: 0.12
-Nodes (23): EmbeddingVector, LOCAL_MINILM_MODEL_INFO, EvaluationOptions, HybridSearchDiagnostic, HybridSearchOptions, HybridSearchResultItem, HybridSearchResults, BASE_LIMITATIONS (+15 more)
+### Community 19 - "attribution.test.ts"
+Cohesion: 0.13
+Nodes (7): normalizeDifficulty(), normalizeRecord(), DEFAULT_MIN_RELEVANCE_SCORE, formatDiagnosisResponseMarkdown(), createMockRecord(), createMockRecord(), createMockRecord()
 
-### Community 20 - "VectorSearchIndex"
-Cohesion: 0.20
-Nodes (3): EmbeddingProvider, getRecordSearchableSemanticText(), VectorSearchIndex
+### Community 20 - "semantic.test.ts"
+Cohesion: 0.05
+Nodes (32): 8.1 Architecture & Typed Provider Interface, 8.2 Vector Similarity Search (`src/knowledge/vectorSearch.ts`), 8.3 Hybrid Search & Reciprocal Rank Fusion (`src/knowledge/hybridSearch.ts`), 8.4 Response Grounding Preservation (`src/knowledge/response.ts`), 8.5 Automated Test Verification (`npm test`), 8.6 Benchmark Results (`npm run evaluate:retrieval`), 8.7 Type Checking & Production Build, 8.8 Stage 6B Runtime Activation & Empirical Verification (`npm run verify:stage6`) (+24 more)
 
 ### Community 21 - "aiIntegration.test.ts"
-Cohesion: 0.07
-Nodes (8): normalizeDifficulty(), normalizeRecord(), DEFAULT_FIELD_WEIGHTS, createMockRecord(), createMockRecord(), createMockRecord(), createMockRecord(), HallucinatingProvider
+Cohesion: 0.09
+Nodes (11): 12.3 Provider Abstraction Layer & Supported Models, Supported Providers:, runLiveSmokeTest(), GeminiProvider, MockAIProvider, OpenAIProvider, AIProviderRegistry, AIProvider (+3 more)
 
-### Community 22 - "semantic.test.ts"
-Cohesion: 0.18
-Nodes (4): RETRIEVAL_EVALUATION_DATASET, handleAIDiagnosisRequest(), resolveCorsOrigin(), SUPPORTED_LANGUAGES
+### Community 22 - "BugBuddy Knowledge Base — Architecture, Schema & Ingestion Guide"
+Cohesion: 0.25
+Nodes (7): 1. Overview, 2. Directory Layout, 4. Ingestion Workflow, 5. Validation Rules & Diagnostics, 6. How to Add a New Knowledge Record, BugBuddy Knowledge Base — Architecture, Schema & Ingestion Guide, Normalized Knowledge Record
 
 ### Community 23 - "🚀 BugBuddy — Production Deployment Guide"
 Cohesion: 0.17
@@ -187,33 +184,33 @@ Nodes (12): 1. System Architecture, 2. Confirmed Repository Commands, 3. Environ
 Cohesion: 0.18
 Nodes (10): 1. Release Lifecycle Stages, 2. Pre-Release Quality Gates (Must Pass 100%), 3. Deployment Coordination Workflow, 4. Emergency Incident & Rollback Protocol, 📦 BugBuddy — Release Process & Quality Gates, Gate 1: Knowledge Base Ingestion & Integrity, Gate 2: Full Automated Unit & Integration Test Suite, Gate 3: Retrieval Benchmark Evaluation (+2 more)
 
-### Community 25 - "8. Stage 6 Implementation & Verification Report"
-Cohesion: 0.25
-Nodes (8): 8.2 Vector Similarity Search (`src/knowledge/vectorSearch.ts`), 8.3 Hybrid Search & Reciprocal Rank Fusion (`src/knowledge/hybridSearch.ts`), 8.4 Response Grounding Preservation (`src/knowledge/response.ts`), 8.5 Automated Test Verification (`npm test`), 8.6 Benchmark Results (`npm run evaluate:retrieval`), 8.7 Type Checking & Production Build, 8. Stage 6 Implementation & Verification Report, Per-Language Results (Hybrid Run with BM25 Fallback)
-
 ### Community 26 - "maintenance.ts"
-Cohesion: 0.13
-Nodes (7): auditCorpusQuality(), AuditSeverity, calculateJaccardSimilarity(), computeCorpusFingerprint(), detectCorpusConflicts(), IndexInvalidationTracker, validateAndStageUpdate()
-
-### Community 27 - "evaluator.ts"
 Cohesion: 0.16
-Nodes (17): main(), EvaluationCase, HELD_OUT_EVALUATION_DATASET, AggregateMetrics, CaseEvaluationResult, computeAggregate(), evaluateRetrieval(), findUnknownExpectedIds() (+9 more)
+Nodes (19): 5.1 Architecture & Modules, main(), auditCorpusQuality(), AuditIssue, AuditSeverity, calculateJaccardSimilarity(), computeCorpusFingerprint(), ConflictAuditReport (+11 more)
 
-### Community 29 - "verifyStage6"
-Cohesion: 0.24
-Nodes (7): 8.1 Architecture & Typed Provider Interface, 8.8 Stage 6B Runtime Activation & Empirical Verification (`npm run verify:stage6`), verifyStage6(), EmbeddingModelInfo, LocalTransformersEmbeddingAdapter, NullEmbeddingProvider, getOrchestrator()
+### Community 27 - "7. How to Run Validation and Tests"
+Cohesion: 0.33
+Nodes (6): 7. How to Run Validation and Tests, Build Production Bundle, Run Automated Test Suite, Run Knowledge Base Validation CLI, Validate a Specific File or Directory, Verify TypeScript Types
+
+### Community 28 - "🔒 Security Policy"
+Cohesion: 0.33
+Nodes (5): Reporting a Vulnerability, Safe Handling of User Source Code & Credentials, 🔒 Security Policy, Supported Versions, What to Include in Your Report
+
+### Community 29 - "9. Stage 4 Structured Debugging Response Engine"
+Cohesion: 0.40
+Nodes (5): 9.1 Architecture & Core Principles, 9.2 TypeScript Response Contract, 9.3 Usage Example, 9. Stage 4 Structured Debugging Response Engine, ResponseMode
 
 ### Community 30 - "📢 BugBuddy v0.1.0 Release Notes"
 Cohesion: 0.17
 Nodes (12): 1. The Bug Confession Booth (Altar of Penance), 2. ByteBuddy — Virtual Cyber-Golem Companion, 3. Interactive Multi-Turn Debugging Chat, 4. Grounded Multi-Language Knowledge Base (RAG), 5. Gamified Productivity Suite, 📢 BugBuddy v0.1.0 Release Notes, 🌟 Executive Summary, 🛠️ Getting Started (+4 more)
 
-### Community 31 - "NormalizedKnowledgeRecord"
-Cohesion: 0.40
-Nodes (7): 5.1 Architecture & Modules, MaintenanceStagingResult, IngestionResult, KnowledgeEntry, NormalizedKnowledgeRecord, ValidationError, ValidationResult
+### Community 31 - "10.4 Actual Evaluation Benchmark Results"
+Cohesion: 0.50
+Nodes (4): 10.4 Actual Evaluation Benchmark Results, Per-Language Breakdown, Run 1: Raw Keyword Retrieval (No Language Filter Applied), Run 2: Language-Scoped Retrieval (Language Filter Applied)
 
 ### Community 32 - "1. Implemented Security Controls"
-Cohesion: 0.20
-Nodes (9): 1. Implemented Security Controls, 2. Residual Risks & Recommended Operator Practices, A. Client-Side Secret Redaction, B. Prohibition of Code Execution, 🛡️ BugBuddy v0.1.0 — Security & Privacy Review, C. Server-Side Secret Isolation, D. Denial of Service & Payload Size Boundary, E. Configurable Cross-Origin Resource Sharing (CORS) (+1 more)
+Cohesion: 0.18
+Nodes (10): 1. Implemented Security Controls, 2. Residual Risks & Recommended Operator Practices, A. Client-Side Secret Redaction, B. Prohibition of Code Execution, 🛡️ BugBuddy v0.1.0 — Security & Privacy Review, C. Server-Side Secret Isolation, D. Denial of Service & Payload Size Boundary, E. Configurable Cross-Origin Resource Sharing (CORS) (+2 more)
 
 ### Community 33 - "🏛️ BugBuddy — Architecture Documentation & Visualization Workflow"
 Cohesion: 0.22
@@ -279,25 +276,29 @@ Nodes (4): 1. Automated Preflight Gate Summary, 2. Browser E2E Audit Results (Lo
 Cohesion: 0.50
 Nodes (4): Phase 2: Survival Mechanics & Mob Engine, Core Product Features & Game Loop, Client State & Survival Engine, Hearts, Hunger & XP Hotbar HUD
 
+### Community 49 - "3. Canonical Metadata Schema"
+Cohesion: 0.50
+Nodes (4): 3. Canonical Metadata Schema, Supported Categories, Supported Difficulties, Supported Language Identifiers
+
 ## Knowledge Gaps
 - **14 isolated node(s):** `tsx`, `@types/node`, `@types/react`, `@types/react-dom`, `typescript` (+9 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 335 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **4 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 339 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **5 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `scanAndRedactSecrets()` connect `knowledgeService.ts` to `1. Implemented Security Controls`, `BugBuddy — Technical Requirements Document (TRD)`, `[0.1.0] - 2026-10-11 (Release Candidate)`, `🤖 General Agent Working Directives`, `🤝 Contributing to BugBuddy`, `v0.1.0/CHANGELOG.md`, `App.tsx`?**
-  _High betweenness centrality (0.203) - this node is a cross-community bridge._
+- **Why does `scanAndRedactSecrets()` connect `types/index.ts` to `1. Implemented Security Controls`, `BugBuddy — Technical Requirements Document (TRD)`, `[0.1.0] - 2026-10-11 (Release Candidate)`, `🤖 General Agent Working Directives`, `🤝 Contributing to BugBuddy`, `v0.1.0/CHANGELOG.md`, `App.tsx`, `🔒 Security Policy`?**
+  _High betweenness centrality (0.201) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `KnowledgeSearchIndex` (e.g. with `Indexing and Searching via `KnowledgeSearchIndex`` and `5.1 Architecture & Modules`) actually correct?**
   _`KnowledgeSearchIndex` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `tsx`, `@types/node`, `@types/react` to the rest of the system?**
   _14 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `knowledgeService.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.0853302162478083 - nodes in this community are weakly interconnected._
-- **Why does `5. Security & Boundary Architecture` connect `BugBuddy — Technical Requirements Document (TRD)` to `knowledgeService.ts`?**
+- **Should `types/index.ts` be split into smaller, more focused modules?**
+  _Cohesion score 0.09573412698412699 - nodes in this community are weakly interconnected._
+- **Why does `5. Security & Boundary Architecture` connect `BugBuddy — Technical Requirements Document (TRD)` to `types/index.ts`?**
   _High betweenness centrality (0.108) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `NormalizedKnowledgeRecord` (e.g. with `Normalized Knowledge Record` and `5.1 Architecture & Modules`) actually correct?**
   _`NormalizedKnowledgeRecord` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **Should `ai/types.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.07145501666049611 - nodes in this community are weakly interconnected._
+- **Should `search.ts` be split into smaller, more focused modules?**
+  _Cohesion score 0.06593707250341997 - nodes in this community are weakly interconnected._

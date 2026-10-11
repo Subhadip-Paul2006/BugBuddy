@@ -14,6 +14,7 @@ import { BugGraveyard, DEFAULT_GRAVEYARD_BUGS, GraveyardBugEntry } from './compo
 import { KnowledgeCodex } from './components/codex/KnowledgeCodex';
 import { SettingsScreen } from './components/settings/SettingsScreen';
 import { PlaceholderScreen } from './components/placeholders/PlaceholderScreen';
+import { BossFightModal } from './components/boss/BossFightModal';
 import {
   setSfxMuted,
   toggleMusic,
@@ -45,6 +46,7 @@ export const App: React.FC = () => {
   const [graveyardBugs, setGraveyardBugs] = useState<GraveyardBugEntry[]>(() =>
     loadGraveyardBugs(DEFAULT_GRAVEYARD_BUGS)
   );
+  const [isBossFightActive, setIsBossFightActive] = useState(false);
 
   const setPersistedLanguage = (lang: CanonicalLanguage) => {
     setPersistedLanguageState(lang);
@@ -133,6 +135,22 @@ export const App: React.FC = () => {
     );
   };
 
+  const handleDefeatBoss = (rewardXP: number) => {
+    handleAddXP(rewardXP);
+    setMood('ECSTATIC');
+    const bossEntry: GraveyardBugEntry = {
+      id: `boss-defeat-${Date.now()}`,
+      title: 'Ender Dragon: Corrupted Void Bug',
+      language: 'typescript',
+      category: 'Boss Raid',
+      slayedAt: `${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} (Boss Slay)`,
+      xpAwarded: rewardXP,
+      status: 'RESOLVED',
+      diagnosis: 'The Void Dragon dared to dereference a null pointer in the presence of ByteBuddy. It was obliterated into pixel dust.',
+    };
+    setGraveyardBugs((prev) => [bossEntry, ...prev]);
+  };
+
   const handleToggleAudio = () => {
     setIsAudioEnabled((prev) => {
       const next = !prev;
@@ -200,6 +218,7 @@ export const App: React.FC = () => {
               onSetMood={setMood}
               onNavigate={setActiveTab}
               onAddXP={handleAddXP}
+              onTriggerBossFight={() => setIsBossFightActive(true)}
             />
           ) : activeTab === 'confession' ? (
             <BugConfessionBooth
@@ -273,6 +292,13 @@ export const App: React.FC = () => {
           onNavigateToConfession={() => setActiveTab('confession')}
         />
       </div>
+
+      {/* Ender Dragon Boss Fight Raid Modal */}
+      <BossFightModal
+        isOpen={isBossFightActive}
+        onClose={() => setIsBossFightActive(false)}
+        onDefeatBoss={handleDefeatBoss}
+      />
     </div>
   );
 };

@@ -301,6 +301,183 @@ export function playScanSound(): void {
   osc.stop(now + 0.09);
 }
 
+/**
+ * Play a menacing boss roar sound (synthesized sawtooth sweep with resonance)
+ */
+export function playBossRoarSound(): void {
+  if (isSfxMuted) return;
+  const ctx = getAudioContext();
+  if (!ctx) return;
+
+  const now = ctx.currentTime;
+  const osc1 = ctx.createOscillator();
+  const osc2 = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc1.type = 'sawtooth';
+  osc2.type = 'triangle';
+
+  // Deep pitch sweep downwards with guttural growl
+  osc1.frequency.setValueAtTime(140, now);
+  osc1.frequency.linearRampToValueAtTime(65, now + 0.6);
+
+  osc2.frequency.setValueAtTime(70, now);
+  osc2.frequency.linearRampToValueAtTime(45, now + 0.6);
+
+  gain.gain.setValueAtTime(0.18, now);
+  gain.gain.linearRampToValueAtTime(0.22, now + 0.2);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
+
+  osc1.connect(gain);
+  osc2.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc1.start(now);
+  osc2.start(now);
+  osc1.stop(now + 0.65);
+  osc2.stop(now + 0.65);
+}
+
+/**
+ * Play dragon breath attack sound (filtered white noise burst)
+ */
+export function playDragonBreathSound(): void {
+  if (isSfxMuted) return;
+  const ctx = getAudioContext();
+  if (!ctx) return;
+
+  const now = ctx.currentTime;
+  const bufferSize = Math.floor(ctx.sampleRate * 0.45);
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = Math.random() * 2 - 1;
+  }
+
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'bandpass';
+  filter.frequency.setValueAtTime(800, now);
+  filter.frequency.linearRampToValueAtTime(300, now + 0.45);
+  filter.Q.setValueAtTime(3.0, now);
+
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0.15, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+
+  noise.connect(filter);
+  filter.connect(gain);
+  gain.connect(ctx.destination);
+
+  noise.start(now);
+  noise.stop(now + 0.45);
+}
+
+/**
+ * Play crisp sword slash sound
+ */
+export function playSwordSlashSound(): void {
+  if (isSfxMuted) return;
+  const ctx = getAudioContext();
+  if (!ctx) return;
+
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc.type = 'triangle';
+  osc.frequency.setValueAtTime(900, now);
+  osc.frequency.exponentialRampToValueAtTime(180, now + 0.12);
+
+  gain.gain.setValueAtTime(0.16, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc.start(now);
+  osc.stop(now + 0.14);
+}
+
+/**
+ * Play boss victory fanfare (triumphant retro arpeggio)
+ */
+export function playBossVictoryFanfare(): void {
+  if (isSfxMuted) return;
+  const ctx = getAudioContext();
+  if (!ctx) return;
+
+  const now = ctx.currentTime;
+  const notes = [
+    { freq: 261.63, time: 0.0, dur: 0.12 }, // C4
+    { freq: 329.63, time: 0.12, dur: 0.12 }, // E4
+    { freq: 392.00, time: 0.24, dur: 0.12 }, // G4
+    { freq: 523.25, time: 0.36, dur: 0.22 }, // C5
+    { freq: 659.25, time: 0.58, dur: 0.18 }, // E5
+    { freq: 783.99, time: 0.76, dur: 0.45 }, // G5
+  ];
+
+  notes.forEach(({ freq, time, dur }) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(freq, now + time);
+
+    gain.gain.setValueAtTime(0.12, now + time);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + time + dur);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now + time);
+    osc.stop(now + time + dur);
+  });
+}
+
+/**
+ * Play cute companion chirp / poke sound
+ */
+export function playPetChirpSound(): void {
+  if (isSfxMuted) return;
+  const ctx = getAudioContext();
+  if (!ctx) return;
+
+  const now = ctx.currentTime;
+
+  // First chirp
+  const osc1 = ctx.createOscillator();
+  const gain1 = ctx.createGain();
+  osc1.type = 'sine';
+  osc1.frequency.setValueAtTime(880, now);
+  osc1.frequency.exponentialRampToValueAtTime(1320, now + 0.08);
+
+  gain1.gain.setValueAtTime(0.12, now);
+  gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+
+  osc1.connect(gain1);
+  gain1.connect(ctx.destination);
+  osc1.start(now);
+  osc1.stop(now + 0.08);
+
+  // Second chirp (higher pitched)
+  const osc2 = ctx.createOscillator();
+  const gain2 = ctx.createGain();
+  osc2.type = 'sine';
+  osc2.frequency.setValueAtTime(1320, now + 0.09);
+  osc2.frequency.exponentialRampToValueAtTime(1760, now + 0.18);
+
+  gain2.gain.setValueAtTime(0.12, now + 0.09);
+  gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+
+  osc2.connect(gain2);
+  gain2.connect(ctx.destination);
+  osc2.start(now + 0.09);
+  osc2.stop(now + 0.18);
+}
+
 /* ==========================================================================
    Chiptune Music Engine (Short Retro Melodies & Themes)
    ========================================================================== */

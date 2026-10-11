@@ -10,6 +10,7 @@ interface BaseCampDashboardProps {
   onSetMood: (mood: ByteBuddyMood) => void;
   onNavigate: (tab: NavigationTab) => void;
   onAddXP: (amount: number) => void;
+  onTriggerBossFight?: () => void;
 }
 
 export const BaseCampDashboard: React.FC<BaseCampDashboardProps> = ({
@@ -17,6 +18,7 @@ export const BaseCampDashboard: React.FC<BaseCampDashboardProps> = ({
   onSetMood,
   onNavigate,
   onAddXP,
+  onTriggerBossFight,
 }) => {
   const [tasks, setTasks] = useState<SprintTask[]>(MOCK_SPRINT_TASKS);
   const [xpToast, setXpToast] = useState<{ amount: number; key: number } | null>(null);
@@ -145,6 +147,24 @@ export const BaseCampDashboard: React.FC<BaseCampDashboardProps> = ({
           >
             <PixelIcon name="scroll" size={12} /> VIEW QUESTS
           </button>
+          {onTriggerBossFight && (
+            <button
+              className="bb-btn"
+              onClick={onTriggerBossFight}
+              title="Summon the Corrupted Void Dragon Boss Fight (+150 XP)"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                backgroundColor: '#4A154B',
+                borderColor: '#8E44AD',
+                color: '#F4D03F',
+                boxShadow: '0 0 10px rgba(142, 68, 173, 0.4)',
+              }}
+            >
+              <PixelIcon name="skull" size={12} color="#E056FD" /> SUMMON BOSS RAID (+150 XP)
+            </button>
+          )}
         </div>
       </section>
 

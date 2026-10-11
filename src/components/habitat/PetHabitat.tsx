@@ -3,7 +3,8 @@ import { ByteBuddyMood } from '../../types';
 import { MOOD_QUOTES } from '../../mock/mockData';
 import { IsometricWorldCanvas } from '../world/IsometricWorldCanvas';
 import { PixelIcon, PixelIconName } from '../common/PixelIcon';
-import { ByteBuddySprite } from '../pet/ByteBuddySprite';
+import { ByteBuddySprite, PetAccessory, PetAnimationOverride } from '../pet/ByteBuddySprite';
+import { playPetChirpSound } from '../../utils/audioSystem';
 
 export interface PetHabitatProps {
   mood: ByteBuddyMood;
@@ -83,6 +84,8 @@ export const PetHabitat: React.FC<PetHabitatProps> = ({
   const [petCount, setPetCount] = useState(0);
   const [reactionToast, setReactionToast] = useState<string | null>(null);
   const [previewMood, setPreviewMood] = useState<ByteBuddyMood | null>(null);
+  const [selectedAccessory, setSelectedAccessory] = useState<PetAccessory>('NONE');
+  const [petAnimOverride, setPetAnimOverride] = useState<PetAnimationOverride>('DEFAULT');
 
   const displayMood = previewMood ?? mood;
   const currentInfo = MOOD_DETAILS[displayMood];
@@ -102,11 +105,47 @@ export const PetHabitat: React.FC<PetHabitatProps> = ({
     }
   };
 
+  const handlePokePet = () => {
+    setPetCount((c) => c + 1);
+    setPetAnimOverride('POKE');
+    playPetChirpSound();
+    triggerToast(`ByteBuddy chirps joyfully! *poke* (Affection: ${petCount + 1})`);
+    if (mood === 'NEUTRAL' || mood === 'DISAPPOINTED') {
+      onSetMood('HAPPY');
+    }
+    setTimeout(() => {
+      setPetAnimOverride('DEFAULT');
+    }, 450);
+  };
+
+  const handleDanceParty = () => {
+    setPetAnimOverride('DANCE');
+    playPetChirpSound();
+    triggerToast('ByteBuddy dances to the chiptune groove! 💃');
+    setTimeout(() => {
+      setPetAnimOverride('DEFAULT');
+    }, 3200);
+  };
+
+  const handleSpinTrick = () => {
+    setPetAnimOverride('SPIN');
+    playPetChirpSound();
+    triggerToast('ByteBuddy executes a 360 spin trick! 🌀');
+    setTimeout(() => {
+      setPetAnimOverride('DEFAULT');
+    }, 1800);
+  };
+
   const handleCheer = () => {
     setPetCount((c) => c + 1);
+    setPetAnimOverride('CELEBRATE');
+    playPetChirpSound();
     onSetMood('ECSTATIC');
     setPreviewMood(null);
     triggerToast('ByteBuddy leaps with joy! "All tests are passing!"');
+    setTimeout(() => {
+      setPetAnimOverride('DEFAULT');
+    }, 2000);
   };
 
   const handleCampfireRest = () => {
@@ -543,12 +582,12 @@ export const PetHabitat: React.FC<PetHabitatProps> = ({
           </p>
 
           {/* Action Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             <button
               type="button"
               className="bb-btn bb-btn-stone"
               onClick={handleObserve}
-              style={{ fontSize: '9px', padding: '10px 8px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
+              style={{ fontSize: '9px', padding: '8px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
             >
               <PixelIcon name="paw" size={10} /> OBSERVE & PET
             </button>
@@ -557,7 +596,7 @@ export const PetHabitat: React.FC<PetHabitatProps> = ({
               type="button"
               className="bb-btn bb-btn-gold"
               onClick={handleCheer}
-              style={{ fontSize: '9px', padding: '10px 8px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
+              style={{ fontSize: '9px', padding: '8px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
             >
               <PixelIcon name="star" size={10} /> CHEER UP!
             </button>
@@ -565,8 +604,26 @@ export const PetHabitat: React.FC<PetHabitatProps> = ({
             <button
               type="button"
               className="bb-btn bb-btn-stone"
+              onClick={handleDanceParty}
+              style={{ fontSize: '9px', padding: '8px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
+            >
+              <PixelIcon name="music" size={10} /> DANCE PARTY
+            </button>
+
+            <button
+              type="button"
+              className="bb-btn bb-btn-stone"
+              onClick={handleSpinTrick}
+              style={{ fontSize: '9px', padding: '8px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
+            >
+              <PixelIcon name="refresh" size={10} /> SPIN TRICK
+            </button>
+
+            <button
+              type="button"
+              className="bb-btn bb-btn-stone"
               onClick={handleCampfireRest}
-              style={{ fontSize: '9px', padding: '10px 8px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
+              style={{ fontSize: '9px', padding: '8px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
             >
               <PixelIcon name="flame" size={10} /> REST BY HEARTH
             </button>
@@ -575,10 +632,61 @@ export const PetHabitat: React.FC<PetHabitatProps> = ({
               type="button"
               className="bb-btn bb-btn-emerald"
               onClick={handleFeedBug}
-              style={{ fontSize: '9px', padding: '10px 8px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
+              style={{ fontSize: '9px', padding: '8px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
             >
               <PixelIcon name="swords" size={10} /> SACRIFICE BUG
             </button>
+          </div>
+
+          {/* Wardrobe & Accessories Selector */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <div
+              style={{
+                fontFamily: 'var(--bb-font-pixel-display)',
+                fontSize: '8px',
+                color: 'var(--bb-color-gold)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+              }}
+            >
+              <PixelIcon name="star" size={10} color="var(--bb-color-gold)" /> COMPANION WARDROBE & HATS
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+              {(
+                [
+                  { id: 'NONE', label: 'Default' },
+                  { id: 'CROWN', label: '👑 Crown' },
+                  { id: 'DIAMOND_HELMET', label: '🪖 Diamond' },
+                  { id: 'WIZARD_HAT', label: '🧙 Wizard' },
+                  { id: 'NIGHT_CAP', label: '💤 Cap' },
+                ] as const
+              ).map((acc) => {
+                const isSelected = selectedAccessory === acc.id;
+                return (
+                  <button
+                    key={acc.id}
+                    type="button"
+                    onClick={() => {
+                      setSelectedAccessory(acc.id);
+                      playPetChirpSound();
+                      triggerToast(`Equipped ${acc.label}!`);
+                    }}
+                    style={{
+                      fontFamily: 'var(--bb-font-pixel-display)',
+                      fontSize: '8px',
+                      padding: '4px 6px',
+                      background: isSelected ? 'var(--bb-surface-inset)' : 'var(--bb-surface-panel)',
+                      border: `1px solid ${isSelected ? 'var(--bb-color-gold)' : 'var(--bb-border-subtle)'}`,
+                      color: isSelected ? 'var(--bb-color-gold)' : 'var(--bb-text-muted)',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {acc.label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {/* Visual Mood Showcase / Avatar Card */}
@@ -593,7 +701,14 @@ export const PetHabitat: React.FC<PetHabitatProps> = ({
             }}
           >
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <ByteBuddySprite mood={displayMood} size={90} />
+              <ByteBuddySprite
+                mood={displayMood}
+                size={90}
+                accessory={selectedAccessory}
+                animation={petAnimOverride}
+                onClick={handlePokePet}
+                interactive={true}
+              />
               <span
                 style={{
                   fontFamily: 'var(--bb-font-pixel-display)',
@@ -603,6 +718,16 @@ export const PetHabitat: React.FC<PetHabitatProps> = ({
                 }}
               >
                 [SPRITE: {displayMood}]
+              </span>
+              <span
+                style={{
+                  fontFamily: 'var(--bb-font-code)',
+                  fontSize: '8px',
+                  color: 'var(--bb-text-muted)',
+                  marginTop: '2px',
+                }}
+              >
+                (Click to poke!)
               </span>
             </div>
 
@@ -620,10 +745,10 @@ export const PetHabitat: React.FC<PetHabitatProps> = ({
                 • Diet: Syntax Errors & Stack Traces
               </div>
               <div style={{ fontSize: '11px', color: 'var(--bb-text-secondary)' }}>
-                • Native Biome: Deepslate & Obsidian
+                • Wardrobe: {selectedAccessory}
               </div>
               <div style={{ fontSize: '11px', color: 'var(--bb-text-secondary)' }}>
-                • Interactions: {petCount} sessions
+                • Affection: {petCount} pokes/pets
               </div>
             </div>
           </div>
